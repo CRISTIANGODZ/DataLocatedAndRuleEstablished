@@ -1,23 +1,23 @@
 <template>
-    <div>
-            <LableList></LableList>
-    </div>
+  <div>
+    <LabelList></LabelList>
+  </div>
 </template>
 
 <script lang="ts">
-    import Vue from "vue";
-    import LableList from "../components/LableList.vue";
+import Vue from "vue";
+import LabelList from "../components/LabelList.vue";
 
-    export default Vue.extend({
-        components: {LableList},
-    });
+export default Vue.extend({
+  components: { LabelList },
+});
 </script>
 
 <style scoped>
-    @import "~prismjs/themes/prism-dark.css";
+@import "~prismjs/themes/prism-dark.css";
 
-    .container {
-        max-height: calc(100vh - 64px);
-        overflow: hidden;
-    }
+.container {
+  max-height: calc(100vh - 64px);
+  overflow: hidden;
+}
 </style>

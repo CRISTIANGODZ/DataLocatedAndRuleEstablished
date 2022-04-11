@@ -1,0 +1,85 @@
+{
+  "login": {
+    "status": 200,
+    "msg": "success",
+    "data": {
+      "username": "admin",
+      "role": "admin"
+    }
+  },
+  "template": {
+    "code": 200,
+    "message": "成功",
+    "data": [
+      {
+        "id": 12,
+        "title": "模板1",
+        "connectionCategories": [
+          {
+            "id": 5,
+            "templateId": null,
+            "title": "关联1"
+          },
+          {
+            "id": 6,
+            "templateId": null,
+            "title": "关联2"
+          }
+        ],
+        "labelCategories": [
+          {
+            "id": 9,
+            "templateId": null,
+            "title": "名词",
+            "color": "hongse",
+            "borderColor": null,
+            "createTime": null
+          },
+          {
+            "id": 10,
+            "templateId": null,
+            "title": "动词",
+            "color": "green",
+            "borderColor": null,
+            "createTime": null
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "title": "模板2",
+        "connectionCategories": [
+          {
+            "id": 5,
+            "templateId": null,
+            "title": "关联3"
+          },
+          {
+            "id": 6,
+            "templateId": null,
+            "title": "关联4"
+          }
+        ],
+        "labelCategories": [
+          {
+            "id": 9,
+            "templateId": null,
+            "title": "名词",
+            "color": "#f00f0f",
+            "borderColor": null,
+            "createTime": null
+          },
+          {
+            "id": 10,
+            "templateId": null,
+            "title": "形容词",
+            "color": "#ff00ff",
+            "borderColor": null,
+            "createTime": null
+          }
+        ]
+      }
+    ],
+    "ok": true
+  }
+}
