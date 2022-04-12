@@ -81,5 +81,71 @@
       }
     ],
     "ok": true
+  },
+  "getTemplateLists": {
+    "code": 200,
+    "message": "成功",
+    "data": [
+      {
+        "id": 12,
+        "title": "模板1"
+      },
+      {
+        "id": 13,
+        "title": "模板2"
+      }
+    ]
+  },
+  "task": {
+    "code": 200,
+    "msg": "success",
+    "data": {
+      "waitTextVo": [
+        {
+          "title": "任务1",
+          "id": 1,
+          "update_time": "2022-04-11 18:23",
+          "done_state": false,
+          "template_id": 12,
+          "template_title": "模板1"
+        },
+        {
+          "title": "任务2",
+          "id": 2,
+          "update_time": "2022-04-01 11:13",
+          "done_state": false,
+          "template_id": 13,
+          "template_title": "模板2"
+        }
+      ],
+      "doneTextVo": [
+        {
+          "title": "任务3",
+          "id": 3,
+          "update_time": "2022-04-21 18:23",
+          "done_state": true,
+          "template_id": 12,
+          "template_title": "模板1"
+        },
+        {
+          "title": "任务4",
+          "id": 4,
+          "update_time": "2022-04-01 11:13",
+          "done_state": true,
+          "template_id": 13,
+          "template_title": "模板2"
+        }
+      ],
+      "templateList": [
+        {
+          "id": 12,
+          "title": "模板1"
+        },
+        {
+          "id": 13,
+          "title": "模板2"
+        }
+      ]
+    }
   }
 }

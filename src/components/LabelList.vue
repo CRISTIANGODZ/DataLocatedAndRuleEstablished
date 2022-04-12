@@ -34,11 +34,11 @@
 
               <v-list-item-action>
                 <div>
-                  <v-btn @click="edit_info(p_idx)"> 编辑 </v-btn>
+                  <v-btn @click="edit_info(p_idx, n['id'])"> 编辑 </v-btn>
                   <v-btn
                     color="error"
                     style="margin-left: 5px"
-                    @click="del_templete(p_idx)"
+                    @click="del_templete(n['id'])"
                   >
                     删除
                   </v-btn>
@@ -86,7 +86,7 @@
             :key="idx"
           >
             <v-list-item-content>
-              <v-list-item-title>{{ l.text }} </v-list-item-title>
+              <v-text-field v-model="l.title" :value="l.title"> </v-text-field>
             </v-list-item-content>
             <v-list-item-action>
               <div>
@@ -128,7 +128,7 @@
             :key="idx"
           >
             <v-list-item-content>
-              <v-list-item-title>{{ l.text }} </v-list-item-title>
+              <v-text-field v-model="l.title" :value="l.title"> </v-text-field>
             </v-list-item-content>
             <v-list-item-action>
               <div>
@@ -181,6 +181,7 @@ export default Vue.extend({
     temp_connectionCategories: "",
     temp_data: [],
     // labels_data: [],
+    edit_template_id: 0,
   }),
   mounted(): void {
     // this.get_label_list()
@@ -188,7 +189,7 @@ export default Vue.extend({
   },
   methods: {
     get_temp_list() {
-      this.$http.get("/template").then(({ data }) => {
+      this.$http.get("/template/get/").then(({ data }) => {
         if (data.code === 200) {
           this.temp_data = data.data;
           console.log("this.temp_data:", data.data);
@@ -221,7 +222,11 @@ export default Vue.extend({
           return;
         }
       }
-      this.temp_label_info.labelCategories.push({ title: label, color: color });
+      this.temp_label_info.labelCategories.push({
+        title: label,
+        color: color,
+        borderColor: "#000000",
+      });
     },
     delLabel(idx) {
       this.temp_label_info.labelCategories.splice(idx, 1);
@@ -252,7 +257,7 @@ export default Vue.extend({
       res["labelCategories"] = this.temp_label_info.labelCategories;
       res["connectionCategories"] = this.temp_label_info.connectionCategories;
       res["title"] = this.temp_label_info.title;
-      res["method"] = "edit";
+
       if (!res["title"]) {
         alert("模版名称不能为空");
         return;
@@ -262,10 +267,52 @@ export default Vue.extend({
         return;
       }
       var self = this;
-      console.log("新增模板:", res);
-      // this.$http.post("/template", res).then(({ data }) => {
-      //   if (data.status === 200) {
-      //     self.get_temp_list();
+      // 更新模板
+      if (this.edit_template_id !== 0) {
+        res["id"] = this.edit_template_id;
+        res["method"] = "update";
+        console.log("更新模板:", res);
+        this.$http.post("/template/update/", res).then(({ data }) => {
+          if (data.code === 200) {
+            self.get_temp_list();
+            this.dialog_edit = false;
+          } else {
+            alert(data.msg);
+            this.dialog_edit = false;
+          }
+          this.edit_template_id = 0;
+        });
+      }
+      // 新增模板
+      else {
+        res["method"] = "insert";
+        this.$http.post("/template/insert/", res).then(({ data }) => {
+          if (data.code === 200) {
+            self.get_temp_list();
+            this.dialog_edit = false;
+          } else {
+            alert(data.msg);
+            this.dialog_edit = false;
+          }
+        });
+        console.log("新增模板:", res);
+      }
+    },
+    del_templete(idx) {
+      // var data = this.labels_data[idx];
+      console.log("删除 template id:", idx);
+      this.$http.delete("/template/delete/" + idx + "/").then(({ data }) => {
+        if (data.code === 200) {
+          this.get_temp_list();
+        } else {
+          alert(data.msg);
+        }
+      });
+      // data["method"] = "del";
+      // var self = this;
+      // this.$http.post("/template/delete", data).then(({ data }) => {
+      //   if (data.code === 200) {
+      //     self.get_label_list();
       //     this.dialog_edit = false;
       //   } else {
       //     alert(data.msg);
@@ -273,22 +320,9 @@ export default Vue.extend({
       //   }
       // });
     },
-    del_templete(idx) {
-      var data = this.labels_data[idx];
-      data["method"] = "del";
-      var self = this;
-      this.$http.post("/label", data).then(({ data }) => {
-        if (data.status === 200) {
-          self.get_label_list();
-          this.dialog_edit = false;
-        } else {
-          alert(data.msg);
-          this.dialog_edit = false;
-        }
-      });
-    },
-    edit_info(idx) {
+    edit_info(idx, id) {
       this.temp_label_info = this.temp_data[idx];
+      this.edit_template_id = id;
       this.dialog_edit = true;
     },
     add_new_info() {
@@ -297,7 +331,10 @@ export default Vue.extend({
         connectionCategories: [],
         title: "",
       };
-      this.dialog_edit = true;
+      (this.temp_label = ""),
+        (this.temp_color = ""),
+        (this.temp_connectionCategories = ""),
+        (this.dialog_edit = true);
     },
   },
 });

@@ -7,8 +7,9 @@
 
           <v-list two-line>
             <template v-for="(n, index) in wait_list">
-              <v-list-item :key="index">
-                <v-list-item-avatar color="grey darken-1"> </v-list-item-avatar>
+              <v-list-item :key="'inlabel:' + index">
+                <v-list-item-avatar color="green darken-1">
+                </v-list-item-avatar>
 
                 <v-list-item-content>
                   <v-list-item-title
@@ -19,11 +20,22 @@
                     最近标注时间：{{ n["update_time"] }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
+
+                <v-list-item-action>
+                  <div>
+                    <TemplateSelector
+                      :selectTemplateId="n['template_id']"
+                      :selectTemplateInfo="{id: n['template_id'], title: n['template_title']}"
+                      :template_list="template_list"
+                      :editable="!n['done_state']"
+                    ></TemplateSelector>
+                  </div>
+                </v-list-item-action>
               </v-list-item>
 
               <v-divider
                 v-if="n !== wait_list.length"
-                :key="`divider-${n}`"
+                :key="`inLabeling-divider-${index}`"
                 inset
               ></v-divider>
             </template>
@@ -36,8 +48,8 @@
           <v-subheader>已完成 总共: {{ done_list.length }}</v-subheader>
 
           <v-list two-line>
-            <template v-for="n in done_list">
-              <v-list-item :key="n">
+            <template v-for="(n, index) in done_list">
+              <v-list-item :key="'labeled:' + index">
                 <v-list-item-avatar color="grey darken-1"> </v-list-item-avatar>
 
                 <v-list-item-content>
@@ -49,11 +61,20 @@
                     最近标注时间：{{ n["update_time"] }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
+
+                <v-chip dark class="mr-20">
+                  <!-- <TemplateSelector
+                    :selectTemplateId="n['template_id']"
+                    :template_list="template_list"
+                    :editable="!n['done_state']"
+                  ></TemplateSelector> -->
+                  {{ n["template_title"] }}
+                </v-chip>
               </v-list-item>
 
               <v-divider
                 v-if="n !== done_list.length"
-                :key="`divider-${n}`"
+                :key="`alreadyLabeled-divider-${index}`"
                 inset
               ></v-divider>
             </template>
@@ -125,11 +146,18 @@
         </v-card>
       </v-dialog>
     </v-row>
+    <!-- <TemplateSelector
+      :selectTemplateId="12"
+      :template_list="template_list"
+      :editable="true"
+    ></TemplateSelector> -->
+    <!-- <TemplateSelector :selectTemplateId="12"></TemplateSelector> -->
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import TemplateSelector from "../components/TemplateSelector.vue";
 
 export default Vue.extend({
   data: () => ({
@@ -138,7 +166,9 @@ export default Vue.extend({
     select_label: false,
     labels_data: [],
     temp_filedata: null,
+    template_list: [],
   }),
+  components: { TemplateSelector },
   methods: {
     get_file_data(filename) {
       let Base64 = require("js-base64").Base64;
@@ -182,10 +212,12 @@ export default Vue.extend({
     },
     get_task_list() {
       this.$http.get("/task").then(({ data }) => {
-        if (data.status === 200) {
-          this.wait_list = data.data;
-          this.done_list = data.data.done;
+        if (data.code === 200) {
+          this.template_list = data.data.templateList;
+          this.wait_list = data.data.waitTextVo;
+          this.done_list = data.data.doneTextVo;
           console.log("this wait list: ", this.wait_list);
+          // this.get_template_list();
         } else {
           alert(data.msg);
         }
@@ -200,7 +232,18 @@ export default Vue.extend({
         }
       });
     },
+    // get_template_list() {
+    //   this.$http.get("/getTemplateLists").then(({ data }) => {
+    //     if (data.code === 200) {
+    //       this.template_list = data.data;
+    //       console.log("template_list:", this.template_list);
+    //     } else {
+    //       alert(data.msg);
+    //     }
+    //   });
+    // },
   },
+
   mounted(): void {
     this.get_task_list();
   },
