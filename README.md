@@ -4,6 +4,7 @@
 - [Vue.js 2.6.10](https://cn.vuejs.org/v2/guide/installation.html)
 - UI 组件 [vuetifyjs 2.0.0](https://vuetifyjs.com/zh-Hans)
 - CSS 框架 [bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
+- 标注组件 [synyi/poplar](https://github.com/synyi/poplar/blob/master/doc/zh.md)
 
 ## Project setup
 ```
