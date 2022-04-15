@@ -13,21 +13,29 @@
 
                 <v-list-item-content>
                   <v-list-item-title
-                    ><a @click="get_file_data(n['title'])">{{ n["title"] }}</a>
+                    ><a
+                      @click="
+                        get_file_data(n['id'], n['templateId'], n['doneState'])
+                      "
+                      >{{ n["title"] }}</a
+                    >
                   </v-list-item-title>
 
                   <v-list-item-subtitle>
-                    最近标注时间：{{ n["update_time"] }}
+                    最近标注时间：{{ n["updateTime"] }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
                 <v-list-item-action>
                   <div>
                     <TemplateSelector
-                      :selectTemplateId="n['template_id']"
-                      :selectTemplateInfo="{id: n['template_id'], title: n['template_title']}"
+                      :selectTemplateId="n['templateId']"
+                      :selectTemplateInfo="{
+                        id: n['templateId'],
+                        title: n['templateTitle'],
+                      }"
                       :template_list="template_list"
-                      :editable="!n['done_state']"
+                      :editable="!n['doneState']"
                     ></TemplateSelector>
                   </div>
                 </v-list-item-action>
@@ -54,11 +62,16 @@
 
                 <v-list-item-content>
                   <v-list-item-title
-                    ><a @click="get_file_data(n['title'])">{{ n["title"] }}</a>
+                    ><a
+                      @click="
+                        get_file_data(n['id'], n['templateId'], n['doneState'])
+                      "
+                      >{{ n["title"] }}</a
+                    >
                   </v-list-item-title>
 
                   <v-list-item-subtitle>
-                    最近标注时间：{{ n["update_time"] }}
+                    最近标注时间：{{ n["updateTime"] }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
@@ -68,7 +81,7 @@
                     :template_list="template_list"
                     :editable="!n['done_state']"
                   ></TemplateSelector> -->
-                  {{ n["template_title"] }}
+                  {{ n["templateTitle"] }}
                 </v-chip>
               </v-list-item>
 
@@ -170,34 +183,57 @@ export default Vue.extend({
   }),
   components: { TemplateSelector },
   methods: {
-    get_file_data(filename) {
-      let Base64 = require("js-base64").Base64;
-      var self = this;
-      this.$http
-        .post("/task", {
-          action: "get_file",
-          file_name: Base64.encode(filename),
+    get_file_data(id, templateId, doneState) {
+      console.log("id:", id);
+      console.log("templateId:", templateId);
+      console.log("doneState:", doneState);
+      // this.$router
+      //   .push({
+      //     name: "annotate",
+      //     params: {
+      //       text_id: id,
+      //       template_id: templateId,
+      //       done_state: doneState,
+      //     },
+      //   })
+      //   .catch((_) => {});
+      this.$router
+        .push({
+          path: "/annotate",
+          query: {
+            text_id: id,
+            template_id: templateId,
+            done_state: doneState,
+          },
         })
-        .then((data) => {
-          if (data.status === 200) {
-            if (
-              !data.data.labelCategories.length ||
-              !data.data.connectionCategories.length
-            ) {
-              self.get_label_list();
-              self.temp_filedata = data.data;
-              self.select_label = true;
-            } else {
-              window.setTimeout(() => {
-                this.$eventbus.$emit("fileUploaded", data.data);
-                this.$forceUpdate();
-              }, 10);
-              this.$router.push("annotate").catch((_) => {});
-            }
-          } else {
-            alert(data.msg);
-          }
-        });
+        .catch((_) => {});
+      // let Base64 = require("js-base64").Base64;
+      // var self = this;
+      // this.$http
+      //   .post("/getTask", {
+      //     action: "get_file",
+      //     file_name: Base64.encode(filename),
+      //   })
+      //   .then((data) => {
+      //     if (data.status === 200) {
+      //       if (
+      //         !data.data.labelCategories.length ||
+      //         !data.data.connectionCategories.length
+      //       ) {
+      //         self.get_label_list();
+      //         self.temp_filedata = data.data;
+      //         self.select_label = true;
+      //       } else {
+      //         window.setTimeout(() => {
+      //           this.$eventbus.$emit("fileUploaded", data.data);
+      //           this.$forceUpdate();
+      //         }, 10);
+      //         this.$router.push("annotate").catch((_) => {});
+      //       }
+      //     } else {
+      //       alert(data.msg);
+      //     }
+      //   });
     },
     select_now_label(idx) {
       var data = this.temp_filedata;
@@ -211,7 +247,7 @@ export default Vue.extend({
       this.$router.push("annotate").catch((_) => {});
     },
     get_task_list() {
-      this.$http.get("/task").then(({ data }) => {
+      this.$http.get("/text/getTask").then(({ data }) => {
         if (data.code === 200) {
           this.template_list = data.data.templateList;
           this.wait_list = data.data.waitTextVo;

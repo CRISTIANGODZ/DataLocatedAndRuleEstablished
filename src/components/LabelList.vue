@@ -229,7 +229,9 @@ export default Vue.extend({
       });
     },
     delLabel(idx) {
-      this.temp_label_info.labelCategories.splice(idx, 1);
+      if (this.template_id !== 0) {
+        this.temp_label_info.labelCategories.splice(idx, 1);
+      }
     },
     addCon() {
       var label = this.temp_connectionCategories;

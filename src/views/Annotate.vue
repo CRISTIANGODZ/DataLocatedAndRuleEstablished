@@ -43,12 +43,12 @@
 
           <v-chip
             v-for="label in this.jsonData.labelCategories"
-            :key="label"
+            :key="'label' + label['id']"
             class="ma-2"
             :color="label.color"
             text-color="white"
           >
-            {{ label.text }}
+            {{ label.title }}
           </v-chip>
         </v-card>
 
@@ -58,10 +58,10 @@
 
           <v-chip
             v-for="cc in this.jsonData.connectionCategories"
-            :key="cc"
+            :key="'cc' + cc['id']"
             class="ma-2"
           >
-            {{ cc.text }}
+            {{ cc.title }}
           </v-chip>
         </v-card>
       </v-col>
@@ -138,7 +138,30 @@ export default Vue.extend({
   components: {},
   data() {
     return {
-      jsonData: null,
+      jsonData: {
+        labels: [],
+        connections: [
+          { id: 2, textId: 1, relationCategory: 3, fromId: 1, toId: 4 },
+        ],
+        labelCategories: [
+          {
+            id: 1,
+            templateId: 1,
+            title: "123",
+            color: "1",
+            borderColor: "1",
+            createTime: null,
+            text: "123",
+          },
+        ],
+        connectionCategories: [
+          { id: 1, templateId: 1, title: "连接", text: "连接" },
+        ],
+        content: "ABC的人啊实打实打开j",
+        update_time: "2022-04-20T16:55:34.000+0000",
+        title: "测试1",
+      },
+      // jsonData: null,
       annotator: null as Annotator | null,
       selectedLabelCategory: null as LabelCategory.Entity | null,
       selectedConnectionCategory: null as ConnectionCategory.Entity | null,
@@ -153,6 +176,11 @@ export default Vue.extend({
       selectedId: -1,
       complete_loading: false,
       save_loading: false,
+      textId: 0,
+      templateId: 1,
+      doneState: false,
+      // labelCategories: [],
+      // connectionCategories: [],
     };
   },
   methods: {
@@ -199,7 +227,63 @@ export default Vue.extend({
       this.updateJSON();
     },
     createAnnotator(): Annotator {
-      const annotator = new Annotator(this.jsonData, this.$refs.container);
+      console.log("createAnnotator");
+      let jjjsonData = `
+      {
+  "content": "文本内容",
+  "labelCategories": [
+    {
+      "id": Label类型Id,
+      "text": Label文字,
+      "color": Label颜色,
+      "borderColor": Label边框颜色
+    },
+    {
+      "id": Label类型Id,
+      "text": Label文字,
+      "color": Label颜色,
+      "borderColor": Label边框颜色
+    },
+    ...
+  ],
+  "labels": [
+    {
+      "id": LabelId,
+      "categoryId": Label类型,
+      "startIndex": Label开始位置（包含）,
+      "endIndex": Label结束位置（不包含）
+    },
+    {
+      "id": LabelId,
+      "categoryId": Label类型,
+      "startIndex": Label开始位置（包含）,
+      "endIndex": Label结束位置（不包含）
+    },
+    ...
+  ],
+  "connectionCategories": [
+    {
+      "id": Connection类型Id,
+      "text": Connection文字
+    },
+    ...
+  ],
+  "connections": [
+    {
+      "id": ConnectionId,
+      "categoryId": Connection类型,
+      "fromId": Connection开始的Label的id,
+      "toId": Connection结束的Label的id
+    }
+  ]
+}`;
+      console.log("createAnnotator jsondata:", JSON.stringify(this.jsonData));
+      const annotator = new Annotator(
+        JSON.stringify(this.jsonData),
+        // jjjsonData,
+        this.$refs.container
+      );
+      console.log("new");
       annotator.on("textSelected", (startIndex, endIndex) => {
         this.startIndex = startIndex;
         this.endIndex = endIndex;
@@ -268,18 +352,25 @@ export default Vue.extend({
     },
     set_complete: function () {
       this.complete_loading = true;
-      var res_data = this.jsonData;
+      var res_data = {
+        textId: 0,
+        doneState: true,
+        textLabelList: [],
+        textRelationList: [],
+      };
+      var res_data1 = this.jsonData;
       res_data["labels"] = this.annotator.store.json.labels;
       res_data["connections"] = this.annotator.store.json.connections;
       res_data["done_state"] = true;
-      this.$http.post("/task", res_data).then(({ data }) => {
-        if (data.status === 200) {
-          this.complete_loading = false;
-        } else {
-          alert(data.msg);
-          this.complete_loading = false;
-        }
-      });
+      console.log("保存text:", res_data);
+      // this.$http.post("/text/saveTask", res_data).then(({ data }) => {
+      //   if (data.status === 200) {
+      //     this.complete_loading = false;
+      //   } else {
+      //     alert(data.msg);
+      //     this.complete_loading = false;
+      //   }
+      // });
     },
     set_save: function () {
       this.save_loading = true;
@@ -294,6 +385,60 @@ export default Vue.extend({
           this.save_loading = false;
         }
       });
+    },
+    init_params: function () {
+      this.text_id = this.$route.query.text_id;
+      this.template_id = this.$route.query.template_id;
+      this.done_state = this.$route.query.done_state;
+    },
+    getTask: function () {
+      this.$http
+        .get("/text/getTaskById/" + this.text_id + "/" + this.template_id + "/")
+        .then(({ data }) => {
+          if (data.code === 200) {
+            // this.jsonData = data.data;
+            this.jsonData = {
+              labels: data.data.textLabelList.map((item) => ({
+                id: item.id,
+                categoryId: item.labelCategory,
+                startIndex: item["startIndex"],
+                endIndex: item["endIndex"],
+              })),
+              connections: data.data.textRelationList.map((item) => ({
+                id: item.id,
+                categoryId: item.relationCategory,
+                fromId: item.fromId,
+                toId: item.toId,
+              })),
+              labelCategories: data.data.labelList.map((item: Object) => {
+                item["text"] = item["title"];
+                return item;
+              }),
+              connectionCategories: data.data.relationList.map(
+                (item: Object) => {
+                  item["text"] = item["title"];
+                  return item;
+                }
+              ),
+              content: data.data.text.content.replaceAll("⮐", "\n\n"),
+              update_time: data.data.text.updateTime,
+              title: data.data.text.title,
+            };
+            // this.labelCategories = data.data.labelList;
+            // this.connectionCategories = data.data.relationList;
+            console.log("this.jsonData:", JSON.stringify(this.jsonData));
+            console.log("this.jsonData.content:", this.jsonData);
+            if (this.jsonData !== null && this.jsonData.content) {
+              console.log("=================");
+              this.annotator = this.createAnnotator();
+              // console.log("this.annotator:", this.annotator);
+              this.updateJSON();
+            }
+            // this.labelCategories = this.jsonData.labelList;
+          } else {
+            alert(data.msg);
+          }
+        });
     },
   },
   computed: {
@@ -319,28 +464,39 @@ export default Vue.extend({
     },
   },
   created(): void {
-    this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
-      this.jsonData = jsonData;
-      if (this.annotator !== null) {
-        this.annotator.remove();
-      }
-      if (this.jsonData !== null && this.jsonData.content) {
-        this.annotator = this.createAnnotator();
-        this.updateJSON();
-      }
-    });
-    this.$eventbus.$on("downloadRequest", () => {
-      this.download();
-    });
-    this.$eventbus.$on("downloadSVGRequest", () => {
-      this.downloadSVG();
-    });
+    // this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
+    //   this.jsonData = jsonData;
+    //   if (this.annotator !== null) {
+    //     this.annotator.remove();
+    //   }
+    //   if (this.jsonData !== null && this.jsonData.content) {
+    //     this.annotator = this.createAnnotator();
+    //     this.updateJSON();
+    //   }
+    // });
+    // this.$eventbus.$on("downloadRequest", () => {
+    //   this.download();
+    // });
+    // this.$eventbus.$on("downloadSVGRequest", () => {
+    //   this.downloadSVG();
+    // });
+    this.init_params();
+    this.getTask();
   },
+
   mounted(): void {
-    if (this.jsonData !== null && this.jsonData.content) {
-      this.annotator = this.createAnnotator();
-      this.updateJSON();
-    }
+    // this.init_params();
+    console.log("this.$route.query:", this.$route.query);
+    console.log("this.text_id:", this.text_id);
+    console.log("this.template_id:", this.template_id);
+    console.log("this.done_state:", this.done_state);
+    // this.getTask();
+    // console.log("this.jsonData.content:", this.jsonData.content);
+    // if (this.jsonData !== null && !this.jsonData.content) {
+    //   this.annotator = this.createAnnotator();
+    //   console.log("this.annotator:", this.annotator);
+    //   this.updateJSON();
+    // }
   },
 });
 </script>

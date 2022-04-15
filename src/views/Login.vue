@@ -2,7 +2,7 @@
  * @Author: Zhou Xianghui
  * @Date: 2022-04-11 14:28:15
  * @LastEditors: Zhou Xianghui
- * @LastEditTime: 2022-04-11 16:41:13
+ * @LastEditTime: 2022-04-13 16:33:30
  * @FilePath: \ai_ann_front\src\views\Login.vue
  * @Description:
  * after a long, long, long time
@@ -70,13 +70,14 @@ export default Vue.extend({
     login_res() {
       var self = this;
       this.$http
-        .get("/login", { username: this.username, password: this.password })
+        .post("/user/login/", { username: this.username, password: this.password })
         .then(({ data }) => {
-          if (data.status === 200) {
+          if (data.code === 200) {
             console.log("login data:", data);
             var token = data.data;
             localStorage.setItem("token", this.username + "_" + token);
-            localStorage.setItem("role", data.data.role);
+            // localStorage.setItem("role", data.data.role);
+            localStorage.setItem("role", "admin");
             this.$router.push("/").catch((_) => {});
             // location.reload();
           } else {
