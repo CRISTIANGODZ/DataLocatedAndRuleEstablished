@@ -45,7 +45,7 @@
             v-for="label in this.labelCategories || []"
             :key="'label' + label['id']"
             class="ma-2"
-            :color="label.color"
+            :color="label['color']"
             text-color="white"
           >
             {{ label.text }}
@@ -371,14 +371,14 @@ export default Vue.extend({
       );
       res_data["done_state"] = true;
       console.log("保存text:", res_data);
-      // this.$http.post("/text/saveTask", res_data).then(({ data }) => {
-      //   if (data.status === 200) {
-      //     this.complete_loading = false;
-      //   } else {
-      //     alert(data.msg);
-      //     this.complete_loading = false;
-      //   }
-      // });
+      this.$http.post("/text/saveTask", res_data).then(({ data }) => {
+        if (data.status === 200) {
+          this.complete_loading = false;
+        } else {
+          alert(data.msg);
+          this.complete_loading = false;
+        }
+      });
     },
     set_save: function () {
       this.save_loading = true;
@@ -405,14 +405,35 @@ export default Vue.extend({
         .then(({ data }) => {
           if (data.code === 200) {
             // this.jsonData = data.data;
+            console.log("data:", data);
             this.jsonData = {
-              labels: data.data.labels || [],
-              connections: data.data.connections || [],
-              labelCategories: data.data.labelCategories || [],
-              connectionCategories: data.data.connectionCategories || [],
-              content: data.data.text.content.replaceAll("\n", "\n\n"),
-              update_time: data.data.text.updateTime,
-              title: data.data.text.title,
+              labels:
+                data.data.labels.map((v) => {
+                  delete v["textId"];
+                  return v;
+                }) || [],
+              connections:
+                data.data.connections.map((v) => {
+                  delete v["textId"];
+                  return v;
+                }) || [],
+              labelCategories:
+                data.data.labelCategories.map((v) => {
+                  delete v["templateId"];
+                  return v;
+                }) || [],
+              connectionCategories:
+                data.data.connectionCategories.map((v) => {
+                  delete v["templateId"];
+                  return v;
+                }) || [],
+              content: !!data.data.text
+                ? data.data.text.content.replaceAll("\n", "\n\n")
+                : "",
+              update_time: !!data.data.text
+                ? data.data.text.updateTime
+                : new Date(),
+              title: !!data.data.text ? data.data.text.title : "",
             };
 
             // this.jsonData = {
@@ -450,7 +471,7 @@ export default Vue.extend({
             if (this.jsonData !== null && this.jsonData.content) {
               console.log("=================");
               this.annotator = this.createAnnotator();
-              // console.log("this.annotator:", this.annotator);
+              console.log("this.annotator:", this.annotator);
               this.updateJSON();
             }
             // this.labelCategories = this.jsonData.labelList;
@@ -521,6 +542,11 @@ export default Vue.extend({
     // });
     this.init_params();
     this.getTask();
+    // if (this.jsonData !== null && this.jsonData.content) {
+    //   this.annotator = this.createAnnotator();
+    //   console.log("this.annotator:", this.annotator);
+    //   this.updateJSON();
+    // }
   },
 
   mounted(): void {
@@ -533,11 +559,11 @@ export default Vue.extend({
     // console.log("this.done_state:", this.done_state);
     // // this.getTask();
     // // console.log("this.jsonData.content:", this.jsonData.content);
-    if (this.jsonData !== null && this.jsonData.content) {
-      this.annotator = this.createAnnotator();
-      console.log("this.annotator:", this.annotator);
-      this.updateJSON();
-    }
+    // if (this.jsonData !== null && this.jsonData.content) {
+    //   this.annotator = this.createAnnotator();
+    //   console.log("this.annotator:", this.annotator);
+    //   this.updateJSON();
+    // }
   },
 });
 </script>

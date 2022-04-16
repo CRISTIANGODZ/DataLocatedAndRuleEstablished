@@ -140,7 +140,7 @@
                 <v-btn
                   color="error"
                   style="margin-left: 5px"
-                  @click="delCon(idx)"
+                  @click="delCon(idx, l['id'])"
                 >
                   删除
                 </v-btn>
@@ -286,18 +286,41 @@ export default Vue.extend({
           return;
         }
       }
+      if (this.edit_template_id !== 0) {
+        this.$http
+          .post("/relation/insert/", {
+            templateId: this.edit_template_id,
+            text: label,
+          })
+          .then(({ data }) => {
+            if (data.code === 200) {
+              alert("添加成功");
+            } else {
+              alert(data.msg);
+            }
+          });
+      }
       this.temp_connectionCategories = "";
       this.temp_label_info.connectionCategories.push({ text: label });
     },
-    delCon(idx) {
-      // 编辑状态 直接添加 templateId, labelId 后端请求
+    delCon(idx, id) {
+      // 编辑状态 直接添加 templateId, relationId 后端请求
       if (this.edit_template_id !== 0) {
         this.temp_label_info.connectionCategories.splice(idx, 1);
-        this.temp_label_info.connectionCategories.push({ text: label });
+        // this.temp_label_info.connectionCategories.push({ text: label });
+        this.$http
+          .delete("/relation/delete/" + this.edit_template_id + "/" + id)
+          .then(({ data }) => {
+            if (data.code === 200) {
+              alert("删除成功");
+            } else {
+              alert(data.msg);
+            }
+          });
       }
       // 新增状态 先放在数组中
       else {
-        //
+        this.temp_label_info.connectionCategories.splice(idx, 1);
       }
     },
     saveTemp() {
