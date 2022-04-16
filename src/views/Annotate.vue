@@ -37,18 +37,18 @@
       <v-col>
         <div class="container" ref="container"></div>
       </v-col>
-      <v-col class="pa-2" v-if="this.annotator !== null">
+      <v-col class="pa-2" v-if="true || this.annotator !== null">
         <v-card>
           <v-subheader>标签</v-subheader>
 
           <v-chip
-            v-for="label in this.jsonData.labelCategories"
+            v-for="label in this.labelCategories || []"
             :key="'label' + label['id']"
             class="ma-2"
             :color="label.color"
             text-color="white"
           >
-            {{ label.title }}
+            {{ label.text }}
           </v-chip>
         </v-card>
 
@@ -57,11 +57,11 @@
           <v-subheader>关联</v-subheader>
 
           <v-chip
-            v-for="cc in this.jsonData.connectionCategories"
+            v-for="cc in this.connectionCategories || []"
             :key="'cc' + cc['id']"
             class="ma-2"
           >
-            {{ cc.title }}
+            {{ cc.text }}
           </v-chip>
         </v-card>
       </v-col>
@@ -138,30 +138,30 @@ export default Vue.extend({
   components: {},
   data() {
     return {
-      jsonData: {
-        labels: [],
-        connections: [
-          { id: 2, textId: 1, relationCategory: 3, fromId: 1, toId: 4 },
-        ],
-        labelCategories: [
-          {
-            id: 1,
-            templateId: 1,
-            title: "123",
-            color: "1",
-            borderColor: "1",
-            createTime: null,
-            text: "123",
-          },
-        ],
-        connectionCategories: [
-          { id: 1, templateId: 1, title: "连接", text: "连接" },
-        ],
-        content: "ABC的人啊实打实打开j",
-        update_time: "2022-04-20T16:55:34.000+0000",
-        title: "测试1",
-      },
-      // jsonData: null,
+      // jsonData: {
+      //   labels: [],
+      //   connections: [
+      //     { id: 2, textId: 1, relationCategory: 3, fromId: 1, toId: 4 },
+      //   ],
+      //   labelCategories: [
+      //     {
+      //       id: 1,
+      //       templateId: 1,
+      //       title: "123",
+      //       color: "1",
+      //       borderColor: "1",
+      //       createTime: null,
+      //       text: "123",
+      //     },
+      //   ],
+      //   connectionCategories: [
+      //     { id: 1, templateId: 1, title: "连接", text: "连接" },
+      //   ],
+      //   content: "ABC的人啊实打实打开j",
+      //   update_time: "2022-04-20T16:55:34.000+0000",
+      //   title: "测试1",
+      // },
+      jsonData: null,
       annotator: null as Annotator | null,
       selectedLabelCategory: null as LabelCategory.Entity | null,
       selectedConnectionCategory: null as ConnectionCategory.Entity | null,
@@ -177,16 +177,16 @@ export default Vue.extend({
       complete_loading: false,
       save_loading: false,
       textId: 0,
-      templateId: 1,
+      templateId: 0,
       doneState: false,
-      // labelCategories: [],
-      // connectionCategories: [],
+      labelCategories: [],
+      connectionCategories: [],
     };
   },
   methods: {
     updateJSON(): void {
       this.json = this.highlight(
-        JSON.stringify(this.annotator.store.json, null, 4)
+        JSON.stringify(this.annotator.store.json, null, 2)
       );
     },
     addLabel(): void {
@@ -227,7 +227,7 @@ export default Vue.extend({
       this.updateJSON();
     },
     createAnnotator(): Annotator {
-      console.log("createAnnotator");
+      console.log("createAnnotator:", JSON.stringify(this.jsonData));
       let jjjsonData = `
       {
   "content": "文本内容",
@@ -277,10 +277,10 @@ export default Vue.extend({
     }
   ]
 }`;
-      console.log("createAnnotator jsondata:", JSON.stringify(this.jsonData));
+      // console.log("createAnnotator jsondata:", JSON.stringify(this.jsonData));
       const annotator = new Annotator(
         JSON.stringify(this.jsonData),
-        // jjjsonData,
+        // this.jsonData,
         this.$refs.container
       );
       console.log("new");
@@ -353,14 +353,22 @@ export default Vue.extend({
     set_complete: function () {
       this.complete_loading = true;
       var res_data = {
-        textId: 0,
+        textId: this.text_id,
         doneState: true,
         textLabelList: [],
         textRelationList: [],
       };
-      var res_data1 = this.jsonData;
-      res_data["labels"] = this.annotator.store.json.labels;
-      res_data["connections"] = this.annotator.store.json.connections;
+      // var res_data1 = this.jsonData;
+      res_data["textLabelList"] = this.annotator.store.json.labels.map((v) => {
+        v["textId"] = this.text_id;
+        return v;
+      });
+      res_data["textRelationList"] = this.annotator.store.json.connections.map(
+        (v) => {
+          v["textId"] = this.text_id;
+          return v;
+        }
+      );
       res_data["done_state"] = true;
       console.log("保存text:", res_data);
       // this.$http.post("/text/saveTask", res_data).then(({ data }) => {
@@ -398,36 +406,47 @@ export default Vue.extend({
           if (data.code === 200) {
             // this.jsonData = data.data;
             this.jsonData = {
-              labels: data.data.textLabelList.map((item) => ({
-                id: item.id,
-                categoryId: item.labelCategory,
-                startIndex: item["startIndex"],
-                endIndex: item["endIndex"],
-              })),
-              connections: data.data.textRelationList.map((item) => ({
-                id: item.id,
-                categoryId: item.relationCategory,
-                fromId: item.fromId,
-                toId: item.toId,
-              })),
-              labelCategories: data.data.labelList.map((item: Object) => {
-                item["text"] = item["title"];
-                return item;
-              }),
-              connectionCategories: data.data.relationList.map(
-                (item: Object) => {
-                  item["text"] = item["title"];
-                  return item;
-                }
-              ),
-              content: data.data.text.content.replaceAll("⮐", "\n\n"),
+              labels: data.data.labels || [],
+              connections: data.data.connections || [],
+              labelCategories: data.data.labelCategories || [],
+              connectionCategories: data.data.connectionCategories || [],
+              content: data.data.text.content.replaceAll("\n", "\n\n"),
               update_time: data.data.text.updateTime,
               title: data.data.text.title,
             };
-            // this.labelCategories = data.data.labelList;
-            // this.connectionCategories = data.data.relationList;
-            console.log("this.jsonData:", JSON.stringify(this.jsonData));
-            console.log("this.jsonData.content:", this.jsonData);
+
+            // this.jsonData = {
+            //   labels: data.data.textLabelList.map((item) => ({
+            //     id: item.id,
+            //     categoryId: item.labelCategory,
+            //     startIndex: item["startIndex"],
+            //     endIndex: item["endIndex"],
+            //   })),
+            //   connections: data.data.textRelationList.map((item) => ({
+            //     id: item.id,
+            //     categoryId: item.relationCategory,
+            //     fromId: item.fromId,
+            //     toId: item.toId,
+            //   })),
+            //   labelCategories: data.data.labelList.map((item: Object) => {
+            //     item["text"] = item["title"];
+            //     return item;
+            //   }),
+            //   connectionCategories: data.data.relationList.map(
+            //     (item: Object) => {
+            //       item["text"] = item["title"];
+            //       return item;
+            //     }
+            //   ),
+            //   content: data.data.text.content.replaceAll("⮐", "\n\n"),
+            //   update_time: data.data.text.updateTime,
+            //   title: data.data.text.title,
+            // };
+
+            this.labelCategories = data.data.labelCategories;
+            this.connectionCategories = data.data.connectionCategories;
+            // console.log("this.jsonData:", JSON.stringify(this.jsonData));
+            console.log("this.jsonData:", this.jsonData);
             if (this.jsonData !== null && this.jsonData.content) {
               console.log("=================");
               this.annotator = this.createAnnotator();
@@ -442,26 +461,46 @@ export default Vue.extend({
     },
   },
   computed: {
-    labelCategories(): LabelCategory.Entity[] {
-      if (this.annotator === null) {
-        return [];
-      }
-      const result = [];
-      for (const [_, category] of this.annotator.store.labelCategoryRepo) {
-        result.push(category);
-      }
-      return result;
-    },
-    connectionCategories(): ConnectionCategory.Entity[] {
-      if (this.annotator === null) {
-        return [];
-      }
-      const result = [];
-      for (const [_, category] of this.annotator.store.connectionCategoryRepo) {
-        result.push(category);
-      }
-      return result;
-    },
+    // labelCategories(): LabelCategory.Entity[] {
+    //   if (this.annotator === null) {
+    //     return [];
+    //   }
+    //   const result = [];
+    //   for (const [_, category] of this.annotator.store.labelCategoryRepo) {
+    //     result.push(category);
+    //   }
+    //   return result;
+    // },
+    // connectionCategories(): ConnectionCategory.Entity[] {
+    //   if (this.annotator === null) {
+    //     return [];
+    //   }
+    //   const result = [];
+    //   for (const [_, category] of this.annotator.store.connectionCategoryRepo) {
+    //     result.push(category);
+    //   }
+    //   return result;
+    // },
+    // labelCategories() {
+    //   if (this.annotator === null) {
+    //     return [];
+    //   }
+    //   const result = [];
+    //   for (const [_, category] of this.annotator.store.labelCategoryRepo) {
+    //     result.push(category);
+    //   }
+    //   return result;
+    // },
+    // connectionCategories() {
+    //   if (this.annotator === null) {
+    //     return [];
+    //   }
+    //   const result = [];
+    //   for (const [_, category] of this.annotator.store.connectionCategoryRepo) {
+    //     result.push(category);
+    //   }
+    //   return result;
+    // },
   },
   created(): void {
     // this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
@@ -486,17 +525,19 @@ export default Vue.extend({
 
   mounted(): void {
     // this.init_params();
-    console.log("this.$route.query:", this.$route.query);
-    console.log("this.text_id:", this.text_id);
-    console.log("this.template_id:", this.template_id);
-    console.log("this.done_state:", this.done_state);
+    // this.init_params();
     // this.getTask();
-    // console.log("this.jsonData.content:", this.jsonData.content);
-    // if (this.jsonData !== null && !this.jsonData.content) {
-    //   this.annotator = this.createAnnotator();
-    //   console.log("this.annotator:", this.annotator);
-    //   this.updateJSON();
-    // }
+    // console.log("this.$route.query:", this.$route.query);
+    // console.log("this.text_id:", this.text_id);
+    // console.log("this.template_id:", this.template_id);
+    // console.log("this.done_state:", this.done_state);
+    // // this.getTask();
+    // // console.log("this.jsonData.content:", this.jsonData.content);
+    if (this.jsonData !== null && this.jsonData.content) {
+      this.annotator = this.createAnnotator();
+      console.log("this.annotator:", this.annotator);
+      this.updateJSON();
+    }
   },
 });
 </script>

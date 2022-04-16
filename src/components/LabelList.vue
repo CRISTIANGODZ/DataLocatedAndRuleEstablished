@@ -19,7 +19,7 @@
                     :color="l.color"
                     text-color="white"
                   >
-                    {{ l.title }}
+                    {{ l.text }}
                   </v-chip>
                   关联：
                   <v-chip
@@ -27,7 +27,7 @@
                     :key="'relation:' + p_idx + '' + idx"
                     class="ma-2"
                   >
-                    {{ cc.title }}
+                    {{ cc.text }}
                   </v-chip>
                 </div>
               </v-list-item-content>
@@ -86,16 +86,21 @@
             :key="idx"
           >
             <v-list-item-content>
-              <v-text-field v-model="l.title" :value="l.title"> </v-text-field>
+              <v-text-field v-model="l.text" :value="l.text"> </v-text-field>
             </v-list-item-content>
             <v-list-item-action>
               <div>
                 颜色:
-                <colorPicker v-model="l.color" style="margin-right: 200px" />
+                <colorPicker
+                  v-model="l.color"
+                  style="margin-right: 200px"
+                  show-swatches
+                  value="#00eeff"
+                />
                 <v-btn
                   color="error"
                   style="margin-left: 5px"
-                  @click="delLabel(idx)"
+                  @click="delLabel(idx, l.id)"
                 >
                   删除
                 </v-btn>
@@ -128,7 +133,7 @@
             :key="idx"
           >
             <v-list-item-content>
-              <v-text-field v-model="l.title" :value="l.title"> </v-text-field>
+              <v-text-field v-model="l.text" :value="l.title"> </v-text-field>
             </v-list-item-content>
             <v-list-item-action>
               <div>
@@ -177,7 +182,7 @@ export default Vue.extend({
       title: "模版名称",
     }, // 待编辑的模板名称
     temp_label: "",
-    temp_color: "",
+    temp_color: "#00eeff",
     temp_connectionCategories: "",
     temp_data: [],
     // labels_data: [],
@@ -222,14 +227,46 @@ export default Vue.extend({
           return;
         }
       }
+      if (this.edit_template_id !== 0) {
+        this.$http
+          .post("/label/insert/", {
+            borderColor: "#000000",
+            color: color,
+            templateId: this.edit_template_id,
+            text: label,
+          })
+          .then(({ data }) => {
+            if (data.code === 200) {
+              alert("添加成功");
+            } else {
+              alert(data.msg);
+            }
+          });
+      }
+      this.temp_label = "";
+      this.temp_color = "#33ffee";
       this.temp_label_info.labelCategories.push({
-        title: label,
+        text: label,
         color: color,
         borderColor: "#000000",
       });
     },
-    delLabel(idx) {
-      if (this.template_id !== 0) {
+    delLabel(idx, id) {
+      // 编辑状态删除标签 直接删除 templateId, labelId
+      if (this.edit_template_id !== 0) {
+        this.temp_label_info.labelCategories.splice(idx, 1);
+        this.$http
+          .delete("/label/delete/" + this.edit_template_id + "/" + id)
+          .then(({ data }) => {
+            if (data.code === 200) {
+              alert("删除成功");
+            } else {
+              alert(data.msg);
+            }
+          });
+      }
+      // 新建状态删除标签 直接删除 labelId
+      else {
         this.temp_label_info.labelCategories.splice(idx, 1);
       }
     },
@@ -249,10 +286,19 @@ export default Vue.extend({
           return;
         }
       }
-      this.temp_label_info.connectionCategories.push({ title: label });
+      this.temp_connectionCategories = "";
+      this.temp_label_info.connectionCategories.push({ text: label });
     },
     delCon(idx) {
-      this.temp_label_info.connectionCategories.splice(idx, 1);
+      // 编辑状态 直接添加 templateId, labelId 后端请求
+      if (this.edit_template_id !== 0) {
+        this.temp_label_info.connectionCategories.splice(idx, 1);
+        this.temp_label_info.connectionCategories.push({ text: label });
+      }
+      // 新增状态 先放在数组中
+      else {
+        //
+      }
     },
     saveTemp() {
       var res = {};
@@ -268,9 +314,19 @@ export default Vue.extend({
         alert("标签不能为空");
         return;
       }
+
       var self = this;
       // 更新模板
       if (this.edit_template_id !== 0) {
+        for (let i = 0; i < this.temp_data.length; i++) {
+          if (
+            this.edit_template_id !== this.temp_data[i].id &&
+            this.temp_label_info.title == this.temp_data[i].title
+          ) {
+            alert("模板名字不能重复");
+            return;
+          }
+        }
         res["id"] = this.edit_template_id;
         res["method"] = "update";
         console.log("更新模板:", res);
@@ -287,6 +343,12 @@ export default Vue.extend({
       }
       // 新增模板
       else {
+        for (let i = 0; i < this.temp_data.length; i++) {
+          if (this.temp_label_info.title == this.temp_data[i].title) {
+            alert("模板名字不能重复");
+            return;
+          }
+        }
         res["method"] = "insert";
         this.$http.post("/template/insert/", res).then(({ data }) => {
           if (data.code === 200) {
@@ -334,9 +396,14 @@ export default Vue.extend({
         title: "",
       };
       (this.temp_label = ""),
-        (this.temp_color = ""),
+        (this.temp_color = "#33ffee"),
         (this.temp_connectionCategories = ""),
         (this.dialog_edit = true);
+    },
+    initial_label_connection() {
+      (this.temp_label = ""),
+        (this.temp_color = "#33ffee"),
+        (this.temp_connectionCategories = "");
     },
   },
 });

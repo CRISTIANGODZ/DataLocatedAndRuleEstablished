@@ -146,6 +146,52 @@
           "title": "模板2"
         }
       ]
+    },
+    "getTaskById": {
+      "code": 200,
+      "message": "success",
+      "data": {
+        "labels": [
+          {
+            "id": 9,
+            "categoryId": 1,
+            "startIndex": 1,
+            "endIndex": 1
+          }
+        ],
+        "connections": [
+          {
+            "id": 1,
+            "categoryId": 1,
+            "fromId": 1,
+            "toId": 1
+          }
+        ],
+        "labelCategories": [
+          {
+            "id": 1,
+            "text": "名词",
+            "color": "#ff00ee",
+            "borderColor": "#0fe332",
+          },
+          {
+            "id": 2,
+            "text": "动词",
+            "color": "#9900ee",
+            "borderColor": "#ff043a"
+          }
+        ],
+        "connectionCategories": [
+          {
+            "id": 1,
+            "title": "有毛病",
+            "templateId": 12
+          }
+        ],
+        "content": "blablabla",
+        "title": "任务1",
+        "update_time": "2022-04-11 18:23"
+      }
     }
   }
 }
