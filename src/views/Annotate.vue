@@ -135,6 +135,7 @@ import Prism from "prismjs";
 import { Action, Annotator } from "poplar-annotation";
 import { LabelCategory } from "poplar-annotation/dist/Store/LabelCategory";
 import { ConnectionCategory } from "poplar-annotation/dist/Store/ConnectionCategory";
+// import { Label } from "poplar-annotation/dist/Store/Label";
 
 enum CategorySelectMode {
   Create,
@@ -204,48 +205,87 @@ export default Vue.extend({
           Action.Label.Update(this.selectedId, this.selectedLabelCategory)
         );
       } else {
-        this.annotator.applyAction(
-          Action.Label.Create(
-            this.selectedLabelCategory,
-            this.startIndex,
-            this.endIndex
-          )
-        );
-      }
-      let a = Action.Label.Create(
-            this.selectedLabelCategory,
-            this.startIndex,
-            this.endIndex
-          )
-      console.log("add label:", {
-        textId: this.text_id,
-        startIndex: this.startIndex,
-        endIndex: this.endIndex,
-        categoryId: this.selectedLabelCategory,
-        selectedId: this.selectedId,
-      });
-      this.$http
-        .post("/text/insertTaskLabel/", {
+        // this.annotator.applyAction(
+        //   Action.Label.Create(
+        //     this.selectedLabelCategory,
+        //     this.startIndex,
+        //     this.endIndex
+        //   )
+        // );
+
+        // let a = Action.Label.Create(
+        //   this.selectedLabelCategory,
+        //   this.startIndex,
+        //   this.endIndex
+        // );
+        console.log("add label:", {
           textId: this.text_id,
           startIndex: this.startIndex,
           endIndex: this.endIndex,
           categoryId: this.selectedLabelCategory,
-        })
-        .then(({ data }) => {
-          if (data.code === 200) {
-            this.complete_loading = false;
-            alert("添加成功");
-            console.log("add label: ", data.data);
-            this.showLabelCategoriesDialog = false;
-            // this.jsonData.labels = [];
-            // this.annotator.remove();
-            // this.annotator = this.createAnnotator();
-            this.updateJSON();
-            // this.getTask();
-          } else {
-            alert(data.msg);
-          }
+          selectedId: this.selectedId,
         });
+        this.$http
+          .post("/text/insertTaskLabel/", {
+            textId: this.text_id,
+            startIndex: this.startIndex,
+            endIndex: this.endIndex,
+            categoryId: this.selectedLabelCategory,
+          })
+          .then(({ data }) => {
+            if (data.code === 200) {
+              this.complete_loading = false;
+              alert("添加成功");
+              console.log("add label: ", data.data);
+              this.annotator.store.labelRepo["nextId"] = data.data;
+              this.annotator.applyAction(
+                Action.Label.Create(
+                  this.selectedLabelCategory,
+                  this.startIndex,
+                  this.endIndex
+                )
+              );
+              this.showLabelCategoriesDialog = false;
+              // this.jsonData.labels = [];
+              // this.annotator.remove();
+              // this.annotator = this.createAnnotator();
+              // this.getTask();
+              // this.$router.go(0)
+              // this.annotator.store.labelRepo.delete(0);
+              // this.annotator.store.labelRepo.add(
+              //   data.data,
+              //   new this.annotator.store.Label.Entity(
+              //     data.data,
+              //     this.selectedLabelCategory,
+              //     this.startIndex,
+              //     this.endIndex,
+              //     this.annotator.store
+              //   )
+              // );
+              // this.updateJSON();
+              // this.annotator.store.json.labels =
+              //   this.annotator.store.json.labels.map((v) => {
+              //     if (v.id === 0) {
+              //       v["id"] = data.data;
+              //       console.log("v: ", v);
+              //     }
+              //     return v;
+              //   });
+              // console.log("labelRepo: ", this.annotator.store.labelRepo);
+              // this.annotator.store.labelRepo.get(0)["id"] = data.data;
+              // console.log("labelRepo: ", this.annotator.store.labelRepo);
+              this.updateJSON();
+              // this.annotator.store.labelRepo.add(data.data, {
+              //   id: data.data,
+              //   categoryId: this.selectedLabelCategory,
+              //   _startIndex: this.startIndex,
+              //   _endIndex: this.endIndex,
+              // });
+            } else {
+              alert(data.msg);
+            }
+          });
+      }
     },
     addConnection(): void {
       if (this.categorySelectMode === CategorySelectMode.Update) {
@@ -256,41 +296,54 @@ export default Vue.extend({
           )
         );
       } else {
-        this.annotator.applyAction(
-          Action.Connection.Create(
-            this.selectedConnectionCategory,
-            this.from,
-            this.to
-          )
-        );
-      }
-      console.log("add connection:", {
-        textId: this.text_id,
-        fromId: this.from,
-        toId: this.to,
-        categoryId: this.selectedConnectionCategory,
-      });
-      this.$http
-        .post("/text/insertTaskRelation/", {
+        // this.annotator.applyAction(
+        //   Action.Connection.Create(
+        //     this.selectedConnectionCategory,
+        //     this.from,
+        //     this.to
+        //   )
+        // );
+        // }
+        console.log("add connection:", {
           textId: this.text_id,
           fromId: this.from,
           toId: this.to,
           categoryId: this.selectedConnectionCategory,
-        })
-        .then(({ data }) => {
-          if (data.code === 200) {
-            this.complete_loading = false;
-            alert("添加成功");
-            console.log("add connection: ", data.data);
-            this.showLabelCategoriesDialog = false;
-            this.updateJSON();
-            // this.getTask();
-          } else {
-            alert(data.msg);
-          }
         });
-      this.showConnectionCategoriesDialog = false;
-      // this.updateJSON();
+        this.$http
+          .post("/text/insertTaskRelation/", {
+            textId: this.text_id,
+            fromId: this.from,
+            toId: this.to,
+            categoryId: this.selectedConnectionCategory,
+          })
+          .then(({ data }) => {
+            if (data.code === 200) {
+              this.complete_loading = false;
+              this.annotator.store.connectionRepo["nextId"] = data.data;
+              this.annotator.applyAction(
+                Action.Connection.Create(
+                  this.selectedConnectionCategory,
+                  this.from,
+                  this.to
+                )
+              );
+              alert("添加成功");
+              console.log("add connection: ", data.data);
+              this.showLabelCategoriesDialog = false;
+              this.updateJSON();
+              // this.$router.go(0);
+              // this.annotator.store.labelRepo.set(0, {
+              //   id: data.data, categoryId: this.selectedConnectionCategory,, _startIndex: number, _endIndex: number, root: Store
+              // })
+              // this.getTask();
+            } else {
+              alert(data.msg);
+            }
+          });
+        this.showConnectionCategoriesDialog = false;
+        // this.updateJSON();
+      }
     },
     createAnnotator(): Annotator {
       console.log("createAnnotator:", JSON.stringify(this.jsonData));
