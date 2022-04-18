@@ -212,6 +212,11 @@ export default Vue.extend({
           )
         );
       }
+      let a = Action.Label.Create(
+            this.selectedLabelCategory,
+            this.startIndex,
+            this.endIndex
+          )
       console.log("add label:", {
         textId: this.text_id,
         startIndex: this.startIndex,
@@ -232,6 +237,9 @@ export default Vue.extend({
             alert("添加成功");
             console.log("add label: ", data.data);
             this.showLabelCategoriesDialog = false;
+            // this.jsonData.labels = [];
+            // this.annotator.remove();
+            // this.annotator = this.createAnnotator();
             this.updateJSON();
             // this.getTask();
           } else {
@@ -262,27 +270,27 @@ export default Vue.extend({
         toId: this.to,
         categoryId: this.selectedConnectionCategory,
       });
-      // this.$http
-      //   .post("/text/insertTaskConnection/", {
-      //     textId: this.text_id,
-      //     fromId: this.from,
-      //     toId: this.to,
-      //     categoryId: this.selectedConnectionCategory,
-      //   })
-      //   .then(({ data }) => {
-      //     if (data.code === 200) {
-      //       this.complete_loading = false;
-      //       alert("添加成功");
-      //       console.log("add connection: ", data.data);
-      //       this.showLabelCategoriesDialog = false;
-      //       this.updateJSON();
-      //       // this.getTask();
-      //     } else {
-      //       alert(data.msg);
-      //     }
-      //   });
+      this.$http
+        .post("/text/insertTaskRelation/", {
+          textId: this.text_id,
+          fromId: this.from,
+          toId: this.to,
+          categoryId: this.selectedConnectionCategory,
+        })
+        .then(({ data }) => {
+          if (data.code === 200) {
+            this.complete_loading = false;
+            alert("添加成功");
+            console.log("add connection: ", data.data);
+            this.showLabelCategoriesDialog = false;
+            this.updateJSON();
+            // this.getTask();
+          } else {
+            alert(data.msg);
+          }
+        });
       this.showConnectionCategoriesDialog = false;
-      this.updateJSON();
+      // this.updateJSON();
     },
     createAnnotator(): Annotator {
       console.log("createAnnotator:", JSON.stringify(this.jsonData));
@@ -376,6 +384,7 @@ export default Vue.extend({
               alert(data.msg);
             }
           });
+        this.showLabelCategoriesDialog = false;
         this.updateJSON();
       });
       annotator.on(
@@ -389,7 +398,7 @@ export default Vue.extend({
             annotator.applyAction(Action.Connection.Delete(connectionId));
           }
           this.$http
-            .delete("/text/deleteTaskConnection/" + connectionId + "/")
+            .delete("/text/deleteTaskRelation/" + connectionId + "/")
             .then(({ data }) => {
               if (data.code === 200) {
                 this.complete_loading = false;
@@ -402,6 +411,7 @@ export default Vue.extend({
                 alert(data.msg);
               }
             });
+          this.showLabelCategoriesDialog = false;
           this.updateJSON();
         }
       );
@@ -447,6 +457,21 @@ export default Vue.extend({
       });
     },
     set_complete: function () {
+      this.$http
+        .get("/text/saveTaskById/" + this.text_id + "/")
+        .then(({ data }) => {
+          if (data.code === 200) {
+            this.complete_loading = false;
+            alert("已完成");
+            this.$router.push("/").catch((_) => {});
+            this.updateJSON();
+          } else {
+            alert(data.msg);
+            this.complete_loading = false;
+          }
+        });
+    },
+    set_complete2: function () {
       this.complete_loading = true;
       var res_data = {
         textId: this.text_id,

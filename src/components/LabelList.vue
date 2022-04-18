@@ -218,7 +218,16 @@ export default Vue.extend({
       var label = this.temp_label;
       var color = this.temp_color;
       if (!label || !color) {
-        alert("标签和颜色不能为空");
+        // alert("标签和颜色不能为空");
+        this.$swal({
+          toast: true,
+          position: "top",
+          showConfirmButton: false,
+          timer: 3000,
+          icon: "warning",
+          title: "Warning",
+          text: "标签和颜色不能为空!!!",
+        });
         return;
       }
       for (let i = 0; i < this.temp_label_info.labelCategories.length; i++) {
