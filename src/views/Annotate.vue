@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row v-if="!doneState">
       <!-- <v-btn
         @click="set_save"
         color="primary ma-1"
@@ -17,14 +17,12 @@
         @click="reset"
         color="primary ma-1"
         v-if="this.$router.currentRoute.fullPath.includes('annotate')"
-        :disabled="doneState"
       >
         重置
       </v-btn>
       <v-btn
         class="ma-1"
         :loading="complete_loading"
-        :disabled="complete_loading || doneState"
         color="success"
         @click="set_complete"
       >
@@ -574,6 +572,7 @@ export default Vue.extend({
       this.text_id = this.$route.query.text_id;
       this.template_id = this.$route.query.template_id;
       this.done_state = this.$route.query.done_state;
+      this.doneState = this.$route.query.done_state;
     },
     getTask: function () {
       this.$http
@@ -614,6 +613,7 @@ export default Vue.extend({
               title: data.data.text.title,
               // !!data.data.text ? data.data.text.title : "",
             };
+            this.doneState = data.data.text.doneState;
 
             // this.jsonData = {
             //   labels: data.data.textLabelList.map((item) => ({
