@@ -6,7 +6,9 @@ var DEBUG = true;
 // var BASEURL = "http://127.0.0.1:3004";
 // var BASEURL = "http://10.16.109.50:8081";
 // var BASEURL = "http://10.16.29.172:8081";
-var BASEURL = "http://localhost:8081";
+// var BASEURL = "http://localhost:8081";
+// var BASEURL = "http://10.16.79.168:8081";
+var BASEURL = "http://10.16.107.2:18081";
 
 var http = axios.create({
   baseURL: BASEURL,

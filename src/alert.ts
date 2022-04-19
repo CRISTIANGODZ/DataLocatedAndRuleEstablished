@@ -6,6 +6,17 @@ import "sweetalert2/dist/sweetalert2.min.css";
 
 Vue.use(VueSweetalert2);
 
+const smiles = ["😊", "😃", "😉"];
+const warnings = ["🤐", "😅", "😮", "🙃", "🏴‍☠️"];
+
+function getRandomSmile() {
+  return " " + smiles[Math.floor(Math.random() * smiles.length)];
+}
+
+function getRandomWaring() {
+  return " " + warnings[Math.floor(Math.random() * warnings.length)];
+}
+
 const warning = function (message) {
   this.$swal({
     toast: true,
@@ -14,7 +25,7 @@ const warning = function (message) {
     timer: 3000,
     icon: "warning",
     title: "Warning",
-    text: message,
+    text: message + getRandomWaring(),
   });
 };
 
@@ -26,7 +37,7 @@ const success = function (message) {
     timer: 3000,
     icon: "success",
     title: "成功",
-    text: message,
+    text: message + getRandomSmile(),
   });
 };
 

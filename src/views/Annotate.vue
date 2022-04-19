@@ -44,6 +44,14 @@
       </v-col>
       <v-col class="pa-2" v-if="true || this.annotator !== null">
         <v-card>
+          <v-chip class="ma-4 font-weight-bold" text-color="black">
+            模板:
+            <!-- hell -->
+            {{ this.templateTitle }}
+          </v-chip>
+        </v-card>
+        <v-divider style="margin-top: 10px; margin-bottom: 10px"></v-divider>
+        <v-card>
           <v-subheader>标签</v-subheader>
 
           <v-chip
@@ -189,6 +197,7 @@ export default Vue.extend({
       doneState: false,
       labelCategories: [],
       connectionCategories: [],
+      templateTitle: "",
     };
   },
   methods: {
@@ -198,149 +207,155 @@ export default Vue.extend({
       );
     },
     addLabel(): void {
-      if (this.categorySelectMode === CategorySelectMode.Update) {
-        this.annotator.applyAction(
-          Action.Label.Update(this.selectedId, this.selectedLabelCategory)
-        );
-      } else {
-        // this.annotator.applyAction(
-        //   Action.Label.Create(
-        //     this.selectedLabelCategory,
-        //     this.startIndex,
-        //     this.endIndex
-        //   )
-        // );
+      if (!this.doneState) {
+        if (this.categorySelectMode === CategorySelectMode.Update) {
+          this.annotator.applyAction(
+            Action.Label.Update(this.selectedId, this.selectedLabelCategory)
+          );
+        } else {
+          // this.annotator.applyAction(
+          //   Action.Label.Create(
+          //     this.selectedLabelCategory,
+          //     this.startIndex,
+          //     this.endIndex
+          //   )
+          // );
 
-        // let a = Action.Label.Create(
-        //   this.selectedLabelCategory,
-        //   this.startIndex,
-        //   this.endIndex
-        // );
-        console.log("add label:", {
-          textId: this.text_id,
-          startIndex: this.startIndex,
-          endIndex: this.endIndex,
-          categoryId: this.selectedLabelCategory,
-          selectedId: this.selectedId,
-        });
-        this.$http
-          .post("/text/insertTaskLabel/", {
+          // let a = Action.Label.Create(
+          //   this.selectedLabelCategory,
+          //   this.startIndex,
+          //   this.endIndex
+          // );
+          console.log("add label:", {
             textId: this.text_id,
             startIndex: this.startIndex,
             endIndex: this.endIndex,
             categoryId: this.selectedLabelCategory,
-          })
-          .then(({ data }) => {
-            if (data.code === 200) {
-              this.complete_loading = false;
-              this.$success("添加成功");
-              console.log("add label: ", data.data);
-              this.annotator.store.labelRepo["nextId"] = data.data;
-              this.annotator.applyAction(
-                Action.Label.Create(
-                  this.selectedLabelCategory,
-                  this.startIndex,
-                  this.endIndex
-                )
-              );
-              this.showLabelCategoriesDialog = false;
-              // this.jsonData.labels = [];
-              // this.annotator.remove();
-              // this.annotator = this.createAnnotator();
-              // this.getTask();
-              // this.$router.go(0)
-              // this.annotator.store.labelRepo.delete(0);
-              // this.annotator.store.labelRepo.add(
-              //   data.data,
-              //   new this.annotator.store.Label.Entity(
-              //     data.data,
-              //     this.selectedLabelCategory,
-              //     this.startIndex,
-              //     this.endIndex,
-              //     this.annotator.store
-              //   )
-              // );
-              // this.updateJSON();
-              // this.annotator.store.json.labels =
-              //   this.annotator.store.json.labels.map((v) => {
-              //     if (v.id === 0) {
-              //       v["id"] = data.data;
-              //       console.log("v: ", v);
-              //     }
-              //     return v;
-              //   });
-              // console.log("labelRepo: ", this.annotator.store.labelRepo);
-              // this.annotator.store.labelRepo.get(0)["id"] = data.data;
-              // console.log("labelRepo: ", this.annotator.store.labelRepo);
-              this.updateJSON();
-              // this.annotator.store.labelRepo.add(data.data, {
-              //   id: data.data,
-              //   categoryId: this.selectedLabelCategory,
-              //   _startIndex: this.startIndex,
-              //   _endIndex: this.endIndex,
-              // });
-            } else {
-              this.$warning(data.msg);
-            }
+            selectedId: this.selectedId,
           });
+          this.$http
+            .post("/text/insertTaskLabel/", {
+              textId: this.text_id,
+              startIndex: this.startIndex,
+              endIndex: this.endIndex,
+              categoryId: this.selectedLabelCategory,
+              templateId: this.templateId,
+            })
+            .then(({ data }) => {
+              if (data.code === 200) {
+                this.complete_loading = false;
+                this.$success("添加成功");
+                console.log("add label: ", data.data);
+                this.annotator.store.labelRepo["nextId"] = data.data;
+                this.annotator.applyAction(
+                  Action.Label.Create(
+                    this.selectedLabelCategory,
+                    this.startIndex,
+                    this.endIndex
+                  )
+                );
+                this.showLabelCategoriesDialog = false;
+                // this.jsonData.labels = [];
+                // this.annotator.remove();
+                // this.annotator = this.createAnnotator();
+                // this.getTask();
+                // this.$router.go(0)
+                // this.annotator.store.labelRepo.delete(0);
+                // this.annotator.store.labelRepo.add(
+                //   data.data,
+                //   new this.annotator.store.Label.Entity(
+                //     data.data,
+                //     this.selectedLabelCategory,
+                //     this.startIndex,
+                //     this.endIndex,
+                //     this.annotator.store
+                //   )
+                // );
+                // this.updateJSON();
+                // this.annotator.store.json.labels =
+                //   this.annotator.store.json.labels.map((v) => {
+                //     if (v.id === 0) {
+                //       v["id"] = data.data;
+                //       console.log("v: ", v);
+                //     }
+                //     return v;
+                //   });
+                // console.log("labelRepo: ", this.annotator.store.labelRepo);
+                // this.annotator.store.labelRepo.get(0)["id"] = data.data;
+                // console.log("labelRepo: ", this.annotator.store.labelRepo);
+                this.updateJSON();
+                // this.annotator.store.labelRepo.add(data.data, {
+                //   id: data.data,
+                //   categoryId: this.selectedLabelCategory,
+                //   _startIndex: this.startIndex,
+                //   _endIndex: this.endIndex,
+                // });
+              } else {
+                this.$warning(data.msg);
+              }
+            });
+        }
       }
     },
     addConnection(): void {
-      if (this.categorySelectMode === CategorySelectMode.Update) {
-        this.annotator.applyAction(
-          Action.Connection.Update(
-            this.selectedId,
-            this.selectedConnectionCategory
-          )
-        );
-      } else {
-        // this.annotator.applyAction(
-        //   Action.Connection.Create(
-        //     this.selectedConnectionCategory,
-        //     this.from,
-        //     this.to
-        //   )
-        // );
-        // }
-        console.log("add connection:", {
-          textId: this.text_id,
-          fromId: this.from,
-          toId: this.to,
-          categoryId: this.selectedConnectionCategory,
-        });
-        this.$http
-          .post("/text/insertTaskRelation/", {
+      if (!this.doneState) {
+        if (this.categorySelectMode === CategorySelectMode.Update) {
+          this.annotator.applyAction(
+            Action.Connection.Update(
+              this.selectedId,
+              this.selectedConnectionCategory
+            )
+          );
+        } else {
+          // this.annotator.applyAction(
+          //   Action.Connection.Create(
+          //     this.selectedConnectionCategory,
+          //     this.from,
+          //     this.to
+          //   )
+          // );
+          // }
+          console.log("add connection:", {
             textId: this.text_id,
             fromId: this.from,
             toId: this.to,
             categoryId: this.selectedConnectionCategory,
-          })
-          .then(({ data }) => {
-            if (data.code === 200) {
-              this.complete_loading = false;
-              this.annotator.store.connectionRepo["nextId"] = data.data;
-              this.annotator.applyAction(
-                Action.Connection.Create(
-                  this.selectedConnectionCategory,
-                  this.from,
-                  this.to
-                )
-              );
-              this.$success("添加成功");
-              console.log("add connection: ", data.data);
-              this.showLabelCategoriesDialog = false;
-              this.updateJSON();
-              // this.$router.go(0);
-              // this.annotator.store.labelRepo.set(0, {
-              //   id: data.data, categoryId: this.selectedConnectionCategory,, _startIndex: number, _endIndex: number, root: Store
-              // })
-              // this.getTask();
-            } else {
-              this.$warning(data.msg);
-            }
           });
-        this.showConnectionCategoriesDialog = false;
-        // this.updateJSON();
+          this.$http
+            .post("/text/insertTaskRelation/", {
+              textId: this.text_id,
+              fromId: this.from,
+              toId: this.to,
+              categoryId: this.selectedConnectionCategory,
+              templateId: this.templateId,
+            })
+            .then(({ data }) => {
+              if (data.code === 200) {
+                this.complete_loading = false;
+                this.annotator.store.connectionRepo["nextId"] = data.data;
+                this.annotator.applyAction(
+                  Action.Connection.Create(
+                    this.selectedConnectionCategory,
+                    this.from,
+                    this.to
+                  )
+                );
+                this.$success("添加成功");
+                console.log("add connection: ", data.data);
+                this.showLabelCategoriesDialog = false;
+                this.updateJSON();
+                // this.$router.go(0);
+                // this.annotator.store.labelRepo.set(0, {
+                //   id: data.data, categoryId: this.selectedConnectionCategory,, _startIndex: number, _endIndex: number, root: Store
+                // })
+                // this.getTask();
+              } else {
+                this.$warning(data.msg);
+              }
+            });
+          this.showConnectionCategoriesDialog = false;
+          // this.updateJSON();
+        }
       }
     },
     createAnnotator(): Annotator {
@@ -401,80 +416,87 @@ export default Vue.extend({
         this.$refs.container
       );
       console.log("new");
-      annotator.on("textSelected", (startIndex, endIndex) => {
-        this.startIndex = startIndex;
-        this.endIndex = endIndex;
-        this.categorySelectMode = CategorySelectMode.Create;
-        this.showLabelCategoriesDialog = true;
-      });
-      annotator.on("twoLabelsClicked", (fromLabelId, toLabelId) => {
-        this.from = fromLabelId;
-        this.to = toLabelId;
-        this.categorySelectMode = CategorySelectMode.Create;
-        this.showConnectionCategoriesDialog = true;
-      });
-      annotator.on("labelRightClicked", (labelId, event: MouseEvent) => {
-        if (event.ctrlKey) {
-          this.categorySelectMode = CategorySelectMode.Update;
-          this.selectedId = labelId;
+      if (!this.doneState) {
+        annotator.on("textSelected", (startIndex, endIndex) => {
+          this.startIndex = startIndex;
+          this.endIndex = endIndex;
+          this.categorySelectMode = CategorySelectMode.Create;
           this.showLabelCategoriesDialog = true;
-        } else {
-          annotator.applyAction(Action.Label.Delete(labelId));
-        }
-        this.$http
-          .delete("/text/deleteTaskLabel/" + labelId + "/")
-          .then(({ data }) => {
-            if (data.code === 200) {
-              this.complete_loading = false;
-              this.$success("删除成功");
-              console.log("delete label: ", data.data);
+        });
+        annotator.on("twoLabelsClicked", (fromLabelId, toLabelId) => {
+          this.from = fromLabelId;
+          this.to = toLabelId;
+          this.categorySelectMode = CategorySelectMode.Create;
+          this.showConnectionCategoriesDialog = true;
+        });
+        annotator.on("labelRightClicked", (labelId, event: MouseEvent) => {
+          if (!this.doneState) {
+            if (event.ctrlKey) {
+              this.categorySelectMode = CategorySelectMode.Update;
+              this.selectedId = labelId;
+              this.showLabelCategoriesDialog = true;
+            } else {
+              annotator.applyAction(Action.Label.Delete(labelId));
+            }
+            this.$http
+              .delete("/text/deleteTaskLabel/" + labelId + "/")
+              .then(({ data }) => {
+                if (data.code === 200) {
+                  this.complete_loading = false;
+                  this.$success("删除成功");
+                  console.log("delete label: ", data.data);
+                  this.showLabelCategoriesDialog = false;
+                  this.updateJSON();
+                  // this.getTask();
+                } else {
+                  this.$warning(data.msg);
+                }
+              });
+            this.showLabelCategoriesDialog = false;
+            this.updateJSON();
+          }
+        });
+
+        annotator.on(
+          "connectionRightClicked",
+          (connectionId, event: MouseEvent) => {
+            if (!this.doneState) {
+              if (event.ctrlKey) {
+                this.categorySelectMode = CategorySelectMode.Update;
+                this.selectedId = connectionId;
+                this.showConnectionCategoriesDialog = true;
+              } else {
+                annotator.applyAction(Action.Connection.Delete(connectionId));
+              }
+              this.$http
+                .delete("/text/deleteTaskRelation/" + connectionId + "/")
+                .then(({ data }) => {
+                  if (data.code === 200) {
+                    this.complete_loading = false;
+                    this.$success("删除成功");
+                    console.log("delete connection: ", data.data);
+                    this.showLabelCategoriesDialog = false;
+                    this.updateJSON();
+                    // this.getTask();
+                  } else {
+                    this.$warning(data.msg);
+                  }
+                });
               this.showLabelCategoriesDialog = false;
               this.updateJSON();
-              // this.getTask();
-            } else {
-              this.$warning(data.msg);
             }
-          });
-        this.showLabelCategoriesDialog = false;
-        this.updateJSON();
-      });
-      annotator.on(
-        "connectionRightClicked",
-        (connectionId, event: MouseEvent) => {
-          if (event.ctrlKey) {
-            this.categorySelectMode = CategorySelectMode.Update;
-            this.selectedId = connectionId;
-            this.showConnectionCategoriesDialog = true;
-          } else {
-            annotator.applyAction(Action.Connection.Delete(connectionId));
           }
-          this.$http
-            .delete("/text/deleteTaskRelation/" + connectionId + "/")
-            .then(({ data }) => {
-              if (data.code === 200) {
-                this.complete_loading = false;
-                this.$success("删除成功");
-                console.log("delete connection: ", data.data);
-                this.showLabelCategoriesDialog = false;
-                this.updateJSON();
-                // this.getTask();
-              } else {
-                this.$warning(data.msg);
-              }
-            });
-          this.showLabelCategoriesDialog = false;
+        );
+        annotator.on("contentInput", (position, value) => {
+          annotator.applyAction(Action.Content.Splice(position, 0, value));
           this.updateJSON();
-        }
-      );
-      annotator.on("contentInput", (position, value) => {
-        annotator.applyAction(Action.Content.Splice(position, 0, value));
-        this.updateJSON();
-      });
-      annotator.on("contentDelete", (position, length) => {
-        annotator.applyAction(Action.Content.Splice(position, length, ""));
-        this.updateJSON();
-      });
-      return annotator;
+        });
+        annotator.on("contentDelete", (position, length) => {
+          annotator.applyAction(Action.Content.Splice(position, length, ""));
+          this.updateJSON();
+        });
+        return annotator;
+      }
     },
     highlight(code: string): string {
       return Prism.highlight(code, Prism.languages.javascript, "javascript");
@@ -513,7 +535,7 @@ export default Vue.extend({
         .then(({ data }) => {
           if (data.code === 200) {
             this.complete_loading = false;
-            this.$success("已完成");
+            this.$success("文本标注完成");
             this.$router.push("/").catch((_) => {});
             this.updateJSON();
           } else {
@@ -614,6 +636,8 @@ export default Vue.extend({
               // !!data.data.text ? data.data.text.title : "",
             };
             this.doneState = data.data.text.doneState;
+            this.templateId = data.data.text.templateId;
+            this.templateTitle = data.data.templateTitle;
 
             // this.jsonData = {
             //   labels: data.data.textLabelList.map((item) => ({

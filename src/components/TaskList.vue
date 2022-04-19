@@ -32,7 +32,7 @@
                       :selectTemplateId="n['templateId']"
                       :selectTemplateIdOperation="selectTemplateIdOperation"
                       :selectTemplateInfo="{
-                        id: n['templateId'],
+                        textId: n['id'],
                         title: n['templateTitle'],
                       }"
                       :template_list="template_list"

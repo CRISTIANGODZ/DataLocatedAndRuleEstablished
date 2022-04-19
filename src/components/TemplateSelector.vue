@@ -39,6 +39,7 @@ export default Vue.extend({
     // template_list: [],
     select: 0,
     selected: true,
+    textId: 0,
   }),
   props: {
     selectTemplateId: Number,
@@ -60,7 +61,18 @@ export default Vue.extend({
     // },
     selectTemplate() {
       console.log("selectTemplateIdOperation select:", this.select);
+      console.log("this.textId:", this.textId);
       this.selectTemplateIdOperation(this.select);
+      this.$http.get(
+        "/text/updateTemplate/" + this.textId + "/" + this.select
+      ).then(({ data }) => {
+        if (data.code === 200) {
+          this.selectTemplateIdOperation(this.select);
+          this.$success("更改模板成功");
+        } else {
+          this.$warning(data.msg);
+        }
+      });
     },
     initialTemplate() {
       if (this.editable) {
@@ -72,6 +84,7 @@ export default Vue.extend({
           }
           this.selected = true;
           this.select = this.selectTemplateId;
+          this.textId = this.selectTemplateInfo.textId;
         } else {
           this.selected = false;
           // this.select.id = 0;
@@ -83,23 +96,24 @@ export default Vue.extend({
         this.selected = false;
         this.select = id;
         console.log("this.select:", this.select);
+        console.log("this.textId:", this.textId);
       }
       // this.selectTemplateIdOperation(this.select);
       // this.selected = false;
       // this.select.id = id;
       // this.select.id = id;
       console.log("this.select:", this.select);
-      this.$post("/text/updateText/", {
-        id: this.selectTemplateId,
-        template_id: id,
-      }).then(({ data }) => {
-        if (data.code === 200) {
-          this.selectTemplateIdOperation(id);
-          alert("更改模板成功");
-        } else {
-          alert(data.msg);
-        }
-      });
+      // this.$get("/text/updateTemplate/"+id+"/"+this.selectTemplateId, {
+      //   id: this.selectTemplateId,
+      //   template_id: id,
+      // }).then(({ data }) => {
+      //   if (data.code === 200) {
+      //     this.selectTemplateIdOperation(id);
+      //     alert("更改模板成功");
+      //   } else {
+      //     alert(data.msg);
+      //   }
+      // });
     },
   },
   mounted(): void {
