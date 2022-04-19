@@ -18,7 +18,7 @@
         elevation="1"
         @click="selectTemplate"
         :disabled="!editable && !selected"
-        >确定</v-btn
+        >更改模板</v-btn
       >
     </v-row>
   </v-container>
@@ -37,7 +37,7 @@ import Vue from "vue";
 export default Vue.extend({
   data: () => ({
     // template_list: [],
-    select:0,
+    select: 0,
     selected: true,
   }),
   props: {
@@ -45,6 +45,7 @@ export default Vue.extend({
     editable: Boolean,
     template_list: Array,
     selectTemplateInfo: Object,
+    selectTemplateIdOperation: Function,
   },
   methods: {
     // get_template_list() {
@@ -58,7 +59,8 @@ export default Vue.extend({
     //   });
     // },
     selectTemplate() {
-      console.log("select:", this.select);
+      console.log("selectTemplateIdOperation select:", this.select);
+      this.selectTemplateIdOperation(this.select);
     },
     initialTemplate() {
       if (this.editable) {
@@ -79,13 +81,25 @@ export default Vue.extend({
     changeTemplate(id) {
       if (this.selectTemplateId === 0) {
         this.selected = false;
-        this.select= id;
+        this.select = id;
         console.log("this.select:", this.select);
       }
+      // this.selectTemplateIdOperation(this.select);
       // this.selected = false;
       // this.select.id = id;
       // this.select.id = id;
       console.log("this.select:", this.select);
+      this.$post("/text/updateText/", {
+        id: this.selectTemplateId,
+        template_id: id,
+      }).then(({ data }) => {
+        if (data.code === 200) {
+          this.selectTemplateIdOperation(id);
+          alert("更改模板成功");
+        } else {
+          alert(data.msg);
+        }
+      });
     },
   },
   mounted(): void {

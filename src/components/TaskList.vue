@@ -30,6 +30,7 @@
                   <div>
                     <TemplateSelector
                       :selectTemplateId="n['templateId']"
+                      :selectTemplateIdOperation="selectTemplateIdOperation"
                       :selectTemplateInfo="{
                         id: n['templateId'],
                         title: n['templateTitle'],
@@ -180,9 +181,16 @@ export default Vue.extend({
     labels_data: [],
     temp_filedata: null,
     template_list: [],
+    select_template_id: 0,
   }),
   components: { TemplateSelector },
   methods: {
+    selectTemplateIdOperation(id) {
+      this.select_template_id = id;
+      console.log("父组件 selectTemplateIdOperation: ", id);
+
+    },
+
     get_file_data(id, templateId, doneState) {
       console.log("id:", id);
       console.log("templateId:", templateId);
@@ -202,7 +210,10 @@ export default Vue.extend({
           path: "/annotate",
           query: {
             text_id: id,
-            template_id: templateId,
+            template_id:
+              this.select_template_id === 0
+                ? templateId
+                : this.select_template_id,
             done_state: doneState,
           },
         })
@@ -255,7 +266,7 @@ export default Vue.extend({
           console.log("this wait list: ", this.wait_list);
           // this.get_template_list();
         } else {
-          alert(data.msg);
+          this.$waning(data.msg);
         }
       });
     },
@@ -264,7 +275,7 @@ export default Vue.extend({
         if (data.status === 200) {
           this.labels_data = data.data;
         } else {
-          alert(data.msg);
+          this.$warning(data.msg);
         }
       });
     },

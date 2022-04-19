@@ -219,20 +219,22 @@ export default Vue.extend({
       var color = this.temp_color;
       if (!label || !color) {
         // alert("标签和颜色不能为空");
-        this.$swal({
-          toast: true,
-          position: "top",
-          showConfirmButton: false,
-          timer: 3000,
-          icon: "warning",
-          title: "Warning",
-          text: "标签和颜色不能为空!!!",
-        });
+        // this.$swal({
+        //   toast: true,
+        //   position: "top",
+        //   showConfirmButton: false,
+        //   timer: 3000,
+        //   icon: "warning",
+        //   title: "Warning",
+        //   text: "标签和颜色不能为空!!!",
+        // });
+        this.$warning("标签和颜色不能为空");
         return;
       }
       for (let i = 0; i < this.temp_label_info.labelCategories.length; i++) {
         if (label == this.temp_label_info.labelCategories[i].text) {
-          alert("标签不能重复");
+          // alert("标签不能重复");
+          this.$warning("标签不能重复");
           return;
         }
       }
@@ -246,9 +248,9 @@ export default Vue.extend({
           })
           .then(({ data }) => {
             if (data.code === 200) {
-              alert("添加成功");
+              this.$success("添加成功");
             } else {
-              alert(data.msg);
+              this.$warning(data.msg);
             }
           });
       }
@@ -268,9 +270,9 @@ export default Vue.extend({
           .delete("/label/delete/" + this.edit_template_id + "/" + id)
           .then(({ data }) => {
             if (data.code === 200) {
-              alert("删除成功");
+              this.$success("删除成功");
             } else {
-              alert(data.msg);
+              this.$warning(data.msg);
             }
           });
       }
@@ -282,7 +284,7 @@ export default Vue.extend({
     addCon() {
       var label = this.temp_connectionCategories;
       if (!label) {
-        alert("关联不能为空");
+        this.$warning("关联不能为空");
         return;
       }
       for (
@@ -291,7 +293,7 @@ export default Vue.extend({
         i++
       ) {
         if (label == this.temp_label_info.connectionCategories[i].text) {
-          alert("关联不能重复");
+          this.$warning("关联不能重复");
           return;
         }
       }
@@ -303,9 +305,9 @@ export default Vue.extend({
           })
           .then(({ data }) => {
             if (data.code === 200) {
-              alert("添加成功");
+              this.$success("添加成功");
             } else {
-              alert(data.msg);
+              this.$warning(data.msg);
             }
           });
       }
@@ -321,9 +323,9 @@ export default Vue.extend({
           .delete("/relation/delete/" + this.edit_template_id + "/" + id)
           .then(({ data }) => {
             if (data.code === 200) {
-              alert("删除成功");
+              this.$success("删除成功");
             } else {
-              alert(data.msg);
+              this.$warning(data.msg);
             }
           });
       }
@@ -339,11 +341,11 @@ export default Vue.extend({
       res["title"] = this.temp_label_info.title;
 
       if (!res["title"]) {
-        alert("模版名称不能为空");
+        this.$warning("模版名称不能为空");
         return;
       }
       if (!res["labelCategories"]) {
-        alert("标签不能为空");
+        this.$warning("标签不能为空");
         return;
       }
 
@@ -355,7 +357,7 @@ export default Vue.extend({
             this.edit_template_id !== this.temp_data[i].id &&
             this.temp_label_info.title == this.temp_data[i].title
           ) {
-            alert("模板名字不能重复");
+            this.$warning("模板名字不能重复");
             return;
           }
         }
@@ -365,9 +367,10 @@ export default Vue.extend({
         this.$http.post("/template/update/", res).then(({ data }) => {
           if (data.code === 200) {
             self.get_temp_list();
+            self.$success("更新模板成功");
             this.dialog_edit = false;
           } else {
-            alert(data.msg);
+            this.$warning(data.msg);
             this.dialog_edit = false;
           }
           this.edit_template_id = 0;
@@ -377,7 +380,7 @@ export default Vue.extend({
       else {
         for (let i = 0; i < this.temp_data.length; i++) {
           if (this.temp_label_info.title == this.temp_data[i].title) {
-            alert("模板名字不能重复");
+            this.$warning("模板名字不能重复");
             return;
           }
         }
@@ -386,8 +389,9 @@ export default Vue.extend({
           if (data.code === 200) {
             self.get_temp_list();
             this.dialog_edit = false;
+            self.$success("添加模板成功");
           } else {
-            alert(data.msg);
+            this.$warning(data.msg);
             this.dialog_edit = false;
           }
         });
@@ -400,8 +404,9 @@ export default Vue.extend({
       this.$http.delete("/template/delete/" + idx + "/").then(({ data }) => {
         if (data.code === 200) {
           this.get_temp_list();
+          this.$success("删除成功");
         } else {
-          alert(data.msg);
+          this.$warning(data.msg);
         }
       });
       // data["method"] = "del";

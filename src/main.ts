@@ -8,13 +8,8 @@ import "@mdi/font/css/materialdesignicons.css";
 import i18n from "./i18n";
 import vcolorpicker from "vcolorpicker";
 Vue.use(vcolorpicker);
+import './alert'
 
-import VueSweetalert2 from "vue-sweetalert2";
-
-// If you don't need the styles, do not connect
-import "sweetalert2/dist/sweetalert2.min.css";
-
-Vue.use(VueSweetalert2);
 
 Vue.config.productionTip = false;
 Vue.prototype.$eventbus = new Vue();

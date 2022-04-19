@@ -235,7 +235,7 @@ export default Vue.extend({
           .then(({ data }) => {
             if (data.code === 200) {
               this.complete_loading = false;
-              alert("添加成功");
+              this.$success("添加成功");
               console.log("add label: ", data.data);
               this.annotator.store.labelRepo["nextId"] = data.data;
               this.annotator.applyAction(
@@ -282,7 +282,7 @@ export default Vue.extend({
               //   _endIndex: this.endIndex,
               // });
             } else {
-              alert(data.msg);
+              this.$warning(data.msg);
             }
           });
       }
@@ -328,7 +328,7 @@ export default Vue.extend({
                   this.to
                 )
               );
-              alert("添加成功");
+              this.$success("添加成功");
               console.log("add connection: ", data.data);
               this.showLabelCategoriesDialog = false;
               this.updateJSON();
@@ -338,7 +338,7 @@ export default Vue.extend({
               // })
               // this.getTask();
             } else {
-              alert(data.msg);
+              this.$warning(data.msg);
             }
           });
         this.showConnectionCategoriesDialog = false;
@@ -428,13 +428,13 @@ export default Vue.extend({
           .then(({ data }) => {
             if (data.code === 200) {
               this.complete_loading = false;
-              alert("删除成功");
+              this.$success("删除成功");
               console.log("delete label: ", data.data);
               this.showLabelCategoriesDialog = false;
               this.updateJSON();
               // this.getTask();
             } else {
-              alert(data.msg);
+              this.$warning(data.msg);
             }
           });
         this.showLabelCategoriesDialog = false;
@@ -455,13 +455,13 @@ export default Vue.extend({
             .then(({ data }) => {
               if (data.code === 200) {
                 this.complete_loading = false;
-                alert("删除成功");
+                this.$success("删除成功");
                 console.log("delete connection: ", data.data);
                 this.showLabelCategoriesDialog = false;
                 this.updateJSON();
                 // this.getTask();
               } else {
-                alert(data.msg);
+                this.$warning(data.msg);
               }
             });
           this.showLabelCategoriesDialog = false;
@@ -497,14 +497,14 @@ export default Vue.extend({
       this.$http.delete("/text/reSet/" + this.text_id).then(({ data }) => {
         if (data.code === 200) {
           this.complete_loading = false;
-          alert("重置成功");
+          this.$success("重置成功");
 
           this.jsonData.labels = [];
           this.annotator.remove();
           this.annotator = this.createAnnotator();
           this.updateJSON();
         } else {
-          alert(data.msg);
+          this.$warning(data.msg);
           this.complete_loading = false;
         }
       });
@@ -515,11 +515,11 @@ export default Vue.extend({
         .then(({ data }) => {
           if (data.code === 200) {
             this.complete_loading = false;
-            alert("已完成");
+            this.$success("已完成");
             this.$router.push("/").catch((_) => {});
             this.updateJSON();
           } else {
-            alert(data.msg);
+            this.$warning(data.msg);
             this.complete_loading = false;
           }
         });
@@ -548,10 +548,10 @@ export default Vue.extend({
       this.$http.post("/text/saveTask", res_data).then(({ data }) => {
         if (data.code === 200) {
           this.complete_loading = false;
-          alert("保存成功");
+          this.$success("保存成功");
           this.$router.push("/").catch((_) => {});
         } else {
-          alert(data.msg);
+          this.$warning(data.msg);
           this.complete_loading = false;
         }
       });
@@ -565,7 +565,7 @@ export default Vue.extend({
         if (data.status === 200) {
           this.save_loading = false;
         } else {
-          alert(data.msg);
+          this.$warning(data.msg);
           this.save_loading = false;
         }
       });
@@ -655,7 +655,7 @@ export default Vue.extend({
             }
             // this.labelCategories = this.jsonData.labelList;
           } else {
-            alert(data.msg);
+            this.$warning(data.msg);
           }
         });
     },
