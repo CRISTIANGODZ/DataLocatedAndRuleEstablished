@@ -5,6 +5,7 @@
 - UI 组件 [vuetifyjs 2.0.0](https://vuetifyjs.com/zh-Hans)
 - CSS 框架 [bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
 - 标注组件 [synyi/poplar](https://github.com/synyi/poplar/blob/master/doc/zh.md)
+- alerti 组件 [vue-sweetalert2](https://github.com/avil13/vue-sweetalert2)
 
 ## Project setup
 ```
