@@ -514,20 +514,22 @@ export default Vue.extend({
       document.body.removeChild(eleLink);
     },
     reset: function () {
-      this.$http.delete("/text/reSet/" + this.text_id).then(({ data }) => {
-        if (data.code === 200) {
-          this.complete_loading = false;
-          this.$success("重置成功");
+      this.$http
+        .delete("/text/reSet/" + this.text_id + "/" + this.template_id)
+        .then(({ data }) => {
+          if (data.code === 200) {
+            this.complete_loading = false;
+            this.$success("重置成功");
 
-          this.jsonData.labels = [];
-          this.annotator.remove();
-          this.annotator = this.createAnnotator();
-          this.updateJSON();
-        } else {
-          this.$warning(data.msg);
-          this.complete_loading = false;
-        }
-      });
+            this.jsonData.labels = [];
+            this.annotator.remove();
+            this.annotator = this.createAnnotator();
+            this.updateJSON();
+          } else {
+            this.$warning(data.msg);
+            this.complete_loading = false;
+          }
+        });
     },
     set_complete: function () {
       this.$http
