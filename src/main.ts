@@ -8,8 +8,21 @@ import "@mdi/font/css/materialdesignicons.css";
 import i18n from "./i18n";
 import vcolorpicker from "vcolorpicker";
 Vue.use(vcolorpicker);
-import './alert'
+import "./alert";
 
+router.beforeEach((to, from, next) => {
+  var token = localStorage.getItem("token");
+  //如果没登录,都导向登录页
+  if (!token) {
+    if (to.path !== "/login") {
+      next({ path: "/login" });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
 Vue.config.productionTip = false;
 Vue.prototype.$eventbus = new Vue();

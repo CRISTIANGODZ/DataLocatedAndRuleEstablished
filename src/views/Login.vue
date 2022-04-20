@@ -40,6 +40,7 @@
                   type="password"
                   v-model="password"
                   required
+                  v-on:keyup.enter="login_res"
                 ></v-text-field>
               </v-col>
             </v-row>
