@@ -13,6 +13,7 @@
     "@mdi/font": "^3.6.95",
     "axios": "^0.21.1",
     "core-js": "^2.6.5",
+    "element-ui": "^2.15.8",
     "js-base64": "^3.6.0",
     "poplar-annotation": "^2.0.3",
     "prismjs": "^1.21.0",
