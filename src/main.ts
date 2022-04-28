@@ -9,6 +9,10 @@ import i18n from "./i18n";
 import vcolorpicker from "vcolorpicker";
 Vue.use(vcolorpicker);
 import "./alert";
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI)
 
 router.beforeEach((to, from, next) => {
   var token = localStorage.getItem("token");
