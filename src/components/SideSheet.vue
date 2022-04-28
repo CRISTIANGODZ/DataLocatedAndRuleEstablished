@@ -48,6 +48,7 @@ export default Vue.extend({
   data: () => ({
     admin_links: [
       ["mdi-inbox-arrow-down", "任务大厅", "/"],
+      ["mdi-oil-lamp", "Mission Hall", "missionHall"],
       ["mdi-send", "标签管理", "labels"],
       ["mdi-alert", "任务分配", "taskAssign"],
       ["mdi-delete", "个人信息", "null"],

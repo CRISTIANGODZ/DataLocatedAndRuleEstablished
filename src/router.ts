@@ -4,7 +4,7 @@ import Home from "./views/Home.vue";
 import Annotate from "@/views/Annotate.vue";
 import Labels from "@/views/Labels.vue";
 import Login from "@/views/Login.vue";
-import TaskAssign from "@/views/TaskAssign/TaskAssign.vue"
+import TaskAssign from "@/views/TaskAssign/TaskAssign.vue";
 
 Vue.use(Router);
 
@@ -45,6 +45,11 @@ export default new Router({
       path: "/login",
       name: "login",
       component: Login,
+    },
+    {
+      path: "/missionHall",
+      name: "missionHall",
+      component: () => import("@/views/MissionHall/MissionHall.vue"),
     },
   ],
 });
