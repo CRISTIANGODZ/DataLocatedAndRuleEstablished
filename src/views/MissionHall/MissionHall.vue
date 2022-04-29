@@ -5,10 +5,10 @@
         <v-chip label> 任务状态: </v-chip>
       </el-col>
       <el-col>
-        <el-tabs v-model="filterData.taskFOU" @tab-click="onTaskFOUChange">
-          <el-tab-pane label="全部" name="0" />
-          <el-tab-pane label="未完成" name="1" />
-          <el-tab-pane label="已完成" name="2" />
+        <el-tabs v-model="filterData.taskFOU" @tab-click="onFilterDataChange">
+          <el-tab-pane label="全部" name="-1" />
+          <el-tab-pane label="未完成" name="0" />
+          <el-tab-pane label="已完成" name="1" />
         </el-tabs>
       </el-col>
     </el-row>
@@ -17,7 +17,7 @@
       <el-col :span="24">
         <el-tabs
           v-model="filterData.taskCategoriesCurrent"
-          @tab-click="onTaskCategoryChange"
+          @tab-click="onFilterDataChange"
         >
           <el-tab-pane
             v-for="taskCategory in jsonData.taskCategories"
@@ -35,7 +35,7 @@
             v-model="filterData.labelPerson"
             filterable
             placeholder="请选择标注人"
-            @change="onLabelPersonChange"
+            @change="onFilterDataChange"
           >
             <el-option
               v-for="person in jsonData.labelPersons"
@@ -50,6 +50,7 @@
         ><div class="grid-content bg-purple">
           <el-input
             v-model="filterData.title"
+            @change="onFilterDataChange"
             placeholder="请输入标题内容"
           ></el-input></div
       ></el-col>
@@ -59,6 +60,7 @@
             v-model="filterData.templateCategory"
             filterable
             placeholder="请选择模板"
+            @change="onFilterDataChange"
           >
             <el-option
               v-for="category in jsonData.templatesCategories"
@@ -76,6 +78,9 @@
             align="right"
             type="date"
             placeholder="选择开始日期"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
+            @change="onFilterDataChange"
             :picker-options="pickerOptions"
           >
           </el-date-picker></div
@@ -87,6 +92,9 @@
             align="right"
             type="date"
             placeholder="选择最后日期"
+            @change="onFilterDataChange"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
             :picker-options="pickerOptions"
           >
           </el-date-picker></div
@@ -136,7 +144,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="filterData.pagination.currentIndex"
-        :page-sizes="[5, 10, 15, 20]"
+        :page-sizes="[1, 2, 15, 20]"
         :page-size="filterData.pagination.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="filterData.pagination.total"
@@ -147,14 +155,14 @@
 </template>
 
 <script>
-// taskStatus 任务状态: 0: 所有, 1: 未完成 2: 已完成
-// taskCategoriesCurrent 任务类别: 0 表示所有
+// taskStatus 任务状态: -1: 所有, 0: 未完成 1: 已完成
+// taskCategoriesCurrent 任务类别: -1 表示所有
 export default {
   data() {
     return {
       filterData: {
-        taskFOU: 0,
-        taskCategoriesCurrent: 0,
+        taskFOU: "-1",
+        taskCategoriesCurrent: "-1",
         labelPerson: "",
         title: "",
         templateCategory: 1,
@@ -163,12 +171,12 @@ export default {
         pagination: {
           currentIndex: 1,
           total: 3,
-          pageSize: 10,
+          pageSize: 1,
         },
       },
       jsonData: {
         taskCategories: [
-          { id: 0, title: "全部", name: "all" },
+          { id: -1, title: "全部", name: "all" },
           { id: 1, title: "外科", name: "surgical" },
           { id: 2, title: "内科", name: "internal" },
           { id: 3, title: "精神科", name: "spiritual" },
@@ -283,13 +291,35 @@ export default {
       console.log("标注人: ", e);
       this.filterData.labelPerson = e;
     },
+    onTitleChange(e) {
+      console.log("标题: ", e);
+      this.filterData.title = e;
+    },
+    onFilterDataChange() {
+      console.log("filterData: ", this.filterData);
+    },
 
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
+      this.filterData.pagination.pageSize = val;
+      this.onFilterDataChange();
     },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.filterData.pagination.currentIndex = val;
+      this.onFilterDataChange();
     },
+    // 使用上面 handleCurrentChange 方法即可
+    // handlePrevClick(val) {
+    //   console.log(`当前页: ${val}`);
+    //   this.filterData.pagination.currentIndex = val;
+    //   // this.onFilterDataChange();
+    // },
+    //  handleNextClick(val) {
+    //   console.log(`当前页: ${val}`);
+    //   this.filterData.pagination.currentIndex = val;
+    //   // this.onFilterDataChange();
+    // },
     handleRowClick(row, event, column) {
       console.log(row, event, column);
     },
