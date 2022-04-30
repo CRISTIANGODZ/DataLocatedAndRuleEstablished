@@ -1,28 +1,32 @@
 <template>
   <div>
     <v-sheet color="grey lighten-4" class="pa-4">
-      <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar>
-
-      <div>管理员</div>
+      <!-- <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar> -->
+      <el-avatar
+        src="https://w7.pngwing.com/pngs/306/70/png-transparent-computer-icons-management-admin-silhouette-black-and-white-neck.png"
+      ></el-avatar>
+      <div>管理员 {{username}}</div>
     </v-sheet>
 
     <v-divider></v-divider>
 
     <v-list>
-      <v-list-item
-        v-for="[icon, text, link] in links"
-        :key="icon"
-        link
-        @click="go_page(link)"
-      >
-        <v-list-item-icon>
-          <v-icon>{{ icon }}</v-icon>
-        </v-list-item-icon>
+      <v-list-item-group v-model="currentRouteAdd" color="primary">
+        <v-list-item
+          v-for="[icon, text, link] in links"
+          :key="link"
+          link
+          @click="go_page(link)"
+        >
+          <v-list-item-icon>
+            <v-icon>{{ icon }}</v-icon>
+          </v-list-item-icon>
 
-        <v-list-item-content>
-          <v-list-item-title>{{ text }}</v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>{{ text }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
     </v-list>
 
     <v-divider></v-divider>
@@ -51,8 +55,8 @@ export default Vue.extend({
       ["mdi-oil-lamp", "Mission Hall", "missionHall"],
       ["mdi-send", "标签管理", "labels"],
       ["mdi-alert", "任务分配", "taskAssign"],
-      ["mdi-delete", "个人信息", "null"],
-      ["mdi-alert-octagon", "权限管理", "null"],
+      ["mdi-delete", "个人信息", "profile"],
+      ["mdi-alert-octagon", "权限管理", "permission"],
     ],
     member_links: [
       ["mdi-inbox-arrow-down", "任务大厅", "/"],
@@ -62,6 +66,8 @@ export default Vue.extend({
     ],
     links: [],
     role: "",
+    username: "",
+    currentRouteAdd: "missoinHall",
   }),
   methods: {
     get_user_role() {
@@ -79,11 +85,12 @@ export default Vue.extend({
       // });
 
       this.role =
-        localStorage.getItem("role") === "admin" ? "管理员" : "标注员";
+        localStorage.getItem("role") === "0" ? "管理员" : "标注员";
       this.links =
-        localStorage.getItem("role") === "admin"
+        localStorage.getItem("role") === "0"
           ? this.admin_links
           : this.member_links;
+      this.username = localStorage.getItem("username");
       console.log("links:", this.links);
     },
     log_out() {

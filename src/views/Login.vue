@@ -2,7 +2,7 @@
  * @Author: Zhou Xianghui
  * @Date: 2022-04-11 14:28:15
  * @LastEditors: Zhou Xianghui
- * @LastEditTime: 2022-04-13 16:33:30
+ * @LastEditTime: 2022-04-30 13:18:25
  * @FilePath: \ai_ann_front\src\views\Login.vue
  * @Description:
  * after a long, long, long time
@@ -31,7 +31,7 @@
                 <v-text-field
                   label="账号"
                   required
-                  v-model="username"
+                  v-model="ucount"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -64,6 +64,7 @@ export default Vue.extend({
     return {
       d_login: true,
       username: null,
+      ucount: null,
       password: null,
     };
   },
@@ -71,18 +72,28 @@ export default Vue.extend({
     login_res() {
       var self = this;
       this.$http
-        .post("/user/login/", { username: this.username, password: this.password })
+        .post("/user/login/", {
+          ucount: this.ucount,
+          password: this.password,
+        })
         .then(({ data }) => {
           if (data.code === 200) {
             console.log("login data:", data);
             var token = data.data;
-            localStorage.setItem("token", this.username + "_" + token);
-            // localStorage.setItem("role", data.data.role);
-            localStorage.setItem("role", "admin");
+            // localStorage.setItem("token", this.username + "_" + token);
+            localStorage.setItem("token", token);
+            localStorage.setItem("role", data.data.user.role);
+            // localStorage.setItem("role", "admin");
+            this.username = data.data.user.username;
+            this.ucount = data.data.user.ucount;
+            localStorage.setItem("username", this.username);
             this.$router.push("/").catch((_) => {});
             // location.reload();
           } else {
-            alert(data.msg);
+            this.$message({
+              message: "登录失败，密码错误或账号不存在 !!!",
+              type: "warning",
+            });
           }
         });
     },

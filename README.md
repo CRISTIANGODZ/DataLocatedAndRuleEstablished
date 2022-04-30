@@ -7,7 +7,7 @@
   - [element ui](https://element.eleme.cn/#/zh-CN/component/installation)
 - CSS 框架 [bootstrap](https://getbootstrap.com/docs/4.0/getting-started/introduction/)
 - 标注组件 [synyi/poplar](https://github.com/synyi/poplar/blob/master/doc/zh.md)
-- alerti 组件 [vue-sweetalert2](https://github.com/avil13/vue-sweetalert2)
+- alert 组件 [vue-sweetalert2](https://github.com/avil13/vue-sweetalert2)
 
 ## Project setup
 ```

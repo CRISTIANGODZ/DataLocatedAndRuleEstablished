@@ -4,7 +4,7 @@
       <side-sheet></side-sheet>
     </v-navigation-drawer>
     <v-main>
-      <v-container class="py-8 px-6" fluid>
+      <v-container class="py-8 px-6 shadow p-3 mb-5 bg-body rounded" fluid>
         <router-view></router-view>
       </v-container>
     </v-main>

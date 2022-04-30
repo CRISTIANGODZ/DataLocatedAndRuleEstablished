@@ -23,7 +23,7 @@
             v-for="taskCategory in jsonData.taskCategories"
             :label="taskCategory.title"
             :name="taskCategory.id + ''"
-            :key="taskCategory.id"
+            :key="taskCategory.title"
           />
         </el-tabs>
       </el-col>
@@ -40,8 +40,8 @@
             <el-option
               v-for="person in jsonData.labelPersons"
               :key="person.id"
-              :label="person.name"
-              :value="person.id"
+              :label="person.username"
+              :value="person.username"
             >
             </el-option>
           </el-select></div
@@ -65,8 +65,8 @@
             <el-option
               v-for="category in jsonData.templatesCategories"
               :key="category.id"
-              :label="category.name"
-              :value="category.id"
+              :label="category.title"
+              :value="category.title"
             >
             </el-option
           ></el-select></div
@@ -118,17 +118,16 @@
         <el-table-column type="index" width="50"> </el-table-column>
         <el-table-column prop="title" label="标题" sortable width="180">
         </el-table-column>
-        <el-table-column prop="labelPersonName" label="标注人">
+        <el-table-column prop="name" label="标注人"> </el-table-column>
+        <el-table-column prop="updateTime" label="最近标注时间">
         </el-table-column>
-        <el-table-column prop="lastModifiedTime" label="最近标注时间">
+        <el-table-column prop="taskCategory" label="任务类型">
         </el-table-column>
-        <el-table-column prop="taskCategoryName" label="任务类型">
-        </el-table-column>
-        <el-table-column prop="templateCategoryName" label="模板类型">
+        <el-table-column prop="templateCategory" label="模板类型">
         </el-table-column>
         <el-table-column prop="status" label="完成状态">
           <template slot-scope="scope">
-            <v-chip v-if="scope.row.status === 1" color="green" filter label>
+            <v-chip v-if="scope.row.doneState === 1" color="green" filter label>
               已完成 <i class="el-icon-view" style="padding-left: 5px"></i>
             </v-chip>
             <v-chip v-else color="yellow" filter label>
@@ -165,7 +164,7 @@ export default {
         taskCategoriesCurrent: "-1",
         labelPerson: "",
         title: "",
-        templateCategory: 1,
+        templateCategory: "",
         startDate: "",
         endDate: "",
         pagination: {
@@ -174,6 +173,7 @@ export default {
           pageSize: 1,
         },
       },
+      defaultTaskCategories: [{ id: -1, title: "全部", name: "all" }],
       jsonData: {
         taskCategories: [
           { id: -1, title: "全部", name: "all" },
@@ -184,55 +184,55 @@ export default {
         ],
         defaultTaskCatogory: 0,
         labelPersons: [
-          { id: 0, name: "李四" },
-          { id: 1, name: "王五" },
-          { id: 2, name: "赵六" },
-          { id: 6, name: "周期" },
+          { id: 0, username: "李四" },
+          { id: 1, username: "王五" },
+          { id: 2, username: "赵六" },
+          { id: 6, username: "周期" },
         ],
         templatesCategories: [
-          { id: 1, name: "模板1" },
-          { id: 2, name: "模板2" },
-          { id: 3, name: "模板3" },
+          { id: 1, title: "模板1" },
+          { id: 2, title: "模板2" },
+          { id: 3, title: "模板3" },
         ],
         tasks: [
           {
             id: 0,
-            status: 1,
+            doneState: 1,
             title: "title1",
             textId: 1,
-            lastModifiedTime: "2019-01-01",
+            updateTime: "2019-01-01",
             templateCategoryId: 1,
-            templateCategoryName: "模板1",
+            templateCategory: "模板1",
             labelPersonId: 1,
-            labelPersonName: "李四",
+            name: "李四",
             taskCategoryId: 1,
-            taskCategoryName: "外科",
+            taskCategory: "外科",
           },
           {
             id: 1,
-            status: 1,
+            doneState: 1,
             title: "title2",
             textId: 2,
-            lastModifiedTime: "2019-01-02",
+            updateTime: "2019-01-02",
             templateCategoryId: 2,
-            templateCategoryName: "模板2",
+            templateCategory: "模板2",
             labelPersonId: 2,
-            labelPersonName: "王五",
+            name: "王五",
             taskCategoryId: 2,
-            taskCategoryName: "内科",
+            taskCategory: "内科",
           },
           {
             id: 2,
-            status: 2,
+            doneState: 2,
             title: "title3",
             textId: 3,
-            lastModifiedTime: "2019-01-03",
+            updateTime: "2019-01-03",
             templateCategoryId: 3,
-            templateCategoryName: "模板3",
+            templateCategory: "模板3",
             labelPersonId: 3,
-            labelPersonName: "赵六",
+            name: "赵六",
             taskCategoryId: 3,
-            taskCategoryName: "精神科",
+            taskCategory: "精神科",
           },
         ],
         pagination: {
@@ -297,6 +297,7 @@ export default {
     },
     onFilterDataChange() {
       console.log("filterData: ", this.filterData);
+      this.getTasks();
     },
 
     handleSizeChange(val) {
@@ -325,23 +326,60 @@ export default {
     },
     clearFilterData() {
       this.filterData = {
-        taskFOU: "all",
-        taskCategoriesCurrent: "4",
-        labelPerson: 1,
+        taskFOU: "-1",
+        taskCategoriesCurrent: "-1",
+        labelPerson: "",
         title: "",
-        templateCategory: 1,
+        templateCategory: "",
         startDate: "",
         endDate: "",
         pagination: this.filterData.pagination,
       };
+      this.getTasks();
     },
     // 获取后端数据
-    getTasks() {},
+    getTasks() {
+      this.$http
+        .post(
+          "/task/pageTask/" +
+            this.filterData.pagination.currentIndex +
+            "/" +
+            this.filterData.pagination.pageSize,
+          {
+            doneState:
+              this.filterData.taskFOU == "-1" ? null : this.filterData.taskFOU,
+            taskCategoryId:
+              this.filterData.taskCategoriesCurrent == "-1"
+                ? null
+                : this.filterData.taskCategoriesCurrent,
+            username: this.filterData.labelPerson,
+            title: this.filterData.title,
+            templateTitle: this.filterData.templateCategory,
+            fromTime: this.filterData.startDate,
+            toTime: this.filterData.endDate,
+            // pageIndex: this.filterData.pagination.currentIndex,
+            // pageSize: this.filterData.pagination.pageSize,
+          }
+        )
+        .then((res) => {
+          console.log("res: ", res);
+          // this.filterData.tasks = res.data.data.tasks;
+          this.jsonData.taskCategories = this.defaultTaskCategories.concat(
+            res.data.data.taskCategoryList
+          );
+          this.jsonData.labelPersons = res.data.data.userList;
+          this.jsonData.templatesCategories = res.data.data.templateList;
+          this.jsonData.tasks = res.data.data.taskVoList;
+          this.filterData.pagination.total = res.data.data.total;
+        });
+    },
     getTaskCategories() {},
     getTemplatesCategories() {},
     getLabelPersons() {},
   },
-  mounted() {},
+  mounted() {
+    this.getTasks();
+  },
 };
 </script>
 

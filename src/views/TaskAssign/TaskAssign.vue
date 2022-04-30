@@ -125,7 +125,7 @@ export default {
       })
       // console.log('after', this.tableData);
       // console.log('taskSelectedByValue执行结束');
-      
+
     },
     templateSelectedByValue(templateValues) {
       this.tableData.forEach((item, index) => {
