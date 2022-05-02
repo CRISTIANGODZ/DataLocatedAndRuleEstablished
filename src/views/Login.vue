@@ -2,7 +2,7 @@
  * @Author: Zhou Xianghui
  * @Date: 2022-04-11 14:28:15
  * @LastEditors: Zhou Xianghui
- * @LastEditTime: 2022-04-30 13:18:25
+ * @LastEditTime: 2022-04-30 14:03:48
  * @FilePath: \ai_ann_front\src\views\Login.vue
  * @Description:
  * after a long, long, long time
@@ -79,7 +79,7 @@ export default Vue.extend({
         .then(({ data }) => {
           if (data.code === 200) {
             console.log("login data:", data);
-            var token = data.data;
+            var token = data.data.token;
             // localStorage.setItem("token", this.username + "_" + token);
             localStorage.setItem("token", token);
             localStorage.setItem("role", data.data.user.role);

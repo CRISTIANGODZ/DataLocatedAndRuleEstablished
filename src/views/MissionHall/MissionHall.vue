@@ -35,7 +35,7 @@
             v-model="filterData.labelPerson"
             filterable
             placeholder="请选择标注人"
-            @change="onFilterDataChange"
+            @input="onFilterDataChange"
           >
             <el-option
               v-for="person in jsonData.labelPersons"
@@ -143,7 +143,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="filterData.pagination.currentIndex"
-        :page-sizes="[1, 2, 15, 20]"
+        :page-sizes="[5, 10, 15, 20]"
         :page-size="filterData.pagination.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="filterData.pagination.total"
@@ -170,7 +170,7 @@ export default {
         pagination: {
           currentIndex: 1,
           total: 3,
-          pageSize: 1,
+          pageSize: 5,
         },
       },
       defaultTaskCategories: [{ id: -1, title: "全部", name: "all" }],
