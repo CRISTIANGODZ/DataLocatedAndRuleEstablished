@@ -50,7 +50,7 @@
         ><div class="grid-content bg-purple">
           <el-input
             v-model="filterData.title"
-            @change="onFilterDataChange"
+            @input="onFilterDataChange"
             placeholder="请输入标题内容"
           ></el-input></div
       ></el-col>
@@ -127,10 +127,22 @@
         </el-table-column>
         <el-table-column prop="status" label="完成状态">
           <template slot-scope="scope">
-            <v-chip v-if="scope.row.doneState === 1" color="green" filter label>
+            <v-chip
+              v-if="scope.row.doneState === 1"
+              @click="handleTaskEditAction(scope.row)"
+              color="green"
+              filter
+              label
+            >
               已完成 <i class="el-icon-view" style="padding-left: 5px"></i>
             </v-chip>
-            <v-chip v-else color="yellow" filter label>
+            <v-chip
+              v-else
+              color="yellow"
+              @click="handleTaskEditAction(scope.row)"
+              filter
+              label
+            >
               未完成 <i class="el-icon-edit" style="padding-left: 5px"></i>
             </v-chip>
           </template>
@@ -150,15 +162,20 @@
       >
       </el-pagination>
     </el-row>
+    <!-- <MissionAnnotate :dialogVisible="missionAnnotateVisiable" /> -->
   </div>
 </template>
 
 <script>
+// import MissionAnnotate from "./MissionAnnotate";
 // taskStatus 任务状态: -1: 所有, 0: 未完成 1: 已完成
 // taskCategoriesCurrent 任务类别: -1 表示所有
+
 export default {
+  // components: { MissionAnnotate },
   data() {
     return {
+      missionAnnotateVisiable: false,
       filterData: {
         taskFOU: "-1",
         taskCategoriesCurrent: "-1",
@@ -310,6 +327,10 @@ export default {
       this.filterData.pagination.currentIndex = val;
       this.onFilterDataChange();
     },
+    handleTaskEditAction(row) {
+      console.log("编辑的row:", row);
+      this.missionAnnotateVisiable = true;
+    },
     // 使用上面 handleCurrentChange 方法即可
     // handlePrevClick(val) {
     //   console.log(`当前页: ${val}`);
@@ -353,7 +374,7 @@ export default {
                 ? null
                 : this.filterData.taskCategoriesCurrent,
             username: this.filterData.labelPerson,
-            title: this.filterData.title,
+            textTitle: this.filterData.title,
             templateTitle: this.filterData.templateCategory,
             fromTime: this.filterData.startDate,
             toTime: this.filterData.endDate,
