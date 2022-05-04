@@ -35,6 +35,7 @@
       lazy
       @selection-change="handleSelectionChange"
       style="width: 100%"
+      :row-style="{ height: '80px' }"
       @select="handleToggleRowSelection"
       @select-all="handleToggleAllSelection"
     >
@@ -55,9 +56,9 @@
           >
         </template>
       </el-table-column>
-      <el-table-column align="right">
+      <el-table-column align="right" fixed="right">
         <template slot-scope="scope">
-          <div style="display: flex">
+          <div style="display: flex; overflow: hidden; flex: 1">
             <!-- <span>{{scope.row}}</span> -->
             <TaskSelector
               :data="scope.row"
@@ -93,7 +94,7 @@
       top="3%"
       :before-close="handleClose"
     >
-    <h2>{{checkTextRow.title}}</h2>
+      <h2>{{ checkTextRow.title }}</h2>
       <p style="color: grey">{{ checkTextRow.uploadTime }}</p>
       <span v-html="checkTextRow.content"></span>
       <span slot="footer" class="dialog-footer">
@@ -470,5 +471,8 @@ export default {
 .el-input--mini .el-input__inner {
   height: 40px !important;
   line-height: 40px !important;
+}
+.el-table__header {
+  table-layout: auto !important;
 }
 </style>

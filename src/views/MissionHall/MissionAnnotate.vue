@@ -29,7 +29,7 @@
           </v-card>
         </v-row>
         <v-row>
-          <div class="container" ref="container"></div>
+          <div class="annotate-container" ref="container"></div>
         </v-row>
       </v-col>
       <v-col class="pa-2" v-if="true || this.annotator !== null">
@@ -513,10 +513,10 @@ export default {
           this.jsonData.text = data.data.text;
           this.jsonData.taskCategory = data.data.taskCategory;
           this.jsonData.annotatorData = {
-            labelCategories: data.data.labelList,
-            connectionCategories: data.data.relationList,
-            labels: data.data.taskLabelList,
-            connections: data.data.taskRelationList,
+            labelCategories: data.data.labelList || [],
+            connectionCategories: data.data.relationList || [],
+            labels: data.data.taskLabelList || [],
+            connections: data.data.taskRelationList || [],
             content: data.data.text.content,
           };
           console.log("this.jsonData: ", this.jsonData);
@@ -579,7 +579,7 @@ export default {
   border-left: solid 2px black;
 }
 
-.container,
+.annotate-container,
 .code-container {
   padding-top: 10px;
   overflow: scroll;
@@ -596,7 +596,7 @@ code {
 }
 </style>
 <style>
-.container > svg {
+.annotate-container > svg {
   width: 45vw;
 }
 
