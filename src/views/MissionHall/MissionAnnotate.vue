@@ -1,4 +1,130 @@
-<template></template>
+<template>
+  <div>
+    <v-row>
+      <el-page-header @back="goBack" content="NLP 标注"> </el-page-header>
+    </v-row>
+    <v-row v-if="!jsonData.task.doneState" style="margin-top: 20px">
+      <v-btn @click="reset" color="primary ma-1"> 重置所有标注 </v-btn>
+      <v-btn
+        class="ma-1"
+        :loading="complete_loading"
+        color="success"
+        @click="set_complete"
+      >
+        标记为已完成
+        <template v-slot:loader>
+          <span>标记中...</span>
+        </template>
+      </v-btn></v-row
+    >
+
+    <v-row no-gutters style="margin-top: 40px">
+      <v-col>
+        <v-row class="pa-2">
+          <v-card color="ma-2 pa-6 w-50">
+            <h3>标题: {{ this.jsonData.text.title }}</h3>
+            <h4>标注人: {{ this.jsonData.user.username }}</h4>
+            <h4>任务类型: {{ this.jsonData.taskCategory.title }}</h4>
+            <h4>最后更新时间 {{ this.jsonData.task.updateTime }}</h4>
+          </v-card>
+        </v-row>
+        <v-row>
+          <div class="container" ref="container"></div>
+        </v-row>
+      </v-col>
+      <v-col class="pa-2" v-if="true || this.annotator !== null">
+        <v-card>
+          <v-chip class="ma-4 font-weight-bold" text-color="black">
+            模板:
+            <!-- hell -->
+            {{ this.jsonData.template.title }}
+          </v-chip>
+        </v-card>
+        <v-divider style="margin-top: 10px; margin-bottom: 10px"></v-divider>
+        <v-card>
+          <v-subheader>标签</v-subheader>
+
+          <v-chip
+            v-for="label in this.jsonData.annotatorData.labelCategories || []"
+            :key="'label' + label['id']"
+            class="ma-2"
+            :color="label['color']"
+            text-color="white"
+          >
+            {{ label.text }}
+          </v-chip>
+        </v-card>
+
+        <v-divider style="margin-top: 10px; margin-bottom: 10px"></v-divider>
+        <v-card>
+          <v-subheader>关联</v-subheader>
+
+          <v-chip
+            v-for="cc in this.jsonData.annotatorData.connectionCategories || []"
+            :key="'cc' + cc['id']"
+            class="ma-2"
+          >
+            {{ cc.text }}
+          </v-chip>
+        </v-card>
+      </v-col>
+      <v-dialog max-width="290" persistent v-model="showLabelCategoriesDialog">
+        <v-card>
+          <v-card-title>
+            <span class="headline">请选择分类</span>
+          </v-card-title>
+          <v-card-text>
+            <v-radio-group v-model="selectedLabelCategory">
+              <v-radio
+                :key="category.id"
+                :label="category.text"
+                :value="category.id"
+                v-for="category in this.jsonData.annotatorData.labelCategories"
+              ></v-radio>
+            </v-radio-group>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn @click="showLabelCategoriesDialog = false" color="primary">
+              取消
+            </v-btn>
+            <v-btn @click="addLabel" color="primary"> 确定 </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog
+        max-width="290"
+        persistent
+        v-model="showConnectionCategoriesDialog"
+      >
+        <v-card>
+          <v-card-title>
+            <span class="headline">请选择分类</span>
+          </v-card-title>
+          <v-card-text>
+            <v-radio-group v-model="selectedConnectionCategory">
+              <v-radio
+                :key="category.id"
+                :label="category.text"
+                :value="category.id"
+                v-for="category in this.jsonData.annotatorData
+                  .connectionCategories"
+              ></v-radio>
+            </v-radio-group>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              @click="showConnectionCategoriesDialog = false"
+              color="primary"
+            >
+              取消
+            </v-btn>
+            <v-btn @click="addConnection" color="primary"> 确定 </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+  </div>
+</template>
 
 <script lang="ts">
 import Vue from "vue";
@@ -36,17 +162,41 @@ export default {
       labelCategories: [],
       connectionCategories: [],
       templateTitle: "",
+      taskId: 0,
       jsonData: {
-        taskInfo: {
-          taskId: 0,
-          templateId: 0,
-          taskCategoryId: 0,
-          taskCategoryTitle: "大病",
-          taskTitle: "hello world",
-          taskContent: "hello world",
+        template: {
+          id: 0,
+          title: "",
+          createTime: "",
+        },
+        task: {
+          id: 18,
+          textId: 1,
+          userId: 2,
+          templateId: 1,
+          taskCategoryId: 1,
+          weight: 0,
+          preLabel: 0,
           doneState: 0,
-          userId: 0,
-          updateTime: "2022-01-01 00:00:00",
+          createTime: "2022-05-02T09:08:39.000+0000",
+          updateTime: "2022-05-02T09:08:39.000+0000",
+        },
+        taskCategory: {
+          id: 0,
+          title: "",
+        },
+        text: {
+          id: 1,
+          title: "病例测试",
+          content: "aaaaaaaaaaaaaaaa",
+          uploadTime: "2022-04-29T20:14:49.000+0000",
+        },
+        user: {
+          id: 2,
+          ucount: "root",
+          username: "root",
+          password: "123456",
+          role: 2,
         },
         annotatorData: {
           labelCategories: [
@@ -70,26 +220,26 @@ export default {
       );
     },
     addLabel(): void {
-      if (!this.doneState) {
+      if (!this.jsonData.task.doneState) {
         if (this.categorySelectMode === CategorySelectMode.Update) {
           this.annotator.applyAction(
             Action.Label.Update(this.selectedId, this.selectedLabelCategory)
           );
         } else {
           console.log("add label:", {
-            textId: this.text_id,
+            taskId: this.taskId,
             startIndex: this.startIndex,
             endIndex: this.endIndex,
             categoryId: this.selectedLabelCategory,
-            selectedId: this.selectedId,
+            templateId: this.jsonData.template.id,
           });
           this.$http
-            .post("/text/insertTaskLabel/", {
-              textId: this.text_id,
+            .post("/task/insertTaskLabel/", {
+              taskId: this.taskId,
               startIndex: this.startIndex,
               endIndex: this.endIndex,
               categoryId: this.selectedLabelCategory,
-              templateId: this.templateId,
+              templateId: this.jsonData.template.id,
             })
             .then(({ data }) => {
               if (data.code === 200) {
@@ -114,7 +264,7 @@ export default {
       }
     },
     addConnection(): void {
-      if (!this.doneState) {
+      if (!this.jsonData.task.doneState) {
         if (this.categorySelectMode === CategorySelectMode.Update) {
           this.annotator.applyAction(
             Action.Connection.Update(
@@ -124,18 +274,18 @@ export default {
           );
         } else {
           console.log("add connection:", {
-            textId: this.text_id,
+            taskId: this.taskId,
             fromId: this.from,
             toId: this.to,
             categoryId: this.selectedConnectionCategory,
           });
           this.$http
-            .post("/text/insertTaskRelation/", {
-              textId: this.text_id,
+            .post("/task/insertTaskRelation/", {
+              taskId: this.taskId,
               fromId: this.from,
               toId: this.to,
               categoryId: this.selectedConnectionCategory,
-              templateId: this.templateId,
+              templateId: this.jsonData.template.id,
             })
             .then(({ data }) => {
               if (data.code === 200) {
@@ -163,10 +313,10 @@ export default {
     },
     createAnnotator(): Annotator {
       const annotator = new Annotator(
-        JSON.stringify(this.jsonData),
+        JSON.stringify(this.jsonData.annotatorData),
         this.$refs.container
       );
-      if (!this.doneState) {
+      if (!this.jsonData.task.doneState) {
         annotator.on("textSelected", (startIndex, endIndex) => {
           this.startIndex = startIndex;
           this.endIndex = endIndex;
@@ -189,7 +339,7 @@ export default {
               annotator.applyAction(Action.Label.Delete(labelId));
             }
             this.$http
-              .delete("/text/deleteTaskLabel/" + labelId + "/")
+              .delete("/task/deleteTaskLabel/" + labelId + "/")
               .then(({ data }) => {
                 if (data.code === 200) {
                   this.complete_loading = false;
@@ -219,7 +369,7 @@ export default {
                 annotator.applyAction(Action.Connection.Delete(connectionId));
               }
               this.$http
-                .delete("/text/deleteTaskRelation/" + connectionId + "/")
+                .delete("/task/deleteTaskRelation/" + connectionId + "/")
                 .then(({ data }) => {
                   if (data.code === 200) {
                     this.complete_loading = false;
@@ -265,13 +415,13 @@ export default {
     },
     reset: function () {
       this.$http
-        .delete("/text/reSet/" + this.text_id + "/" + this.template_id)
+        .delete("/task/reSet/" + this.taskId + "/" + this.jsonData.template.id)
         .then(({ data }) => {
           if (data.code === 200) {
             this.complete_loading = false;
             this.$success("重置成功");
 
-            this.jsonData.labels = [];
+            this.jsonData.annotatorData.labels = [];
             this.annotator.remove();
             this.annotator = this.createAnnotator();
             this.updateJSON();
@@ -283,12 +433,12 @@ export default {
     },
     set_complete: function () {
       this.$http
-        .get("/text/saveTaskById/" + this.text_id + "/")
+        .get("/task/saveTaskById/" + this.taskId + "/")
         .then(({ data }) => {
           if (data.code === 200) {
             this.complete_loading = false;
             this.$success("文本标注完成");
-            this.$router.push("/").catch((_) => {});
+            this.$router.go("-1");
             this.updateJSON();
           } else {
             this.$warning(data.msg);
@@ -343,41 +493,47 @@ export default {
       });
     },
     init_params: function () {
-      this.text_id = this.$route.query.text_id;
-      this.template_id = this.$route.query.template_id;
-      this.done_state = this.$route.query.done_state;
-      this.doneState = this.$route.query.done_state;
+      this.taskId = this.$route.query.taskId;
+      // this.text_id = this.$route.query.text_id;
+      // this.template_id = this.$route.query.template_id;
+      // this.done_state = this.$route.query.done_state;
+      // this.doneState = this.$route.query.done_state;
     },
+    getTaskInfo() {},
+    getLabels() {},
+    getConnections() {},
+    getLabelCategories() {},
+    getConnectionCategories() {},
     getTask: function () {
-      this.$http
-        .get("/text/getTaskById/" + this.text_id + "/" + this.template_id + "/")
-        .then(({ data }) => {
-          if (data.code === 200) {
-            this.jsonData = {
-              labels: data.data.labels,
-
-              connections: data.data.connections,
-
-              labelCategories: data.data.labelCategories,
-              connectionCategories: data.data.connectionCategories,
-              content: data.data.text.content.replaceAll("\n", "\n\n"),
-              update_time: data.data.text.updateTime,
-              title: data.data.text.title,
-            };
-            this.doneState = data.data.text.doneState;
-            this.templateId = data.data.text.templateId;
-            this.templateTitle = data.data.templateTitle;
-
-            this.labelCategories = data.data.labelCategories;
-            this.connectionCategories = data.data.connectionCategories;
-            if (this.jsonData !== null && this.jsonData.content) {
-              this.annotator = this.createAnnotator();
-              this.updateJSON();
-            }
-          } else {
-            this.$warning(data.msg);
+      this.$http.get("/task/getTask/" + this.taskId + "/").then(({ data }) => {
+        if (data.code === 200) {
+          this.jsonData.template = data.data.template;
+          this.jsonData.task = data.data.task;
+          this.jsonData.user = data.data.user;
+          this.jsonData.text = data.data.text;
+          this.jsonData.taskCategory = data.data.taskCategory;
+          this.jsonData.annotatorData = {
+            labelCategories: data.data.labelList,
+            connectionCategories: data.data.relationList,
+            labels: data.data.taskLabelList,
+            connections: data.data.taskRelationList,
+            content: data.data.text.content,
+          };
+          console.log("this.jsonData: ", this.jsonData);
+          if (
+            this.jsonData.annotatorData !== null &&
+            this.jsonData.annotatorData.content
+          ) {
+            this.annotator = this.createAnnotator();
+            this.updateJSON();
           }
-        });
+        } else {
+          this.$warning(data.msg);
+        }
+      });
+    },
+    goBack() {
+      this.$router.go(-1);
     },
   },
   computed: {},

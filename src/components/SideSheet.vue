@@ -5,7 +5,7 @@
       <el-avatar
         src="https://w7.pngwing.com/pngs/306/70/png-transparent-computer-icons-management-admin-silhouette-black-and-white-neck.png"
       ></el-avatar>
-      <div>管理员 {{username}}</div>
+      <div>管理员 {{ username }}</div>
     </v-sheet>
 
     <v-divider></v-divider>
@@ -52,9 +52,10 @@ export default Vue.extend({
   data: () => ({
     admin_links: [
       ["mdi-inbox-arrow-down", "任务大厅", "/"],
-      ["mdi-oil-lamp", "Mission Hall", "missionHall"],
+      ["mdi-alert", "任务分配", "/taskAssign"],
+      // ["mdi-oil-lamp", "Mission Hall", "missionHall"],
       ["mdi-send", "标签管理", "labels"],
-      ["mdi-alert", "任务分配", "taskAssign"],
+      // ["mdi-alert", "任务分配", "taskAssign"],
       ["mdi-delete", "个人信息", "profile"],
       ["mdi-alert-octagon", "权限管理", "permission"],
     ],
@@ -84,8 +85,7 @@ export default Vue.extend({
       //   }
       // });
 
-      this.role =
-        localStorage.getItem("role") === "0" ? "管理员" : "标注员";
+      this.role = localStorage.getItem("role") === "0" ? "管理员" : "标注员";
       this.links =
         localStorage.getItem("role") === "0"
           ? this.admin_links

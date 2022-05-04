@@ -44,7 +44,12 @@
       <el-table-column label="Title" sortable prop="title"> </el-table-column>
       <el-table-column label="内容" sortable prop="content">
         <template slot-scope="scope">
-          <div v-html="scope.row.content"></div>
+          <div>
+            {{
+              ("" + scope.row.content).substring(0, 20) +
+              (("" + scope.row.content).length >= 20 ? "..." : "")
+            }}
+          </div>
           <el-button type="text" @click="checkTextContent(scope.row)">
             点击查看更多内容</el-button
           >
@@ -82,12 +87,15 @@
       </el-pagination>
     </el-row>
     <el-dialog
-      :title="checkTextRow.title"
+      title="文本详情"
       :visible.sync="dialogVisible"
-      width="50%"
+      width="70%"
+      top="3%"
       :before-close="handleClose"
     >
-      <p>{{ checkTextRow.content }}</p>
+    <h2>{{checkTextRow.title}}</h2>
+      <p style="color: grey">{{ checkTextRow.uploadTime }}</p>
+      <span v-html="checkTextRow.content"></span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogVisible = false"
@@ -196,7 +204,20 @@ export default {
     },
     checkTextContent(row) {
       this.dialogVisible = true;
-      this.checkTextRow = row;
+      this.checkTextRow.id = row.id;
+      this.checkTextRow.title = row.title;
+      this.checkTextRow.uploadTime = row.uploadTime;
+      this.checkTextRow.content = row.content || "";
+
+      // this.checkTextRow.content.replaceAll(/\n|\r/g, "<br/>");
+      if (!this.checkTextRow.content.includes("<\/p>")) {
+        this.checkTextRow.content = this.checkTextRow.content
+          .split(/\n|\r/g)
+          .map((p) => {
+            return `<p>${p}</p>`;
+          })
+          .join("");
+      }
       console.log("row:", row);
     },
     handleEdit(index, row) {

@@ -330,6 +330,14 @@ export default {
     handleTaskEditAction(row) {
       console.log("编辑的row:", row);
       this.missionAnnotateVisiable = true;
+      this.$router
+        .push({
+          path: "/missionAnnotate",
+          query: {
+            taskId: row.id,
+          },
+        })
+        .catch((_) => {});
     },
     // 使用上面 handleCurrentChange 方法即可
     // handlePrevClick(val) {
