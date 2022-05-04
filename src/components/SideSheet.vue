@@ -66,9 +66,9 @@ export default Vue.extend({
       ["mdi-delete", "个人信息", "null"],
     ],
     links: [],
-    role: "",
+    role: "0",
     username: "",
-    currentRouteAdd: "missoinHall",
+    currentRouteAdd: "/",
   }),
   methods: {
     get_user_role() {
