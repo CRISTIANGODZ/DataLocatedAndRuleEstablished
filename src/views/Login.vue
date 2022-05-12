@@ -2,7 +2,7 @@
  * @Author: Zhou Xianghui
  * @Date: 2022-04-11 14:28:15
  * @LastEditors: Zhou Xianghui
- * @LastEditTime: 2022-04-30 14:03:48
+ * @LastEditTime: 2022-05-12 17:18:45
  * @FilePath: \ai_ann_front\src\views\Login.vue
  * @Description:
  * after a long, long, long time
@@ -47,6 +47,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions>
+          <!-- <v-btn color="blue darken-1" text @click="login_res"> 注册 </v-btn> -->
+          <router-link to="/register">注册账号</router-link>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" text @click="login_res"> 登陆 </v-btn>
         </v-card-actions>
@@ -83,10 +85,10 @@ export default Vue.extend({
             // localStorage.setItem("token", this.username + "_" + token);
             localStorage.setItem("token", token);
             localStorage.setItem("role", data.data.user.role);
+            localStorage.setItem("username", data.data.user.username);
             // localStorage.setItem("role", "admin");
             this.username = data.data.user.username;
             this.ucount = data.data.user.ucount;
-            localStorage.setItem("username", this.username);
             this.$router.push("/").catch((_) => {});
             // location.reload();
           } else {
@@ -97,6 +99,14 @@ export default Vue.extend({
           }
         });
     },
+  },
+  mounted() {
+    let username = localStorage.getItem("ucount");
+    let password = localStorage.getItem("password");
+    if (!username || !password) {
+      this.username = username;
+      this.password = password;
+    }
   },
 });
 </script>

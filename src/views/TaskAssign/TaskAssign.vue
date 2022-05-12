@@ -457,7 +457,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @import "~prismjs/themes/prism-dark.css";
 
 .container {

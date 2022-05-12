@@ -562,7 +562,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .code-container-wrapper,
 .container-wrapper {
   min-height: calc(100vh - 64px);

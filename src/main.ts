@@ -9,15 +9,15 @@ import i18n from "./i18n";
 import vcolorpicker from "vcolorpicker";
 Vue.use(vcolorpicker);
 import "./alert";
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import ElementUI from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
 
-Vue.use(ElementUI)
+Vue.use(ElementUI);
 
 router.beforeEach((to, from, next) => {
   var token = localStorage.getItem("token");
   //如果没登录,都导向登录页
-  if (!token) {
+  if (!token && to.path !== "/register") {
     if (to.path !== "/login") {
       next({ path: "/login" });
     } else {

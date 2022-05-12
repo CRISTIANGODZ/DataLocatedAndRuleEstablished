@@ -61,5 +61,10 @@ export default new Router({
       name: "missionAnnotate",
       component: () => import("@/views/MissionHall/MissionAnnotate.vue"),
     },
+    {
+      path: "/register",
+      name: "register",
+      component: () => import("@/views/Register/Register.vue"),
+    }
   ],
 });
