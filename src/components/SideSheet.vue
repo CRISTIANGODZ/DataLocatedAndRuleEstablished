@@ -1,11 +1,13 @@
 <template>
   <div>
-    <v-sheet color="grey lighten-4" class="pa-4">
+    <v-sheet
+      color="grey lighten-4"
+      class="pa-4 d-flex flex-column align-center justify-center"
+    >
       <!-- <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar> -->
-      <el-avatar
-        src="https://w7.pngwing.com/pngs/306/70/png-transparent-computer-icons-management-admin-silhouette-black-and-white-neck.png"
-      ></el-avatar>
-      <div>管理员 {{ username }}</div>
+      <el-avatar :src="headIconUrl"></el-avatar>
+      <div>{{ role }}</div>
+      <div>{{ username }}</div>
     </v-sheet>
 
     <v-divider></v-divider>
@@ -13,9 +15,10 @@
     <v-list>
       <v-list-item-group v-model="currentRouteAdd" color="primary">
         <v-list-item
-          v-for="[icon, text, link] in links"
-          :key="link"
+          v-for="[index, [icon, text, link]] of links.entries()"
+          :key="index"
           link
+          color="primary"
           @click="go_page(link)"
         >
           <v-list-item-icon>
@@ -47,28 +50,38 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { permission_links, permission_roles } from "../constants";
 
 export default Vue.extend({
   data: () => ({
-    admin_links: [
-      ["mdi-inbox-arrow-down", "任务大厅", "/"],
-      ["mdi-alert", "任务分配", "/taskAssign"],
-      // ["mdi-oil-lamp", "Mission Hall", "missionHall"],
-      ["mdi-send", "标签管理", "labels"],
-      // ["mdi-alert", "任务分配", "taskAssign"],
-      ["mdi-delete", "个人信息", "profile"],
-      ["mdi-alert-octagon", "权限管理", "permission"],
-    ],
-    member_links: [
-      ["mdi-inbox-arrow-down", "任务大厅", "/"],
-      ["mdi-send", "标签管理", "labels"],
-      ["mdi-send", "任务分配", "taskAssign"],
-      ["mdi-delete", "个人信息", "null"],
-    ],
+    // permission_links: [
+    //   // super_admin_links:
+    //   [
+    //     ["mdi-inbox-arrow-down", "任务大厅", "main"],
+    //     ["mdi-alert", "任务分配", "taskAssign"],
+    //     ["mdi-send", "标签管理", "labels"],
+    //     ["mdi-delete", "个人信息", "profile"],
+    //     ["mdi-alert-octagon", "权限管理", "personManagement"],
+    //   ],
+    //   // regular_admin_links:
+    //   [
+    //     ["mdi-inbox-arrow-down", "任务大厅", "main"],
+    //     ["mdi-send", "标签管理", "labels"],
+    //     ["mdi-send", "任务分配", "taskAssign"],
+    //     ["mdi-delete", "个人信息", "profile"],
+    //   ],
+    //   // regular_person_link:
+    //   [],
+    // ],
     links: [],
+    // permission_roles: ["超级管理员", "管理员", "普通用户"],
     role: "0",
     username: "",
-    currentRouteAdd: "/",
+    currentRouteAdd: "1",
+    activePath: "",
+
+    headIconUrl:
+      "https://w7.pngwing.com/pngs/306/70/png-transparent-computer-icons-management-admin-silhouette-black-and-white-neck.png",
   }),
   methods: {
     get_user_role() {
@@ -84,17 +97,19 @@ export default Vue.extend({
       //     alert(data.msg);
       //   }
       // });
+      if (localStorage.length === 0) {
+        this.links = [];
+        return;
+      }
+      this.role = permission_roles[localStorage.getItem("role")];
+      this.links = permission_links[localStorage.getItem("role")];
 
-      this.role = localStorage.getItem("role") === "0" ? "管理员" : "标注员";
-      this.links =
-        localStorage.getItem("role") === "0"
-          ? this.admin_links
-          : this.member_links;
       this.username = localStorage.getItem("username");
       console.log("links:", this.links);
     },
     log_out() {
       localStorage.setItem("token", "");
+      // localStorage.clear();
       this.$router.push("login").catch((_) => {});
     },
     go_page(name) {
@@ -106,7 +121,17 @@ export default Vue.extend({
     },
   },
   mounted(): void {
+    // this.currentRouteAdd = this.$route.path;
+    console.log("this.currentRouteAdd:", this.currentRouteAdd);
     this.get_user_role();
+  },
+
+  watch: {
+    $route(to, from) {
+      // this.currentRouteAdd = this.$route.path;
+      console.log("this.currentRouteAdd:", this.currentRouteAdd);
+      console.log(this.$route.path);
+    },
   },
 });
 </script>

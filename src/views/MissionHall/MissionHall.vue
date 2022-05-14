@@ -32,6 +32,7 @@
       <el-col :span="4"
         ><div class="grid-content bg-purple">
           <el-select
+            v-if="isAdmin"
             v-model="filterData.labelPerson"
             filterable
             placeholder="请选择标注人"
@@ -166,11 +167,11 @@
   </div>
 </template>
 
-<script>
+<script type="ts">
 // import MissionAnnotate from "./MissionAnnotate";
 // taskStatus 任务状态: -1: 所有, 0: 未完成 1: 已完成
 // taskCategoriesCurrent 任务类别: -1 表示所有
-
+import {ROLES} from '../../constants'
 export default {
   // components: { MissionAnnotate },
   data() {
@@ -190,6 +191,7 @@ export default {
           pageSize: 5,
         },
       },
+      isAdmin: false,
       defaultTaskCategories: [{ id: -1, title: "全部", name: "all" }],
       jsonData: {
         taskCategories: [
@@ -407,6 +409,7 @@ export default {
     getLabelPersons() {},
   },
   mounted() {
+    this.isAdmin = localStorage.getItem("role")    !== ROLES.USER
     this.getTasks();
   },
 };

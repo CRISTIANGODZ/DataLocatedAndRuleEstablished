@@ -579,7 +579,7 @@ export default {
   border-left: solid 2px black;
 }
 
-.annotate-container,
+.container,
 .code-container {
   padding-top: 10px;
   overflow: scroll;
@@ -594,9 +594,8 @@ code {
   padding-right: 40px !important;
   margin-bottom: 20px;
 }
-</style>
-<style>
-.annotate-container > svg {
+
+.container > svg {
   width: 45vw;
 }
 

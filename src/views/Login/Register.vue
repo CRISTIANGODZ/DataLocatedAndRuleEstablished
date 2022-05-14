@@ -1,13 +1,6 @@
 <template>
   <div class="login clearfix">
     <div class="login-wrap">
-      <v-dialog
-        v-model="d_register"
-        persistent
-        max-width="600px"
-        overlay-opacity="1"
-        overlay-color="#00BFFF"
-      >
       <el-row type="flex" justify="center">
         <el-form
           ref="loginForm"
@@ -16,8 +9,6 @@
           :rules="rules"
           label-width="80px"
         >
-          <h3>注册</h3>
-          <hr />
           <el-form-item type="radio" label="用户角色" prop="role">
             <el-radio v-model="user.role" label="0">超级管理员</el-radio>
             <el-radio v-model="user.role" label="1">普通管理员</el-radio>
@@ -43,13 +34,16 @@
             ></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon @click="doRegister()"
+            <el-button
+              type="primary"
+              icon
+              @click="doRegister()"
+              style="min-width: 150px"
               >注册账号</el-button
             >
           </el-form-item>
         </el-form>
       </el-row>
-    </v-dialog>
     </div>
   </div>
 </template>
@@ -70,7 +64,7 @@ export default Vue.extend({
         password: [
           {
             required: true,
-            message: "密码长度不能小于8位且必须包含字母、数字、符号中的两种",
+            message: "密码至少八个字符，至少一个字母和一个数字",
             trigger: "blur",
           },
         ],
@@ -94,8 +88,30 @@ export default Vue.extend({
       },
     };
   },
+  props: {
+    hanldeRegisterClick: {
+      type: Function,
+    },
+  },
   methods: {
     doRegister() {
+      if (this.user.ucount.length < 1) {
+        this.$message.error("用户名不能为空");
+        return;
+      }
+      if (this.user.username.length < 1) {
+        this.$message.error("用户昵称不能为空");
+        return;
+      }
+      if (this.user.password.length < 1) {
+        this.$message.error("密码不能为空");
+        return;
+      }
+      const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8, }$/;
+      if (!reg.test(this.user.password)) {
+        this.$message.error("密码至少八个字符，至少一个字母和一个数字");
+        return;
+      }
       this.$http
         .post("/user/register/", {
           ucount: this.user.ucount,
@@ -111,7 +127,8 @@ export default Vue.extend({
             localStorage.setItem("password", this.user.password);
             localStorage.setItem("username", this.user.username);
             console.log(localStorage);
-            this.$router.push("/login");
+            this.hanldeRegisterClick();
+            console.log("ddd");
           }
         });
     },
@@ -127,42 +144,7 @@ export default Vue.extend({
   max-height: calc(100vh - 64px);
   overflow: hidden;
 }
-.login {
-  width: 100%;
-  height: 740px;
-  /* background: rgb(131, 58, 180);
-  background: linear-gradient(
-    90deg,
-    rgba(131, 58, 180, 1) 0%,
-    rgba(156, 29, 253, 1) 50%,
-    rgba(252, 176, 69, 1) 100%
-  ); */
-  /* background: url("../../assets/images/bg.png") no-repeat;
-  background-size: cover; */
-  overflow: hidden;
-}
 .login-wrap {
-  /* background: url("../../assets/images/bg.png") no-repeat;
-  background-size: cover; */
-  width: 500px;
-  height: 400px;
-  margin: 215px auto;
-  overflow: hidden;
-  padding-top: 10px;
-  line-height: 20px;
-}
-
-h3 {
-  color: #0babeab8;
-  font-size: 24px;
-}
-hr {
-  background-color: #444;
-  margin: 20px auto;
-}
-
-.el-button {
-  width: 80%;
-  margin-left: -50px;
+  min-width: 400px;
 }
 </style>
