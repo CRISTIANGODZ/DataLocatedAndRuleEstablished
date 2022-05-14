@@ -14,19 +14,19 @@ import "element-ui/lib/theme-chalk/index.css";
 
 Vue.use(ElementUI);
 
-// router.beforeEach((to, from, next) => {
-//   var token = localStorage.getItem("token");
-//   //如果没登录,都导向登录页
-//   if (!token && to.path !== "/register") {
-//     if (to.path !== "/login" && to.path !== "/register") {
-//       next({ path: "/login" });
-//     } else {
-//       next();
-//     }
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  var token = localStorage.getItem("token");
+  //如果没登录,都导向登录页
+  if (!token && to.path !== "/register") {
+    if (to.path !== "/login" && to.path !== "/register") {
+      next({ path: "/login" });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
 
 Vue.config.productionTip = false;
 Vue.prototype.$eventbus = new Vue();
