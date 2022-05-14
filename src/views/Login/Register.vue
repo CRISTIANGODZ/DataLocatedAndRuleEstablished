@@ -64,7 +64,7 @@ export default Vue.extend({
         password: [
           {
             required: true,
-            message: "密码至少八个字符，至少一个字母和一个数字",
+            message: "密码至少八个字符，至少一个字母和一个数字和一个特殊字符",
             trigger: "blur",
           },
         ],
@@ -107,9 +107,11 @@ export default Vue.extend({
         this.$message.error("密码不能为空");
         return;
       }
-      const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8, }$/;
+      // const reg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8, }$/;
+      const reg =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
       if (!reg.test(this.user.password)) {
-        this.$message.error("密码至少八个字符，至少一个字母和一个数字");
+        this.$message.error("密码至少八个字符，至少一个字母和一个数字和一个特殊字符");
         return;
       }
       this.$http

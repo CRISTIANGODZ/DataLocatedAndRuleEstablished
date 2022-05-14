@@ -3,7 +3,7 @@
     <v-row>
       <el-page-header @back="goBack" content="NLP 标注"> </el-page-header>
     </v-row>
-    <v-row v-if="!jsonData.task.doneState" style="margin-top: 20px">
+    <v-row v-if="!(jsonData.task.doneState === 1)" style="margin-top: 20px">
       <v-btn @click="reset" color="primary ma-1"> 重置所有标注 </v-btn>
       <v-btn
         class="ma-1"
@@ -22,22 +22,26 @@
       <v-col>
         <v-row class="pa-2">
           <v-card color="ma-2 pa-6 w-50">
-            <h3>标题: {{ this.jsonData.text.title }}</h3>
-            <h4>标注人: {{ this.jsonData.user.username }}</h4>
-            <h4>任务类型: {{ this.jsonData.taskCategory.title }}</h4>
-            <h4>最后更新时间 {{ this.jsonData.task.updateTime }}</h4>
+            <h3>标题: {{ jsonData.text.title }}</h3>
+            <h4>标注人: {{ jsonData.user.username }}</h4>
+            <h4>任务类型: {{ jsonData.taskCategory.title }}</h4>
+            <h4>最后更新时间 {{ jsonData.task.updateTime }}</h4>
           </v-card>
         </v-row>
         <v-row>
-          <div class="annotate-container" ref="container"></div>
+          <div
+            class="annotator-container"
+            id="annotator-container"
+            ref="container"
+          ></div>
         </v-row>
       </v-col>
-      <v-col class="pa-2" v-if="true || this.annotator !== null">
+      <v-col class="pa-2" v-if="true || annotator !== null">
         <v-card>
           <v-chip class="ma-4 font-weight-bold" text-color="black">
             模板:
             <!-- hell -->
-            {{ this.jsonData.template.title }}
+            {{ jsonData.template.title }}
           </v-chip>
         </v-card>
         <v-divider style="margin-top: 10px; margin-bottom: 10px"></v-divider>
@@ -45,7 +49,7 @@
           <v-subheader>标签</v-subheader>
 
           <v-chip
-            v-for="label in this.jsonData.annotatorData.labelCategories || []"
+            v-for="label in jsonData.annotatorData.labelCategories || []"
             :key="'label' + label['id']"
             class="ma-2"
             :color="label['color']"
@@ -60,7 +64,7 @@
           <v-subheader>关联</v-subheader>
 
           <v-chip
-            v-for="cc in this.jsonData.annotatorData.connectionCategories || []"
+            v-for="cc in jsonData.annotatorData.connectionCategories || []"
             :key="'cc' + cc['id']"
             class="ma-2"
           >
@@ -79,7 +83,7 @@
                 :key="category.id"
                 :label="category.text"
                 :value="category.id"
-                v-for="category in this.jsonData.annotatorData.labelCategories"
+                v-for="category in jsonData.annotatorData.labelCategories"
               ></v-radio>
             </v-radio-group>
           </v-card-text>
@@ -106,8 +110,7 @@
                 :key="category.id"
                 :label="category.text"
                 :value="category.id"
-                v-for="category in this.jsonData.annotatorData
-                  .connectionCategories"
+                v-for="category in jsonData.annotatorData.connectionCategories"
               ></v-radio>
             </v-radio-group>
           </v-card-text>
@@ -193,8 +196,8 @@ export default {
         },
         user: {
           id: 2,
-          ucount: "root",
-          username: "root",
+          ucount: "rosdfsdot",
+          username: "roodddt",
           password: "123456",
           role: 2,
         },
@@ -561,48 +564,42 @@ export default {
   mounted(): void {},
 };
 </script>
-
 <style scoped>
 .code-container-wrapper,
 .container-wrapper {
   min-height: calc(100vh - 64px);
   max-height: calc(100vh - 64px);
   overflow: hidden;
-  padding: 0 !important;
+  /* padding: 0 !important; */
 }
-
 .container-wrapper {
   border-right: solid 2px black;
 }
-
 .code-container-wrapper {
   border-left: solid 2px black;
 }
-
-.container,
+.annotator-container,
 .code-container {
   padding-top: 10px;
-  overflow: scroll;
-  height: calc(100vh - 64px);
+  /* overflow: scroll; */
+  /* height: calc(100vh - 64px); */
 }
-
 code {
-  max-width: calc(45vw - 16px);
+  /* max-width: calc(45vw - 16px); */
   background: rgb(32, 32, 32) !important;
   box-shadow: none !important;
   padding: 8px !important;
-  padding-right: 40px !important;
+  /* padding-right: 40px !important; */
   margin-bottom: 20px;
 }
-
-.container > svg {
+</style>
+<style>
+.annotator-container > svg {
   width: 45vw;
 }
-
 .poplar-annotation-label {
   font-size: 14px;
 }
-
 .poplar-annotation-connection {
   font-family: "PingFang SC", serif;
   font-size: 12px;
