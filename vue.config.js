@@ -28,6 +28,13 @@ module.exports = {
           // 我的理解就是http://baidu.com替换了/api/news/list里面的/api
         },
       },
+      "/permit": {
+        target: "http://127.0.0.1:3004",
+        changOrigin: true, //如果接口跨域这里就要这个参数配置
+        pathRewrite: {
+          "^/permit": "/permit",
+        },
+      },
     },
   },
 };

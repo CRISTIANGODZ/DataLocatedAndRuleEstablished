@@ -2,10 +2,11 @@ export const permission_links = [
   // super_admin_links:
   [
     ["mdi-inbox-arrow-down", "任务大厅", "/main"],
-    ["mdi-alert", "任务分配", "taskAssign"],
+    ["mdi-dresser", "任务分配", "taskAssign"],
     ["mdi-send", "标签管理", "labels"],
     ["mdi-camera-account", "个人信息", "profile"],
-    ["mdi-alert-octagon", "权限管理", "personManagement"],
+    ["mdi-account-cog", "人员管理", "personManagement"],
+    ["mdi-account-wrench", "权限管理", "permissionManagement"],
     ["mdi-package-variant", "模型管理", "modelManagement"],
   ],
   // regular_admin_links:

@@ -104,6 +104,12 @@ export default new Router({
             import("@/views/PersonManagement/PersonManagement.vue"),
         },
         {
+          path: "/permissionManagement",
+          name: "permissionManagement",
+          component: () =>
+            import("@/views/PermissionManagement/PermissionManagement.vue"),
+        },
+        {
           path: "/modelManagement",
           name: "modelManagement",
           component: () =>

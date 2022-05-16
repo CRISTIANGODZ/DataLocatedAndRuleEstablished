@@ -740,10 +740,10 @@
   resolved "https://registry.npmjs.org/@kazupon/vue-i18n-loader/-/vue-i18n-loader-0.3.0.tgz"
   integrity sha512-M2280E9PMxetu6mOdtyh1d6Dif7LwH4gvxD2dgsu7HOyzR26AUNok8DxZ1Y5YAexJvPfbBXC75Llui2myO05Hg==
 
-"@mdi/font@^3.6.95":
-  version "3.9.97"
-  resolved "https://registry.npmjs.org/@mdi/font/-/font-3.9.97.tgz"
-  integrity sha512-yADBl2mzqIssrhLaRvJ2gZPyEQK+fN9uYh/1/cwwuq2lKDx+ITWsOrh1vlHMfw1IICMx9cwBjSoiCf3B8Br8nw==
+"@mdi/font@^6.9.95":
+  version "6.6.96"
+  resolved "https://registry.npmmirror.com/@mdi/font/-/font-6.6.96.tgz#4eee6faee5f44d3ec401d354fb95775cd6699575"
+  integrity sha512-FbcvG9z17hwZ7IwX5XeOR1UYGoLq+gTKq6XNPvJFuCpn599GdiPCJbAmmDBJb+jMYXjKYr0lCxfouWGxDA82sA==
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"

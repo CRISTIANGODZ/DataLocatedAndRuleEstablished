@@ -30,6 +30,13 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
+        <el-form-item label="用户角色">
+          <el-input
+            v-model="userData.userRole"
+            :disabled="true"
+            placeholder="请输入角色"
+          ></el-input>
+        </el-form-item>
         <el-form-item label="邮箱">
           <el-input
             v-model="userData.email"
@@ -100,6 +107,7 @@ export default Vue.extend({
         ucount: "fankaljead",
         phone: "18523771521",
         address: "重庆市南岸区重庆邮电大学",
+        userRole: "超级管理员",
         description: "",
         avatar:
           "https://avatars.githubusercontent.com/u/30434925?s=400&u=0a2acdf9f2ea4954f44343079c9804fcd11ec933&v=4",
