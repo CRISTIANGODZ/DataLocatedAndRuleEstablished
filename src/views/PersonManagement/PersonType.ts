@@ -9,6 +9,7 @@ export interface PersonType {
   phone: string;
   address: string;
   userRole: string;
+  userRoleId: number;
   description: string;
   avatar: string;
 }
@@ -31,4 +32,11 @@ export interface PersonJsonDataType {
     pagination: Pagination;
     users: PersonType[];
   };
+}
+
+export enum PersonOperation {
+  CHECK = 0,
+  EDIT = 1,
+  DELETE = 2,
+  ADD = 3,
 }

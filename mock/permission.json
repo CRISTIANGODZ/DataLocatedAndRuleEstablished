@@ -113,6 +113,7 @@
           "phone": "18523771521",
           "address": "重庆市南岸区重庆邮电大学",
           "userRole": "超级管理员",
+          "userRoleId": 1,
           "description": "hello world",
           "avatar": "https://avatars.githubusercontent.com/u/30434925?s=400&u=0a2acdf9f2ea4954f44343079c9804fcd11ec933&v=4"
         },
@@ -125,6 +126,7 @@
           "phone": "18523771521",
           "address": "美国加州洛杉矶",
           "userRole": "管理员",
+          "userRoleId": 2,
           "description": "hello world",
           "avatar": "https://avatars.githubusercontent.com/u/30434925?s=400&u=0a2acdf9f2ea4954f44343079c9804fcd11ec933&v=4"
         },
@@ -137,8 +139,56 @@
           "phone": "18523771521",
           "address": "美国牛约克",
           "userRole": "普通用户",
+          "userRoleId": 3,
           "description": "hello world",
           "avatar": "https://avatars.githubusercontent.com/u/30434925?s=400&u=0a2acdf9f2ea4954f44343079c9804fcd11ec933&v=4"
+        }
+      ]
+    }
+  },
+  "roles": {
+    "code": 200,
+    "data": {
+      "total": 3,
+      "currentPage": 1,
+      "pageSize": 10,
+      "roles": [
+        {
+          "id": 1,
+          "name": "root",
+          "title": "超级管理员",
+          "description": "超级管理员",
+          "permissions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "id": 2,
+          "name": "admin",
+          "title": "管理员",
+          "description": "管理员",
+          "permissions": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "id": 3,
+          "name": "user",
+          "title": "普通用户",
+          "description": "普通用户",
+          "permissions": [
+            1,
+            4
+          ]
         }
       ]
     }

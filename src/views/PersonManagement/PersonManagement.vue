@@ -16,7 +16,9 @@
       </el-col>
 
       <el-col>
-        <el-button type="primary" @click="() => {}">添加角色</el-button>
+        <el-button type="primary" @click="handleAddModalOperationVisible"
+          >添加角色</el-button
+        >
       </el-col>
     </el-row>
     <el-row>
@@ -50,6 +52,16 @@
           label="角色"
           width="180"
         ></el-table-column>
+        <el-table-column prop="password" label="密码" width="180">
+          <template slot-scope="scope">
+            <!-- <el-input
+            v-model="scope.row.password"
+            disabled
+            type="password"
+          ></el-input> -->
+            <el-tag>{{ scope.row.password.replace(/[\s\S]/g, "*") }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="description"
           label="简介"
@@ -57,11 +69,15 @@
         ></el-table-column>
         <el-table-column prop="avatar" label="头像" width="180">
           <template slot-scope="scope">
-            <el-avatar shape="square" :size="large" :src="scope.row.avatar"></el-avatar>
+            <el-avatar
+              shape="square"
+              size="large"
+              :src="scope.row.avatar"
+            ></el-avatar>
           </template>
         </el-table-column>
 
-        <el-table-column  label="操作" width="250">
+        <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleCheckModalOperationVisible"
               >查看</el-button
@@ -96,14 +112,29 @@
       >
       </el-pagination>
     </el-row>
+    <person-profile-modal-vue
+      :closeModal="handleCloseModalOperation"
+      :visible="operation.modalVisible"
+      :userData="selectPerson"
+      :confirmDelete="handleConfirmDelete"
+      :allRoles="roles"
+      :state="operation.operationState"
+    ></person-profile-modal-vue>
   </el-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import { PersonJsonDataType } from "./PersonType";
+import PersonProfileModalVue from "./PersonProfileModal.vue";
+import { PersonJsonDataType, PersonOperation, PersonType } from "./PersonType";
 import { getPersonList } from "./PersonApi";
+import { getRoleList } from "../PermissionManagement/PermissionApi";
+import { RoleInfo } from "../PermissionManagement/PermissionTypes";
+
 export default Vue.extend({
+  components: {
+    PersonProfileModalVue,
+  },
   data() {
     return {
       filterData: {
@@ -116,6 +147,12 @@ export default Vue.extend({
         },
       },
       jsonData: null as PersonJsonDataType,
+      operation: {
+        modalVisible: false,
+        operationState: PersonOperation.CHECK,
+      },
+      roles: [] as RoleInfo[],
+      selectPerson: null as PersonType,
     };
   },
   methods: {
@@ -129,10 +166,41 @@ export default Vue.extend({
       this.filterData.pagination.currentIndex = val;
       this.onFilterDataChange();
     },
-    handleRowClick() {},
-    handleCheckModalOperationVisible() {},
-    handleEditModalOperationVisible() {},
-    handleDeleteModalOperationVisible() {},
+    handleModalOperationVisible() {
+      this.operation.modalVisible = true;
+    },
+    handleRowClick(row, column, event) {
+      this.selectPerson = row;
+      console.log(row);
+      console.log(column);
+    },
+    handleEditModalOperationVisible() {
+      this.handleModalOperationVisible();
+      this.operation.operationState = PersonOperation.EDIT;
+    },
+    handleCheckModalOperationVisible() {
+      this.handleModalOperationVisible();
+      this.operation.operationState = PersonOperation.CHECK;
+    },
+    handleAddModalOperationVisible() {
+      this.operation.operationState = PersonOperation.ADD;
+      this.handleModalOperationVisible();
+      this.selectPerson = {} as PersonType;
+    },
+    handleDeleteModalOperationVisible() {
+      this.handleModalOperationVisible();
+      this.operation.operationState = PersonOperation.DELETE;
+    },
+    handleConfirmDelete() {
+      this.$success("删除成功");
+      this.handleCloseModalOperation();
+    },
+    handleCloseModalOperation() {
+      this.operation.modalVisible = false;
+      if (this.operation.operationState !== PersonOperation.EDIT) {
+        this.getData();
+      }
+    },
     async getData() {
       const data = (await getPersonList(this.filterData)).data;
       console.log("data:", data);
@@ -142,6 +210,12 @@ export default Vue.extend({
         // this.jsonData.data.users = data.data.users;
         this.jsonData = data;
         console.log("this.jsonData.users:", this.jsonData);
+        this.selectPerson = data.data.users[0];
+      }
+      const role_data = (await getRoleList()).data;
+      if (role_data.code === 200) {
+        this.roles = role_data.data.roles;
+        console.log("this.roles:", this.roles);
       }
     },
   },
@@ -154,4 +228,13 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.el-row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.el-table {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+</style>

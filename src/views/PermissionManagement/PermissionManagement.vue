@@ -33,7 +33,7 @@
         <el-table-column prop="description" label="角色描述" width="180">
         </el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleCheckModalOperationVisible"
               >查看</el-button

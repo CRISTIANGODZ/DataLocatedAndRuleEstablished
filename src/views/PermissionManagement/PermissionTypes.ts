@@ -1,3 +1,5 @@
+import { AxiosRequestConfig } from "axios";
+
 export interface RoleInfo {
   id: number;
   name: string;
@@ -16,4 +18,23 @@ export enum RoleOperation {
   EDIT = 1,
   DELETE = 2,
   ADD = 3,
+}
+
+export interface Pagination {
+  currentIndex: number;
+  total: number;
+  pageSize: number;
+}
+
+export interface RoleListJsonData {
+  code: number;
+  data: {
+    pagination: Pagination;
+    roles: RoleInfo[];
+  };
+}
+
+export interface RoleFilterDataType extends AxiosRequestConfig {
+  roleName: string;
+  pagination: Pagination;
 }
