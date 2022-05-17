@@ -21,22 +21,47 @@
     </el-row>
     <el-row>
       <el-table
-        :data="jsonData.roles"
+        :data="jsonData.data.users"
         border
         highlight-current-row
         style="width: 100%"
         @row-click="handleRowClick"
       >
         <el-table-column prop="id" label="编号" width="180"> </el-table-column>
+        <el-table-column prop="ucount" label="ucount" width="180">
+        </el-table-column>
         <el-table-column
-          prop="name"
-          label="角色名称"
+          prop="username"
+          label="人员名称"
           width="180"
         ></el-table-column>
-        <el-table-column prop="description" label="角色描述" width="180">
+        <el-table-column
+          prop="phone"
+          label="电话"
+          width="180"
+        ></el-table-column>
+        <el-table-column
+          prop="address"
+          label="地址"
+          width="180"
+        ></el-table-column>
+        <el-table-column
+          prop="userRole"
+          label="角色"
+          width="180"
+        ></el-table-column>
+        <el-table-column
+          prop="description"
+          label="简介"
+          width="180"
+        ></el-table-column>
+        <el-table-column prop="avatar" label="头像" width="180">
+          <template slot-scope="scope">
+            <el-avatar shape="square" :size="large" :src="scope.row.avatar"></el-avatar>
+          </template>
         </el-table-column>
 
-        <el-table-column label="操作">
+        <el-table-column  label="操作" width="250">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleCheckModalOperationVisible"
               >查看</el-button
@@ -76,6 +101,8 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { PersonJsonDataType } from "./PersonType";
+import { getPersonList } from "./PersonApi";
 export default Vue.extend({
   data() {
     return {
@@ -88,9 +115,7 @@ export default Vue.extend({
           total: 3,
         },
       },
-      jsonData: {
-        users: [],
-      },
+      jsonData: null as PersonJsonDataType,
     };
   },
   methods: {
@@ -104,6 +129,27 @@ export default Vue.extend({
       this.filterData.pagination.currentIndex = val;
       this.onFilterDataChange();
     },
+    handleRowClick() {},
+    handleCheckModalOperationVisible() {},
+    handleEditModalOperationVisible() {},
+    handleDeleteModalOperationVisible() {},
+    async getData() {
+      const data = (await getPersonList(this.filterData)).data;
+      console.log("data:", data);
+      console.log("dataddddddddddddddddddd");
+      if (data.code === 200) {
+        console.log("ddsdlakjflk");
+        // this.jsonData.data.users = data.data.users;
+        this.jsonData = data;
+        console.log("this.jsonData.users:", this.jsonData);
+      }
+    },
+  },
+  mounted() {
+    // this.onFilterDataChange();
+    // const data = getPersonList(this.filterData);
+    // console.log(data);
+    this.getData();
   },
 });
 </script>

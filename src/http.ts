@@ -129,3 +129,6 @@ httpl.interceptors.response.use(
 );
 
 Vue.prototype.$httpl = httpl;
+
+export { httpl as requestl };
+export { http as request };
