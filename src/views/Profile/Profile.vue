@@ -1,6 +1,7 @@
 <template>
   <el-container>
     <el-row>
+      <h2 style="margin-bottom: 10px">个人信息</h2>
       <el-form
         :label-position="labelPosition"
         label-width="100px"

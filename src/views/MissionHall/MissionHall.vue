@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2 style="margin-bottom: 10px">任务大厅</h2>
     <el-row>
       <el-col :span="2">
         <v-chip label> 任务状态: </v-chip>
@@ -130,7 +131,7 @@
         <el-table-column prop="weight" label="置信度"> </el-table-column>
         <el-table-column prop="status" label="完成状态">
           <template slot-scope="scope">
-            <el-tag>{{
+            <el-tag :type="scope.row.doneState === 0 ? 'success' : 'info'">{{
               scope.row.doneState === 0 ? "未完成" : "已完成"
             }}</el-tag>
             <!-- <v-chip

@@ -1,5 +1,6 @@
 <template>
   <el-container direction="vertical">
+    <h2 style="margin-bottom: 10px">模型管理</h2>
     <!-- <el-header></el-header> -->
     <el-row el-row type="flex" justify="between" :gutter="20">
       <el-col>
@@ -35,7 +36,7 @@
         :data="datasets.data"
         border
         highlight-current-row
-        style="width: 100%"
+        style="width: 100%; margin-top: 10px; margin-bottom: 10px"
       >
         <el-table-column prop="id" label="编号" width="180"> </el-table-column>
         <el-table-column prop="name" label="数据集名称" width="180">

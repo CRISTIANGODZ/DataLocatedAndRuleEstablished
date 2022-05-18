@@ -1,10 +1,18 @@
 <template>
   <div>
-    <el-row :gutter="20">
+    <h2>任务分配</h2>
+    <el-row :gutter="20" style="margin-top: 10px;">
       <el-col :span="6">
         <el-input
           v-model="filterData.keyWord"
           placeholder="输入关键字搜索"
+          @input="onFilterDataChange"
+        />
+      </el-col>
+      <el-col :span="6">
+        <el-input
+          v-model="filterData.modelName"
+          placeholder="输入模型名称"
           @input="onFilterDataChange"
         />
       </el-col>
@@ -34,7 +42,7 @@
       :data="tableData"
       lazy
       @selection-change="handleSelectionChange"
-      style="width: 100%"
+      style="width: 100%;margin-top: 10px"
       :row-style="{ height: '80px' }"
       @select="handleToggleRowSelection"
       @select-all="handleToggleAllSelection"
@@ -43,6 +51,7 @@
       <el-table-column label="上传时间" sortable prop="uploadTime">
       </el-table-column>
       <el-table-column label="Title" sortable prop="title"> </el-table-column>
+      <el-table-column label="模型名称" sortable prop="modelName"> </el-table-column>
       <el-table-column label="内容" sortable prop="content">
         <template slot-scope="scope">
           <div>
@@ -118,6 +127,7 @@ export default {
       dialogVisible: false,
       filterData: {
         keyWord: "",
+        modelName:"",
         pagination: {
           currentIndex: 1,
           total: 3,
