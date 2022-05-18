@@ -3,7 +3,14 @@
     <v-row>
       <el-page-header @back="goBack" content="NLP 标注"> </el-page-header>
     </v-row>
-    <v-row v-if="!(jsonData.task.doneState === 1)" style="margin-top: 20px">
+    <v-row v-if="!(jsonData.task.doneState === 1)" style="margin-top: 40px">
+      <v-btn
+        @click="predictLabel"
+        v-if="!!!jsonData.task.preLabel"
+        color="info ma-1"
+      >
+        预达标
+      </v-btn>
       <v-btn @click="reset" color="primary ma-1"> 重置所有标注 </v-btn>
       <v-btn
         class="ma-1"
@@ -25,6 +32,8 @@
             <h3>标题: {{ jsonData.text.title }}</h3>
             <h4>标注人: {{ jsonData.user.username }}</h4>
             <h4>任务类型: {{ jsonData.taskCategory.title }}</h4>
+            <h4>预打标: {{ jsonData.task.preLabel == 1 ? "是" : "否" }}</h4>
+            <h4>置信度: {{ taskWeight }}</h4>
             <h4>最后更新时间 {{ jsonData.task.updateTime }}</h4>
           </v-card>
         </v-row>
@@ -136,6 +145,7 @@ import { Action, Annotator } from "poplar-annotation";
 import { LabelCategory } from "poplar-annotation/dist/Store/LabelCategory";
 import { ConnectionCategory } from "poplar-annotation/dist/Store/ConnectionCategory";
 // import { Label } from "poplar-annotation/dist/Store/Label";
+import { toPercent } from "../../util/math";
 
 enum CategorySelectMode {
   Create,
@@ -166,6 +176,7 @@ export default {
       connectionCategories: [],
       templateTitle: "",
       taskId: 0,
+      modeld: 0,
       jsonData: {
         template: {
           id: 0,
@@ -334,50 +345,25 @@ export default {
         });
         annotator.on("labelRightClicked", (labelId, event: MouseEvent) => {
           if (!this.doneState) {
-            if (event.ctrlKey) {
-              this.categorySelectMode = CategorySelectMode.Update;
-              this.selectedId = labelId;
-              this.showLabelCategoriesDialog = true;
-            } else {
-              annotator.applyAction(Action.Label.Delete(labelId));
-            }
-            this.$http
-              .delete("/task/deleteTaskLabel/" + labelId + "/")
-              .then(({ data }) => {
-                if (data.code === 200) {
-                  this.complete_loading = false;
-                  this.$success("删除成功");
-                  console.log("delete label: ", data.data);
-                  this.showLabelCategoriesDialog = false;
-                  this.updateJSON();
-                  // this.getTask();
-                } else {
-                  this.$warning(data.msg);
-                }
-              });
-            this.showLabelCategoriesDialog = false;
-            this.updateJSON();
-          }
-        });
-
-        annotator.on(
-          "connectionRightClicked",
-          (connectionId, event: MouseEvent) => {
-            if (!this.doneState) {
+            this.$confirm("确定要删除标注吗？", "警告", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning",
+            }).then(() => {
               if (event.ctrlKey) {
                 this.categorySelectMode = CategorySelectMode.Update;
-                this.selectedId = connectionId;
-                this.showConnectionCategoriesDialog = true;
+                this.selectedId = labelId;
+                this.showLabelCategoriesDialog = true;
               } else {
-                annotator.applyAction(Action.Connection.Delete(connectionId));
+                annotator.applyAction(Action.Label.Delete(labelId));
               }
               this.$http
-                .delete("/task/deleteTaskRelation/" + connectionId + "/")
+                .delete("/task/deleteTaskLabel/" + labelId + "/")
                 .then(({ data }) => {
                   if (data.code === 200) {
                     this.complete_loading = false;
                     this.$success("删除成功");
-                    console.log("delete connection: ", data.data);
+                    console.log("delete label: ", data.data);
                     this.showLabelCategoriesDialog = false;
                     this.updateJSON();
                     // this.getTask();
@@ -387,6 +373,43 @@ export default {
                 });
               this.showLabelCategoriesDialog = false;
               this.updateJSON();
+            });
+          }
+        });
+
+        annotator.on(
+          "connectionRightClicked",
+          (connectionId, event: MouseEvent) => {
+            if (!this.doneState) {
+              this.$confirm("确定要删除吗？", "警告", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+              }).then(() => {
+                if (event.ctrlKey) {
+                  this.categorySelectMode = CategorySelectMode.Update;
+                  this.selectedId = connectionId;
+                  this.showConnectionCategoriesDialog = true;
+                } else {
+                  annotator.applyAction(Action.Connection.Delete(connectionId));
+                }
+                this.$http
+                  .delete("/task/deleteTaskRelation/" + connectionId + "/")
+                  .then(({ data }) => {
+                    if (data.code === 200) {
+                      this.complete_loading = false;
+                      this.$success("删除成功");
+                      console.log("delete connection: ", data.data);
+                      this.showLabelCategoriesDialog = false;
+                      this.updateJSON();
+                      // this.getTask();
+                    } else {
+                      this.$warning(data.msg);
+                    }
+                  });
+                this.showLabelCategoriesDialog = false;
+                this.updateJSON();
+              });
             }
           }
         );
@@ -417,22 +440,29 @@ export default {
       document.body.removeChild(eleLink);
     },
     reset: function () {
-      this.$http
-        .delete("/task/reSet/" + this.taskId + "/" + this.jsonData.template.id)
-        .then(({ data }) => {
-          if (data.code === 200) {
-            this.complete_loading = false;
-            this.$success("重置成功");
+      this.$confirm("确定要重置所有标注吗？", "警告", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        this.$http
+          .delete(
+            "/task/reSet/" + this.taskId + "/" + this.jsonData.template.id
+          )
+          .then(({ data }) => {
+            if (data.code === 200) {
+              this.complete_loading = false;
+              this.$success("重置成功");
 
-            this.jsonData.annotatorData.labels = [];
-            this.annotator.remove();
-            this.annotator = this.createAnnotator();
-            this.updateJSON();
-          } else {
-            this.$warning(data.msg);
-            this.complete_loading = false;
-          }
-        });
+              this.jsonData.annotatorData.labels = [];
+              this.annotator.remove();
+              this.getTask();
+            } else {
+              this.$warning(data.msg);
+              this.complete_loading = false;
+            }
+          });
+      });
     },
     set_complete: function () {
       this.$http
@@ -538,8 +568,36 @@ export default {
     goBack() {
       this.$router.go(-1);
     },
+    predictLabel() {
+      const loading = this.$loading({
+        lock: true,
+        text: "预打标中...",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+
+      this.$http
+        .get("/model/preLabel/" + this.modeld + "/" + this.taskId)
+        .then(({ data }) => {
+          if (data.code === 200) {
+            console.log("model data: ", data);
+            loading.close();
+            this.$success("预测成功");
+            this.annotator.remove();
+            this.getTask();
+          } else {
+            this.$warning(data.msg);
+          }
+        });
+    },
   },
-  computed: {},
+  computed: {
+    taskWeight: {
+      get: function () {
+        return toPercent(this.jsonData.task.weight);
+      },
+    },
+  },
   created(): void {
     this.$eventbus.$on("fileUploaded", (jsonData: JSON) => {
       this.jsonData = jsonData;

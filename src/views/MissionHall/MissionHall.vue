@@ -126,9 +126,14 @@
         </el-table-column>
         <el-table-column prop="templateCategory" label="模板类型">
         </el-table-column>
+        <el-table-column prop="preLabel" label="是否预打标"> </el-table-column>
+        <el-table-column prop="weight" label="置信度"> </el-table-column>
         <el-table-column prop="status" label="完成状态">
           <template slot-scope="scope">
-            <v-chip
+            <el-tag>{{
+              scope.row.doneState === 0 ? "未完成" : "已完成"
+            }}</el-tag>
+            <!-- <v-chip
               v-if="scope.row.doneState === 1"
               @click="handleTaskEditAction(scope.row)"
               color="green"
@@ -145,7 +150,30 @@
               label
             >
               未完成 <i class="el-icon-edit" style="padding-left: 5px"></i>
-            </v-chip>
+            </v-chip> -->
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="250">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              v-if="scope.row.doneState === 1"
+              @click="handleTaskEditAction(scope.row)"
+              >查看</el-button
+            >
+            <el-button
+              size="mini"
+              v-if="scope.row.doneState === 0"
+              @click="handleTaskEditAction(scope.row)"
+              type="primary"
+              >编辑</el-button
+            >
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDeleteTask(scope.row)"
+              >删除</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -403,6 +431,16 @@ export default {
           this.jsonData.tasks = res.data.data.taskVoList;
           this.filterData.pagination.total = res.data.data.total;
         });
+    },
+    handleDeleteTask(row){
+      this.$confirm("确定要删除这个任务吗吗？", "警告", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning",
+            }).then(() => {
+              console.log('删除row:',row);
+              this.getTasks()
+            })
     },
     getTaskCategories() {},
     getTemplatesCategories() {},
