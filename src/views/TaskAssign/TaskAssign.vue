@@ -41,6 +41,7 @@
       ref="taskTableRef"
       :data="tableData"
       lazy
+      border
       @selection-change="handleSelectionChange"
       style="width: 100%;margin-top: 10px"
       :row-style="{ height: '80px' }"

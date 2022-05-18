@@ -115,6 +115,12 @@ export default new Router({
           component: () =>
             import("@/views/ModelManagement/ModelManagement.vue"),
         },
+        {
+          path: "/datasetManagement",
+          name: "datasetManagement",
+          component: () =>
+            import("@/views/DatasetManagement/DatasetManagement.vue"),
+        },
       ],
     },
     // {

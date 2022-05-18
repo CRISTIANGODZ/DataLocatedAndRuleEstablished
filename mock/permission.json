@@ -19,7 +19,8 @@
               4,
               5,
               6,
-              7
+              7,
+              8
             ]
           },
           {
@@ -88,6 +89,12 @@
         },
         {
           "id": 7,
+          "icon": "mdi-database",
+          "title": "数据管理",
+          "path": "/datasetManagement"
+        },
+        {
+          "id": 8,
           "icon": "mdi-package-variant",
           "title": "模型管理",
           "path": "/modelManagement"
@@ -135,7 +142,7 @@
           "ucount": "king",
           "username": "Keven Durent",
           "email": "kd@gmail.com",
-          "password": "123456",
+          "password": "cqupt123?",
           "phone": "18523771521",
           "address": "美国牛约克",
           "userRole": "普通用户",
@@ -190,6 +197,54 @@
             4
           ]
         }
+      ]
+    }
+  },
+  "datasets": {
+    "code": 200,
+    "data": {
+      "pagination": {
+        "total": 3,
+        "currentIndex": 1,
+        "pageSize": 10
+      },
+      "datasets": [
+        {
+          "id": 1,
+          "name": "精神病",
+          "description": "精神病精神病精神病精神病精神病精神病",
+          "uploadTime": "2020-01-01",
+          "uploader": "admin",
+          "uploaderId": 1,
+          "status": 0,
+          "labeledCount": 0,
+          "totalCount": 400,
+          "unlabeledCount": 200
+        },
+        {
+          "id": 2,
+          "name": "胃病",
+          "description": "胃病胃病胃病胃病",
+          "uploadTime": "2020-01-01",
+          "uploader": "james",
+          "uploaderId": 2,
+          "status": 1,
+          "labeledCount": 100,
+          "totalCount": 200,
+          "unlabeledCount": 100
+        },
+        {
+          "id": 3,
+          "name": "心脏病",
+          "description": "心脏病心脏病心脏病心脏病",
+          "uploadTime": "2020-01-01",
+          "uploader": "durant",
+          "uploaderId": 3,
+          "status": 2,
+          "labeledCount": 300,
+          "totalCount": 300,
+          "unlabeledCount": 0
+        },
       ]
     }
   }

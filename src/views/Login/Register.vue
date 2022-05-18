@@ -14,13 +14,13 @@
             <el-radio v-model="user.role" label="1">普通管理员</el-radio>
             <el-radio v-model="user.role" label="2">普通用户</el-radio>
           </el-form-item>
-          <el-form-item prop="username" label="用户名">
+          <el-form-item prop="ucount" label="用户名">
             <el-input
               v-model="user.ucount"
               placeholder="请输入登录的用户名"
             ></el-input>
           </el-form-item>
-          <el-form-item prop="ucount" label="用户昵称">
+          <el-form-item prop="username" label="用户昵称">
             <el-input
               v-model="user.username"
               placeholder="请输入用户昵称"

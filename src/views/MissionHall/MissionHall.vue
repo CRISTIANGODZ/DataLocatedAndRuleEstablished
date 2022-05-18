@@ -6,7 +6,7 @@
         <v-chip label> 任务状态: </v-chip>
       </el-col>
       <el-col>
-        <el-tabs v-model="filterData.taskFOU" @tab-click="onFilterDataChange">
+        <el-tabs v-model="filterData.doneState" @tab-click="onFilterDataChange">
           <el-tab-pane label="全部" name="-1" />
           <el-tab-pane label="未完成" name="0" />
           <el-tab-pane label="已完成" name="1" />
@@ -127,8 +127,22 @@
         </el-table-column>
         <el-table-column prop="templateCategory" label="模板类型">
         </el-table-column>
-        <el-table-column prop="preLabel" label="是否预打标"> </el-table-column>
-        <el-table-column prop="weight" label="置信度"> </el-table-column>
+        <el-table-column prop="preLabel" label="是否预打标">
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.preLabel === 0 ? 'success' : 'info'">{{
+              scope.row.preLabel === 0 ? "否" : "是"
+            }}</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="weight" label="置信度">
+          <template slot-scope="scope">
+            <el-tag :type="scope.row.weight === 0 ? 'success' : 'info'">{{
+              scope.row.weight === 0
+                ? "---"
+                : Number(scope.row.weight * 100).toFixed(2) + "%"
+            }}</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="status" label="完成状态">
           <template slot-scope="scope">
             <el-tag :type="scope.row.doneState === 0 ? 'success' : 'info'">{{
@@ -196,18 +210,18 @@
   </div>
 </template>
 
-<script type="ts">
+<script lang="ts">
 // import MissionAnnotate from "./MissionAnnotate";
 // taskStatus 任务状态: -1: 所有, 0: 未完成 1: 已完成
 // taskCategoriesCurrent 任务类别: -1 表示所有
-import {ROLES} from '../../constants'
+import { ROLES } from "../../constants";
 export default {
   // components: { MissionAnnotate },
   data() {
     return {
       missionAnnotateVisiable: false,
       filterData: {
-        taskFOU: "-1",
+        doneState: "-1",
         taskCategoriesCurrent: "-1",
         labelPerson: "",
         title: "",
@@ -386,7 +400,7 @@ export default {
     },
     clearFilterData() {
       this.filterData = {
-        taskFOU: "-1",
+        doneState: "-1",
         taskCategoriesCurrent: "-1",
         labelPerson: "",
         title: "",
@@ -407,7 +421,9 @@ export default {
             this.filterData.pagination.pageSize,
           {
             doneState:
-              this.filterData.taskFOU == "-1" ? null : this.filterData.taskFOU,
+              this.filterData.doneState === "-1"
+                ? null
+                : this.filterData.doneState,
             taskCategoryId:
               this.filterData.taskCategoriesCurrent == "-1"
                 ? null
@@ -433,22 +449,38 @@ export default {
           this.filterData.pagination.total = res.data.data.total;
         });
     },
-    handleDeleteTask(row){
+    handleDeleteTask(row) {
       this.$confirm("确定要删除这个任务吗吗？", "警告", {
-              confirmButtonText: "确定",
-              cancelButtonText: "取消",
-              type: "warning",
-            }).then(() => {
-              console.log('删除row:',row);
-              this.getTasks()
-            })
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$http.delete("/task/deleteTask/" + row.id).then((res) => {
+            console.log("res: ", res);
+            this.$message({
+              type: "success",
+              message: "删除成功",
+            });
+            this.getTasks();
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+
+          // console.log('删除row:',row);
+          // this.getTasks()
+        });
     },
     getTaskCategories() {},
     getTemplatesCategories() {},
     getLabelPersons() {},
   },
   mounted() {
-    this.isAdmin = localStorage.getItem("role")    !== ROLES.USER
+    this.isAdmin = localStorage.getItem("role") !== ROLES.USER;
     this.getTasks();
   },
 };

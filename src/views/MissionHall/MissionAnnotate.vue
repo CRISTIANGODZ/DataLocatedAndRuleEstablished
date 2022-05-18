@@ -8,8 +8,9 @@
         @click="predictLabel"
         v-if="!!!jsonData.task.preLabel"
         color="info ma-1"
+        id="predictLabelBtn"
       >
-        预达标
+        预打标
       </v-btn>
       <v-btn @click="reset" color="primary ma-1"> 重置所有标注 </v-btn>
       <v-btn
@@ -571,9 +572,11 @@ export default {
     predictLabel() {
       const loading = this.$loading({
         lock: true,
-        text: "预打标中...",
+        // text: "预打标中...",
         spinner: "el-icon-loading",
-        background: "rgba(0, 0, 0, 0.7)",
+        // background: "rgba(0, 0, 0, 0.7)",
+        customClass: "annotate-y-loading",
+        target: "#predictLabelBtn",
       });
 
       this.$http
@@ -661,5 +664,10 @@ code {
 .poplar-annotation-connection {
   font-family: "PingFang SC", serif;
   font-size: 12px;
+}
+#predictLabelBtn {
+  display: flex;
+  justify-items: center;
+  align-content: center;
 }
 </style>

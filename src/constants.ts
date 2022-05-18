@@ -7,6 +7,7 @@ export const permission_links = [
     ["mdi-camera-account", "个人信息", "profile"],
     ["mdi-account-cog", "人员管理", "personManagement"],
     ["mdi-account-wrench", "权限管理", "permissionManagement"],
+    ["mdi-database", "数据管理", "datasetManagement"],
     ["mdi-package-variant", "模型管理", "modelManagement"],
   ],
   // regular_admin_links:
