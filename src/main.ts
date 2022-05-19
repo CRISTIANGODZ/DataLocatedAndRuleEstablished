@@ -11,7 +11,7 @@ Vue.use(vcolorpicker);
 import "./alert";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
-
+import store from "./store";
 Vue.use(ElementUI);
 
 router.beforeEach((to, from, next) => {
@@ -35,6 +35,7 @@ new Vue({
 
   // @ts-ignore
   vuetify,
+  store,
 
   i18n,
   render: (h) => h(App),

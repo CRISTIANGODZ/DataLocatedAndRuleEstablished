@@ -32,6 +32,34 @@
         ></el-table-column>
         <el-table-column prop="description" label="数据集描述" width="180">
         </el-table-column>
+        <el-table-column prop="status" label="数据集状态" width="180">
+          <template slot-scope="scope">
+            <el-tag
+              :type="
+                scope.row.status === datasetStatus.UNTRAIN
+                  ? ''
+                  : scope.row.status === datasetStatus.TRAINING
+                  ? 'info'
+                  : 'success'
+              "
+              >{{
+                scope.row.status === datasetStatus.UNTRAIN
+                  ? datasetStatusZH.UNTRAIN
+                  : scope.row.status === datasetStatus.TRAINING
+                  ? datasetStatusZH.TRAINING
+                  : datasetStatusZH.TRAINED
+              }}</el-tag
+            >
+          </template>
+        </el-table-column>
+        <el-table-column prop="uploader" label="上传者" width="180">
+        </el-table-column>
+        <el-table-column prop="uploadTime" label="上传时间" width="180">
+        </el-table-column>
+        <el-table-column prop="labeledCount" label="已标注数量" width="180">
+        </el-table-column>
+        <el-table-column prop="totalCount" label="总数量" width="180">
+        </el-table-column>
 
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
@@ -83,7 +111,13 @@
 <script lang="ts">
 import Vue from "vue";
 import DatasetModal from "./DatasetModal.vue";
-import { DatasetType, Dataset, DatasetOperation } from "./DatasetTypes";
+import {
+  DatasetType,
+  Dataset,
+  DatasetOperation,
+  DatasetStatus,
+  DatasetStatusZH,
+} from "./DatasetTypes";
 import { getDatasetList } from "./DatasetApi";
 export default Vue.extend({
   data() {
@@ -143,18 +177,6 @@ export default Vue.extend({
       console.log("handleLabelStateMouseover");
       console.log(row);
     },
-    getRoles() {
-      this.$httpl
-        .get("/permit")
-        .then(({ data }) => {
-          this.filterData.pagination.total = data.roles.data.total;
-          this.filterData.pagination.pageSize = data.roles.data.pageSize;
-          console.log("roles:", data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
     handleModalOperationVisible() {
       console.log("dddd");
       this.operation.modalVisible = true;
@@ -196,9 +218,25 @@ export default Vue.extend({
         this.getRoles();
       }
     },
+    async getData() {
+      const dataset_data = (await getDatasetList(this.filterData)).data;
+      console.log("dataset_data: ", dataset_data);
+      if (dataset_data.code === 200) {
+        this.jsonData.datasets = dataset_data.data.datasets;
+        this.filterData.pagination.total = dataset_data.data.pagination.total;
+      }
+    },
   },
   mounted() {
-    this.getRoles();
+    this.getData();
+  },
+  computed: {
+    datasetStatus() {
+      return DatasetStatus;
+    },
+    datasetStatusZH() {
+      return DatasetStatusZH;
+    },
   },
 });
 </script>

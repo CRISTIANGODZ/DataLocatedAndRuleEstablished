@@ -33,12 +33,20 @@
         <el-button type="primary" @click="onLogin" style="min-width: 150px"
           >登录</el-button
         >
+        <el-button
+          type="primary"
+          @click="vlogin(userData.ucount, userData.password)"
+          style="min-width: 150px"
+          >Vuex登录</el-button
+        >
       </el-form>
     </el-row>
   </div>
 </template>
 
 <script lang="ts">
+import { mapState, mapActions } from "vuex";
+import { PersonType } from "@/views/PersonManagement/PersonType";
 import Vue from "vue";
 export default Vue.extend({
   data() {
@@ -58,6 +66,14 @@ export default Vue.extend({
     };
   },
   methods: {
+    vlogin(ucount: string, password: string) {
+      this.$store
+        .dispatch("user/login", { ucount, password } as PersonType)
+        .then(() => {
+          this.$router.replace("/main");
+        });
+      console.log("this.$store.state.user", this.$store.state.user);
+    },
     onRememberPasswordChange() {
       // this.userData.rememberPassword = !this.userData.rememberPassword;
       localStorage.setItem("rememberPassword", this.userData.rememberPassword);
@@ -74,14 +90,14 @@ export default Vue.extend({
             var token = data.data.token;
             // localStorage.setItem("token", this.username + "_" + token);
             localStorage.setItem("token", token);
-            localStorage.setItem("role", data.data.user.role);
-            localStorage.setItem("username", data.data.user.username);
-            localStorage.setItem("ucount", data.data.user.ucount);
+            localStorage.setItem("role", data.data.userVo.userRoleId);
+            localStorage.setItem("username", data.data.userVo.username);
+            localStorage.setItem("ucount", data.data.userVo.ucount);
             localStorage.setItem("password", this.userData.password);
-            localStorage.setItem("headIconUrl", data.data.user.headIconUrl);
+            localStorage.setItem("headIconUrl", data.data.userVo.avatar);
             // localStorage.setItem("role", "admin");
-            this.username = data.data.user.username;
-            this.ucount = data.data.user.ucount;
+            this.username = data.data.userVo.username;
+            this.ucount = data.data.userVo.ucount;
             this.$router.push("/main").catch((_) => {
               console.log("errrereoreor");
             });

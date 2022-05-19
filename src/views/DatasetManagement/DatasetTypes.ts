@@ -45,3 +45,9 @@ export interface DatasetFilterDataType extends AxiosRequestConfig {
   datasetName: string;
   pagination: Pagination;
 }
+
+export enum DatasetStatusZH {
+  UNTRAIN = "未训练",
+  TRAINING = "训练中",
+  TRAINED = "已训练",
+}

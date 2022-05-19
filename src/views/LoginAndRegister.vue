@@ -70,6 +70,9 @@ export default Vue.extend({
     },
   },
   mounted() {},
+  created() {
+    console.log("this.store", this.$store);
+  },
 });
 </script>
 >

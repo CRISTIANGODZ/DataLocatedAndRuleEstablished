@@ -40,3 +40,13 @@ export enum PersonOperation {
   DELETE = 2,
   ADD = 3,
 }
+
+export interface PersonLoginJSONDataType {
+  code: number;
+  message: string;
+  data: {
+    userVo: PersonType;
+    token: string;
+  };
+  ok: boolean;
+}
