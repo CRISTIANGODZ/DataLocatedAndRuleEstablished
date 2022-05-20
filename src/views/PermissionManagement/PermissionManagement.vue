@@ -48,7 +48,6 @@
               size="mini"
               type="danger"
               @click="handleDeleteModalOperationVisible"
-              ref="deleteRoleReference"
               >删除</el-button
             >
           </template>
@@ -71,9 +70,10 @@
     <role-permission-modal-vue
       :allPermissions="jsonData.permissions"
       :closeModal="handleCloseModalOperation"
+      :handleOperation="handleOperation"
       :visible="operation.modalVisible"
       :roleInfo="selectRole"
-      :confirmDelete=handleConfirmDelete
+      :confirmDelete="handleConfirmDelete"
       :state="operation.operationState"
     ></role-permission-modal-vue>
   </el-container>
@@ -83,6 +83,12 @@
 import Vue from "vue";
 import RolePermissionModalVue from "./RolePermissionModal.vue";
 import { RoleInfo, Permission, RoleOperation } from "./PermissionTypes";
+import {
+  getRoleList,
+  getPermissionList,
+  updateRole,
+  addRole,
+} from "./PermissionApi";
 export default Vue.extend({
   data() {
     return {
@@ -102,7 +108,7 @@ export default Vue.extend({
         modalVisible: false,
         operationState: RoleOperation.CHECK,
       },
-      selectRole: null as RoleInfo,
+      selectRole: {} as RoleInfo,
     };
   },
   components: {
@@ -118,6 +124,9 @@ export default Vue.extend({
       console.log(`当前页: ${val}`);
       this.filterData.pagination.currentIndex = val;
       this.onFilterDataChange();
+    },
+    onFilterDataChange() {
+      this.getRoles();
     },
     handleLabelStateClick(row) {
       console.log("handleLabelStateClick");
@@ -142,21 +151,13 @@ export default Vue.extend({
       console.log("handleLabelStateMouseover");
       console.log(row);
     },
-    getRoles() {
-      this.$httpl
-        .get("/permit")
-        .then(({ data }) => {
-          this.jsonData.roles = data.roles.data.roles;
-          this.jsonData.permissions = data.permissions.data;
-          this.filterData.pagination.currentIndex = data.roles.data.currentPage;
-          this.filterData.pagination.total = data.roles.data.total;
-          this.filterData.pagination.pageSize = data.roles.data.pageSize;
-          this.selectRole = data.roles.data.roles[0];
-          console.log("roles:", data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    async getRoles() {
+      const roles_json_data = (await getRoleList(this.filterData.pagination))
+        .data;
+      if (roles_json_data.code === 200) {
+        this.jsonData.roles = roles_json_data.data.roles;
+        this.filterData.pagination.total = roles_json_data.data.total;
+      }
     },
     handleModalOperationVisible() {
       console.log("dddd");
@@ -195,13 +196,47 @@ export default Vue.extend({
     },
     handleCloseModalOperation() {
       this.operation.modalVisible = false;
-      if (this.operation.operationState !== RoleOperation.EDIT) {
+    },
+    handleOperation() {
+      if (this.operation.operationState === RoleOperation.ADD) {
+        this.onAddRole();
+      }
+      if (this.operation.operationState === RoleOperation.EDIT) {
+        this.onUpdateRole();
+      }
+    },
+    async getPermisions() {
+      const permissions_json_data = (await getPermissionList()).data;
+      if (permissions_json_data.code === 200) {
+        this.jsonData.permissions = permissions_json_data.data;
+      }
+    },
+    async onAddRole() {
+      const add_role_json_data = (await addRole(this.selectRole)).data;
+      if (add_role_json_data.code === 200) {
+        this.$success("添加成功");
+        this.operation.modalVisible = false;
         this.getRoles();
       }
     },
+
+    async onUpdateRole() {
+      console.log("selectRole", this.selectRole);
+      const update_role_json_data = (await updateRole(this.selectRole)).data;
+      if (update_role_json_data.code === 200) {
+        this.$success("更新成功");
+        this.operation.modalVisible = false;
+        this.getRoles();
+      }
+    },
+    async getData() {
+      this.getRoles();
+      this.getPermisions();
+    },
   },
   mounted() {
-    this.getRoles();
+    // this.getRoles();
+    this.getData();
   },
 });
 </script>

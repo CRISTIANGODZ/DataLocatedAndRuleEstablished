@@ -76,7 +76,6 @@
               size="mini"
               type="danger"
               @click="handleDeleteModalOperationVisible"
-              ref="deleteRoleReference"
               >删除</el-button
             >
           </template>
@@ -137,7 +136,7 @@ export default Vue.extend({
         modalVisible: false,
         operationState: DatasetOperation.CHECK,
       },
-      selectRole: null as Dataset,
+      selectRole: {} as Dataset,
     };
   },
   components: {

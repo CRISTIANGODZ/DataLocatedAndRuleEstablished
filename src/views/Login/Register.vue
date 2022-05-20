@@ -10,8 +10,8 @@
           label-width="80px"
         >
           <el-form-item type="radio" label="用户角色" prop="role">
-            <el-radio v-model="user.role" label="0">超级管理员</el-radio>
-            <el-radio v-model="user.role" label="1">普通管理员</el-radio>
+            <!-- <el-radio v-model="user.role" label="0">超级管理员</el-radio>
+            <el-radio v-model="user.role" label="1">普通管理员</el-radio> -->
             <el-radio v-model="user.role" label="2">普通用户</el-radio>
           </el-form-item>
           <el-form-item prop="ucount" label="用户名">

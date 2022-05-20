@@ -152,7 +152,7 @@ export default Vue.extend({
         operationState: PersonOperation.CHECK,
       },
       roles: [] as RoleInfo[],
-      selectPerson: null as PersonType,
+      selectPerson: {} as PersonType,
     };
   },
   methods: {

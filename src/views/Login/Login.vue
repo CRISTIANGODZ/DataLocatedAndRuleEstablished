@@ -90,14 +90,20 @@ export default Vue.extend({
             var token = data.data.token;
             // localStorage.setItem("token", this.username + "_" + token);
             localStorage.setItem("token", token);
-            localStorage.setItem("role", data.data.userVo.userRoleId);
-            localStorage.setItem("username", data.data.userVo.username);
-            localStorage.setItem("ucount", data.data.userVo.ucount);
+            // localStorage.setItem("role", data.data.userVo.userRoleId);
+            // localStorage.setItem("username", data.data.userVo.username);
+            // localStorage.setItem("ucount", data.data.userVo.ucount);
+            // localStorage.setItem("password", this.userData.password);
+            // localStorage.setItem("headIconUrl", data.data.userVo.avatar);
+            // this.username = data.data.userVo.username;
+            // this.ucount = data.data.userVo.ucount;
+            localStorage.setItem("role", data.data.user.role);
+            localStorage.setItem("username", data.data.user.username);
+            localStorage.setItem("ucount", data.data.user.ucount);
             localStorage.setItem("password", this.userData.password);
-            localStorage.setItem("headIconUrl", data.data.userVo.avatar);
+            this.username = data.data.user.username;
+            this.ucount = data.data.user.ucount;
             // localStorage.setItem("role", "admin");
-            this.username = data.data.userVo.username;
-            this.ucount = data.data.userVo.ucount;
             this.$router.push("/main").catch((_) => {
               console.log("errrereoreor");
             });

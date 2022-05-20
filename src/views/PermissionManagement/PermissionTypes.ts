@@ -34,7 +34,22 @@ export interface RoleListJsonData {
   };
 }
 
-export interface RoleFilterDataType extends AxiosRequestConfig {
+export interface RoleFilterDataType extends AxiosRequestConfig, Pagination {
   roleName: string;
-  pagination: Pagination;
+}
+
+export interface PermissionListJsonData {
+  code: number;
+  message: string;
+  ok: boolean;
+  data: {
+    permissions: Permission[];
+  };
+}
+
+export interface OPStatus {
+  code: number;
+  message: string;
+  ok: boolean;
+  data: {};
 }

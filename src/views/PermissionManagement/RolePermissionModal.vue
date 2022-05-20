@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="角色详细权限信息" :visible.sync="visible" width="60%">
     <el-alert
-      :title="'确定要删除角色' + roleInfo.title + '吗 ？'"
+      :title="'确定要删除: ' + roleInfo.title + '吗 ？'"
       type="warning"
       v-if="isDelete"
       show-icon
@@ -45,7 +45,7 @@
     ></el-transfer>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeModal">取 消</el-button>
-      <el-button v-if="!isDelete" type="primary" @click="closeModal"
+      <el-button v-if="!isDelete" type="primary" @click="handleOperation"
         >保 存</el-button
       >
       <el-button v-else type="danger" @click="confirmDelete"
@@ -68,7 +68,8 @@ export default {
     },
     roleInfo: {
       type: Object as PropType<RoleInfo>,
-      default: () => {},
+      default: () => ({} as RoleInfo),
+      required: true,
     },
     visible: {
       type: Boolean,
@@ -79,6 +80,10 @@ export default {
       default: RoleOperation.CHECK,
     },
     closeModal: {
+      type: Function,
+      default: () => {},
+    },
+    handleOperation: {
       type: Function,
       default: () => {},
     },
