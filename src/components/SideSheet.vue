@@ -5,9 +5,9 @@
       class="pa-4 d-flex flex-column align-center justify-center"
     >
       <!-- <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar> -->
-      <el-avatar :src="headIconUrl"></el-avatar>
-      <div>{{ role }}</div>
-      <div>{{ username }}</div>
+      <el-avatar :src="userInfo.avatar"></el-avatar>
+      <div>{{ userInfo.username }}</div>
+      <div>{{ userInfo.userRole }}</div>
     </v-sheet>
 
     <v-divider></v-divider>
@@ -15,7 +15,10 @@
     <v-list>
       <v-list-item-group v-model="currentRouteAdd" color="primary">
         <v-list-item
-          v-for="[index, [icon, text, link]] of links.entries()"
+          v-for="[
+            index,
+            { icon, title: text, fpath: link },
+          ] of permissions.entries()"
           :key="index"
           link
           color="primary"
@@ -50,7 +53,10 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { mapActions, mapState } from "vuex";
 import { permission_links, permission_roles } from "../constants";
+import { PersonType } from "@/views/PersonManagement/PersonType";
+import {PermissionType} from "@/views/Login/LoginTypes"
 
 export default Vue.extend({
   data: () => ({
@@ -101,8 +107,8 @@ export default Vue.extend({
         this.links = [];
         return;
       }
-      this.role = permission_roles[localStorage.getItem("role")];
-      this.links = permission_links[localStorage.getItem("role")];
+      this.role = permission_roles[Number(localStorage.getItem("role")) - 1];
+      this.links = permission_links[Number(localStorage.getItem("role")) - 1];
 
       this.username = localStorage.getItem("username");
       console.log("links:", this.links);
@@ -119,11 +125,14 @@ export default Vue.extend({
       }
       this.$router.push(name).catch((_) => {});
     },
+
+    ...mapActions("user", ["setUserInfoFromLocal"]),
   },
   mounted(): void {
     // this.currentRouteAdd = this.$route.path;
-    console.log("this.currentRouteAdd:", this.currentRouteAdd);
-    this.get_user_role();
+    // console.log("this.currentRouteAdd:", this.currentRouteAdd);
+    // this.get_user_role();
+    this.$store.dispatch("user/setUserInfoFromLocal");
   },
 
   watch: {
@@ -133,6 +142,10 @@ export default Vue.extend({
       console.log(this.$route.path);
     },
   },
+  computed: mapState({
+    permissions: (state) => state.user.userInfo.loginRoleVo.permissions || [] as Array<PermissionType>,
+    userInfo: (state) => state.user.userInfo.userVo || {} as PersonType,
+  }),
 });
 </script>
 

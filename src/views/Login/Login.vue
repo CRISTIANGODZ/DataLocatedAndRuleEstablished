@@ -48,6 +48,7 @@
 import { mapState, mapActions } from "vuex";
 import { PersonType } from "@/views/PersonManagement/PersonType";
 import Vue from "vue";
+import { LoginJSONData } from "@/views/Login/LoginTypes";
 export default Vue.extend({
   data() {
     return {
@@ -70,7 +71,7 @@ export default Vue.extend({
       this.$store
         .dispatch("user/login", { ucount, password } as PersonType)
         .then(() => {
-          this.$router.replace("/main");
+          this.$router.push(this.main_url);
         });
       console.log("this.$store.state.user", this.$store.state.user);
     },
@@ -90,21 +91,22 @@ export default Vue.extend({
             var token = data.data.token;
             // localStorage.setItem("token", this.username + "_" + token);
             localStorage.setItem("token", token);
-            // localStorage.setItem("role", data.data.userVo.userRoleId);
-            // localStorage.setItem("username", data.data.userVo.username);
-            // localStorage.setItem("ucount", data.data.userVo.ucount);
-            // localStorage.setItem("password", this.userData.password);
-            // localStorage.setItem("headIconUrl", data.data.userVo.avatar);
-            // this.username = data.data.userVo.username;
-            // this.ucount = data.data.userVo.ucount;
-            localStorage.setItem("role", data.data.user.role);
-            localStorage.setItem("username", data.data.user.username);
-            localStorage.setItem("ucount", data.data.user.ucount);
+            localStorage.setItem("role", data.data.userVo.userRoleId);
+            localStorage.setItem("username", data.data.userVo.username);
+            localStorage.setItem("ucount", data.data.userVo.ucount);
             localStorage.setItem("password", this.userData.password);
-            this.username = data.data.user.username;
-            this.ucount = data.data.user.ucount;
+            localStorage.setItem("headIconUrl", data.data.userVo.avatar);
+            this.username = data.data.userVo.username;
+            this.ucount = data.data.userVo.ucount;
+            // localStorage.setItem("role", data.data.user.role);
+            // localStorage.setItem("username", data.data.user.username);
+            // localStorage.setItem("ucount", data.data.user.ucount);
+            // localStorage.setItem("password", this.userData.password);
+            // this.username = data.data.user.username;
+            // this.ucount = data.data.user.ucount;
             // localStorage.setItem("role", "admin");
-            this.$router.push("/main").catch((_) => {
+            const first_url = data.data.loginRoleVo.permissions[0]["fpath"];
+            this.$router.push(first_url).catch((_) => {
               console.log("errrereoreor");
             });
             // console.log("after push /main");
@@ -133,6 +135,10 @@ export default Vue.extend({
   updated() {
     console.log("updated");
   },
+  computed: mapState({
+    main_url: (state) =>
+      state.user.userInfo.loginRoleVo.permissions[0]["fpath"],
+  }),
 });
 </script>
 >

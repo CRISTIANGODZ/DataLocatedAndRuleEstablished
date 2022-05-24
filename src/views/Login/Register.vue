@@ -9,11 +9,11 @@
           :rules="rules"
           label-width="80px"
         >
-          <el-form-item type="radio" label="用户角色" prop="role">
+          <!-- <el-form-item type="radio" label="用户角色" prop="role"> -->
             <!-- <el-radio v-model="user.role" label="0">超级管理员</el-radio>
             <el-radio v-model="user.role" label="1">普通管理员</el-radio> -->
-            <el-radio v-model="user.role" label="2">普通用户</el-radio>
-          </el-form-item>
+            <!-- <el-radio v-model="user.role" label="2">普通用户</el-radio> -->
+          <!-- </el-form-item> -->
           <el-form-item prop="ucount" label="用户名">
             <el-input
               v-model="user.ucount"
@@ -58,7 +58,7 @@ export default Vue.extend({
         username: "",
         ucount: "",
         password: "",
-        role: "0",
+        // role: "0",
       },
       rules: {
         password: [
@@ -78,13 +78,13 @@ export default Vue.extend({
             trigger: "blur",
           },
         ],
-        role: [
-          {
-            required: true,
-            message: "用户角色不能为空",
-            trigger: "blur",
-          },
-        ],
+        // role: [
+        //   {
+        //     required: true,
+        //     message: "用户角色不能为空",
+        //     trigger: "blur",
+        //   },
+        // ],
       },
     };
   },
@@ -118,7 +118,7 @@ export default Vue.extend({
         .post("/user/register/", {
           ucount: this.user.ucount,
           password: this.user.password,
-          role: this.user.role,
+          // role: this.user.role,
           username: this.user.username,
         })
         .then(({ data }) => {
