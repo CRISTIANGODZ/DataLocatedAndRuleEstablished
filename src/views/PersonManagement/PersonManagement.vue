@@ -127,7 +127,7 @@
 import Vue from "vue";
 import PersonProfileModalVue from "./PersonProfileModal.vue";
 import { PersonJsonDataType, PersonOperation, PersonType } from "./PersonType";
-import { getPersonList } from "./PersonApi";
+import { getPersonList, getUserInfoCondition } from "./PersonApi";
 import { getRoleList } from "../PermissionManagement/PermissionApi";
 import { RoleInfo } from "../PermissionManagement/PermissionTypes";
 
@@ -139,7 +139,7 @@ export default Vue.extend({
     return {
       filterData: {
         userName: "",
-        userRole: "",
+        userRole: 0,
         pagination: {
           currentIndex: 1,
           pageSize: 10,
@@ -202,16 +202,22 @@ export default Vue.extend({
       }
     },
     async getData() {
-      const data = (await getPersonList(this.filterData)).data;
-      console.log("data:", data);
-      console.log("dataddddddddddddddddddd");
-      if (data.code === 200) {
-        console.log("ddsdlakjflk");
-        // this.jsonData.data.users = data.data.users;
-        this.jsonData = data;
-        console.log("this.jsonData.users:", this.jsonData);
-        this.selectPerson = data.data.users[0];
+      const user_data = (await getUserInfoCondition(this.filterData)).data;
+      if (user_data.code === 200) {
+        this.jsonData = user_data.data;
       }
+      console.log("user_data:", user_data);
+
+      // const data = (await getPersonList(this.filterData)).data;
+      // console.log("data:", data);
+      // console.log("dataddddddddddddddddddd");
+      // if (data.code === 200) {
+      //   console.log("ddsdlakjflk");
+      //   // this.jsonData.data.users = data.data.users;
+      //   this.jsonData = data;
+      //   console.log("this.jsonData.users:", this.jsonData);
+      //   this.selectPerson = data.data.users[0];
+      // }
       const role_data = (await getRoleList()).data;
       if (role_data.code === 200) {
         this.roles = role_data.data.roles;

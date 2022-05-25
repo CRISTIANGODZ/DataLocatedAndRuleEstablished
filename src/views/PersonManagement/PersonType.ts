@@ -51,7 +51,26 @@ export interface PersonLoginJSONDataType {
   ok: boolean;
 }
 
-
 export interface PersonJsonDataType {
   code: number;
+}
+
+export interface UserInfoFilterDataType extends AxiosRequestConfig {
+  current: number;
+  size: number;
+  roleId: number;
+  roleName: string;
+}
+
+
+export interface  UserInfoJsonDataType {
+  code: number;
+  message: string;
+  ok: boolean;
+  data: {
+    current: number;
+    size: number;
+    total: number;
+    userList: PersonType[];
+  };
 }

@@ -1,6 +1,12 @@
 import { requestl } from "@/http";
+import { request } from "@/http";
 import { AxiosResponse } from "axios";
-import { PersonFilterDataType, PersonJsonDataType } from "./PersonType";
+import {
+  PersonFilterDataType,
+  PersonJsonDataType,
+  UserInfoFilterDataType,
+  UserInfoJsonDataType,
+} from "./PersonType";
 
 export function getPersonList(
   filterData: PersonFilterDataType
@@ -10,4 +16,18 @@ export function getPersonList(
   });
 }
 
-
+export function getUserInfoCondition(
+  filterData: PersonFilterDataType
+): Promise<AxiosResponse<UserInfoJsonDataType>> {
+  return request.post(
+    "/user/getUserInfoCondition/" +
+      filterData.pagination.currentIndex +
+      "/" +
+      filterData.pagination.pageSize +
+      "/",
+    {
+      roleId: filterData.userRole,
+      roleName: filterData.userName,
+    }
+  );
+}
