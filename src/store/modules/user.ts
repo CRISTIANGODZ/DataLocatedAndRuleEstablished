@@ -1,21 +1,24 @@
 import user from "@/api/user/user";
 import { PersonType } from "@/views/PersonManagement/PersonType";
-import { LoginJSONData } from "@/views/Login/LoginTypes";
+import { LoginJSONData, UserInfoType } from "@/views/Login/LoginTypes";
 
 const state = () => ({
-  userInfo: {} as LoginJSONData,
+  userInfo: {} as UserInfoType,
 });
 
 // getters
 const getters = {
-  userInfo: (state: { userInfo: PersonType }) => {
+  userInfo: (state: { userInfo: UserInfoType }) => {
     return state.userInfo;
   },
 };
 
 // actions
 const actions = {
-  async login({ commit }: { commit: any }, userInfo: PersonType): Promise<any> {
+  async login(
+    { commit }: { commit: any },
+    userInfo: PersonType
+  ): Promise<void> {
     console.log("userInfo: ", userInfo);
     const { data } = await user.login(userInfo.ucount, userInfo.password);
     commit("setUserInfo", data.data);
@@ -27,19 +30,37 @@ const actions = {
     localStorage.setItem("token", JSON.stringify(data.data.token));
   },
 
-  setUserInfoFromLocal({ commit }: { commit: any }): void {
+  async setUserInfoFromLocal({ commit }: { commit: any }): Promise<number> {
     const userInfo = JSON.parse(localStorage.getItem("userInfo"));
     const ucount = localStorage.getItem("ucount");
     if (ucount && userInfo) {
       commit("setUserInfo", userInfo);
+      return Promise.resolve(1);
+    } else {
+      return Promise.reject(0);
     }
+  },
+  async updateUserInfo(
+    { commit }: { commit: any },
+    userInfo: PersonType
+  ): Promise<number> {
+    const { data } = await user.updateUserInfo(userInfo);
+    if (data.code === 200) {
+      commit("setSpecificUserInfo", userInfo);
+      localStorage.setItem("userInfo", JSON.stringify(userInfo));
+      return Promise.resolve(1);
+    }
+    return Promise.reject(0);
   },
 };
 
 // mutations
 const mutations = {
-  setUserInfo(state: { userInfo: LoginJSONData }, userInfo: LoginJSONData) {
+  setUserInfo(state: { userInfo: UserInfoType }, userInfo: UserInfoType) {
     state.userInfo = userInfo;
+  },
+  setSpecificUserInfo(state: { userInfo: UserInfoType }, userInfo: PersonType) {
+    state.userInfo.userVo = userInfo;
   },
 };
 

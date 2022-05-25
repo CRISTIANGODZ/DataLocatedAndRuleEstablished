@@ -8,8 +8,8 @@ interface LoginRoleVo {
   permissions: Array<PermissionType>;
 }
 
-interface UserVo extends PersonType {}
-interface PermissionType extends Permission {
+export interface UserVo extends PersonType {}
+export interface PermissionType extends Permission {
   fpath: string;
 }
 
@@ -17,9 +17,11 @@ export interface LoginJSONData {
   code: number;
   ok: boolean;
   message: string;
-  data: {
-    loginRoleVo: LoginRoleVo;
-    token: string;
-    userVo: UserVo;
-  };
+  data: UserInfoType;
+}
+
+export interface UserInfoType {
+  loginRoleVo: LoginRoleVo;
+  token: string;
+  userVo: UserVo;
 }

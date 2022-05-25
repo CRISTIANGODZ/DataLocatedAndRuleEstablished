@@ -50,3 +50,8 @@ export interface PersonLoginJSONDataType {
   };
   ok: boolean;
 }
+
+
+export interface PersonJsonDataType {
+  code: number;
+}

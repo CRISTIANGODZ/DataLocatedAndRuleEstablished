@@ -1,6 +1,7 @@
 import { request } from "@/http";
 import { AxiosResponse } from "axios";
 import { LoginJSONData } from "@/views/Login/LoginTypes";
+import { PersonType } from "@/views/PersonManagement/PersonType";
 
 function login(
   ucount: string,
@@ -17,4 +18,15 @@ function login(
 
 export default {
   login,
+  updateUserInfo,
 };
+
+function updateUserInfo(
+  updateUserInfo: PersonType
+): Promise<AxiosResponse<any>> {
+  console.log("updateUserInfo:", updateUserInfo);
+  return request.post("/user/updateUserInfo/", {
+    ...updateUserInfo,
+    roleId: updateUserInfo.userRoleId,
+  });
+}

@@ -91,6 +91,10 @@
 
 <script lang="ts">
 import Vue from "vue";
+import { mapActions, mapGetters, mapState } from "vuex";
+import { PersonType } from "../PersonManagement/PersonType";
+import { updateUserInfo } from "./ProfileApi";
+
 export default Vue.extend({
   data() {
     return {
@@ -101,22 +105,27 @@ export default Vue.extend({
         region: "",
         type: "",
       },
-      userData: {
-        username: "周翔辉",
-        email: "fankaljead@gmail.com",
-        password: "123456",
-        ucount: "fankaljead",
-        phone: "18523771521",
-        address: "重庆市南岸区重庆邮电大学",
-        userRole: "超级管理员",
-        description: "",
-        avatar:
-          "https://avatars.githubusercontent.com/u/30434925?s=400&u=0a2acdf9f2ea4954f44343079c9804fcd11ec933&v=4",
-      },
+      userData: {} as PersonType,
     };
   },
   methods: {
     onUserDataModify() {
+      if (this.isEdit) {
+        // updateUserInfo(this.userData).then((res) => {
+        //   if (res.data.code === 200) {
+        //     this.isEdit = false;
+        //   }
+        //   this.$swal({
+        //     title: "修改成功",
+        //     type: "success",
+        //     showConfirmButton: false,
+        //     timer: 1500,
+        //   });
+        // });
+        this.updateUserInfo(this.userData).then((_) => {
+          this.$success("修改个人信息成功");
+        });
+      }
       this.isEdit = !this.isEdit;
     },
     handleAvatarSuccess(res, file) {
@@ -135,6 +144,16 @@ export default Vue.extend({
       // return isJPG && isLt2M;
       return isLt2M;
     },
+    ...mapActions("user", ["updateUserInfo"]),
+  },
+  mounted() {
+    this.userData = {...this.userInfo.userVo};
+    console.log("this.userData:", this.userData);
+  },
+  computed: {
+    ...mapGetters({
+      userInfo: "user/userInfo",
+    }),
   },
 });
 </script>

@@ -56,7 +56,7 @@ import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 import { permission_links, permission_roles } from "../constants";
 import { PersonType } from "@/views/PersonManagement/PersonType";
-import {PermissionType} from "@/views/Login/LoginTypes"
+import { PermissionType, UserVo } from "@/views/Login/LoginTypes";
 
 export default Vue.extend({
   data: () => ({
@@ -85,6 +85,8 @@ export default Vue.extend({
     username: "",
     currentRouteAdd: "1",
     activePath: "",
+    permissions: [] as PermissionType[],
+    userInfo: {} as UserVo,
 
     headIconUrl:
       "https://w7.pngwing.com/pngs/306/70/png-transparent-computer-icons-management-admin-silhouette-black-and-white-neck.png",
@@ -132,7 +134,16 @@ export default Vue.extend({
     // this.currentRouteAdd = this.$route.path;
     // console.log("this.currentRouteAdd:", this.currentRouteAdd);
     // this.get_user_role();
-    this.$store.dispatch("user/setUserInfoFromLocal");
+    this.$store.dispatch("user/setUserInfoFromLocal").then((value) => {
+      console.log("value", value);
+      console.log('this.$store', this.$store);
+      //  permissions: (state) => state.user.userInfo.loginRoleVo.permissions || [] as Array<PermissionType>,
+      this.permissions =
+        this.$store.getters["user/userInfo"].loginRoleVo.permissions;
+      this.userInfo = this.$store.getters["user/userInfo"].userVo;
+      console.log("this.userInfo:", this.userInfo);
+      // userInfo: (state) => state.user.userInfo.userVo || {} as PersonType,
+    });
   },
 
   watch: {
@@ -143,8 +154,8 @@ export default Vue.extend({
     },
   },
   computed: mapState({
-    permissions: (state) => state.user.userInfo.loginRoleVo.permissions || [] as Array<PermissionType>,
-    userInfo: (state) => state.user.userInfo.userVo || {} as PersonType,
+    // permissions: (state) => state.user.userInfo.loginRoleVo.permissions || [] as Array<PermissionType>,
+    // userInfo: (state) => state.user.userInfo.userVo || {} as PersonType,
   }),
 });
 </script>
