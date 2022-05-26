@@ -166,6 +166,7 @@ import {
 import { getPersonList, getUserInfoCondition } from "./PersonApi";
 import { getRoleList } from "../PermissionManagement/PermissionApi";
 import { RoleInfo } from "../PermissionManagement/PermissionTypes";
+import user from "@/api/user/user";
 
 export default Vue.extend({
   components: {
@@ -255,7 +256,7 @@ export default Vue.extend({
       this.operation.operationState = PersonOperation.DELETE;
     },
     handleConfirmDelete() {
-      this.$success("删除成功");
+      this.onDeleteUserInfo()
       this.handleCloseModalOperation();
     },
     handleCloseModalOperation() {
@@ -297,6 +298,14 @@ export default Vue.extend({
         console.log("this.roles:", this.roles);
         this.roleFilterData.total = role_data.data.total;
         this.roleFilterData.currentIndex = role_data.data.currentPage;
+      }
+    },
+
+    async onDeleteUserInfo() {
+      const delete_data = (await user.deleteUserInfo(this.selectPerson.id)).data;
+      if (delete_data.code === 200) {
+        this.$success("删除成功");
+        this.getData();
       }
     },
   },

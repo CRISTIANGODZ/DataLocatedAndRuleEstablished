@@ -11,7 +11,7 @@
       </el-col>
 
       <el-col>
-        <el-button type="primary" @click="handleAddModalOperationVisible"
+        <el-button type="primary" @click="showAddDatasetModal"
           >添加数据集</el-button
         >
       </el-col>
@@ -30,6 +30,8 @@
           label="数据集名称"
           width="180"
         ></el-table-column>
+        <el-table-column prop="templateName" label="模板名称" width="180">
+        </el-table-column>
         <el-table-column prop="description" label="数据集描述" width="180">
         </el-table-column>
         <el-table-column prop="status" label="数据集状态" width="180">
@@ -56,9 +58,15 @@
         </el-table-column>
         <el-table-column prop="uploadTime" label="上传时间" width="180">
         </el-table-column>
-        <el-table-column prop="labeledCount" label="已标注数量" width="180">
+        <el-table-column
+          prop="labeledTaskCount"
+          label="已标注任务数量"
+          width="180"
+        >
         </el-table-column>
-        <el-table-column prop="totalCount" label="总数量" width="180">
+        <el-table-column prop="totalTaskCount" label="总任务数量" width="180">
+        </el-table-column>
+        <el-table-column prop="textCount" label="总病例数量" width="180">
         </el-table-column>
 
         <el-table-column label="操作" width="250">
@@ -104,6 +112,10 @@
       :state="operation.operationState"
     ></role-permission-modal-vue> -->
     <dataset-modal></dataset-modal>
+    <add-dataset-modal-vue
+      :dialogVisible="addDatasetModalVisible"
+      :closeModal="hideAddDatasetModal"
+    ></add-dataset-modal-vue>
   </el-container>
 </template>
 
@@ -117,7 +129,8 @@ import {
   DatasetStatus,
   DatasetStatusZH,
 } from "./DatasetTypes";
-import { getDatasetList } from "./DatasetApi";
+import { getDatasetList } from "@/api/dataset";
+import AddDatasetModalVue from "./AddDatasetModal.vue";
 export default Vue.extend({
   data() {
     return {
@@ -137,10 +150,12 @@ export default Vue.extend({
         operationState: DatasetOperation.CHECK,
       },
       selectRole: {} as Dataset,
+      addDatasetModalVisible: false,
     };
   },
   components: {
     DatasetModal,
+    AddDatasetModalVue,
   },
   methods: {
     handleSizeChange(val) {
@@ -206,6 +221,14 @@ export default Vue.extend({
     handleDeleteModalOperationVisible() {
       this.handleModalOperationVisible();
       this.operation.operationState = DatasetOperation.DELETE;
+    },
+
+    showAddDatasetModal() {
+      this.addDatasetModalVisible = true;
+    },
+    hideAddDatasetModal() {
+      console.log('ccccccccccccccccccccc');
+      this.addDatasetModalVisible = false;
     },
     handleConfirmDelete() {
       this.$success("删除成功");

@@ -20,6 +20,7 @@ export default {
   login,
   updateUserInfo,
   registerUserInfo,
+  deleteUserInfo,
 };
 
 function updateUserInfo(
@@ -34,8 +35,12 @@ function updateUserInfo(
 function registerUserInfo(
   registerUserInfo: PersonType
 ): Promise<AxiosResponse<any>> {
-  console.log("updateUserInfo:", registerUserInfo);
+  console.log("registerUserInfo:", registerUserInfo);
   return request.post("/user/register/", {
     ...registerUserInfo,
   });
+}
+
+function deleteUserInfo(userId: number): Promise<AxiosResponse<any>> {
+  return request.delete("/user/deleteUserInfo/" + userId + "/");
 }

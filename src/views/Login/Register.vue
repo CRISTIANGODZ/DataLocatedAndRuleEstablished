@@ -10,9 +10,9 @@
           label-width="80px"
         >
           <!-- <el-form-item type="radio" label="用户角色" prop="role"> -->
-            <!-- <el-radio v-model="user.role" label="0">超级管理员</el-radio>
+          <!-- <el-radio v-model="user.role" label="0">超级管理员</el-radio>
             <el-radio v-model="user.role" label="1">普通管理员</el-radio> -->
-            <!-- <el-radio v-model="user.role" label="2">普通用户</el-radio> -->
+          <!-- <el-radio v-model="user.role" label="2">普通用户</el-radio> -->
           <!-- </el-form-item> -->
           <el-form-item prop="ucount" label="用户名">
             <el-input
@@ -50,6 +50,8 @@
 
 <script lang="ts">
 import Vue from "vue";
+import user from "@/api/user/user";
+
 export default Vue.extend({
   data() {
     return {
@@ -58,7 +60,7 @@ export default Vue.extend({
         username: "",
         ucount: "",
         password: "",
-        // role: "0",
+        roleId: 3,
       },
       rules: {
         password: [
@@ -94,7 +96,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    doRegister() {
+    async doRegister() {
       if (this.user.ucount.length < 1) {
         this.$message.error("用户名不能为空");
         return;
@@ -111,28 +113,43 @@ export default Vue.extend({
       const reg =
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
       if (!reg.test(this.user.password)) {
-        this.$message.error("密码至少八个字符，至少一个字母和一个数字和一个特殊字符");
+        this.$message.error(
+          "密码至少八个字符，至少一个字母和一个数字和一个特殊字符"
+        );
         return;
       }
-      this.$http
-        .post("/user/register/", {
-          ucount: this.user.ucount,
-          password: this.user.password,
-          // role: this.user.role,
-          username: this.user.username,
-        })
-        .then(({ data }) => {
-          console.log("register data:", data);
-          if (data.code === 200) {
-            this.$message.success("注册成功");
-            localStorage.setItem("ucount", this.user.ucount);
-            localStorage.setItem("password", this.user.password);
-            localStorage.setItem("username", this.user.username);
-            console.log(localStorage);
-            this.hanldeRegisterClick();
-            console.log("ddd");
-          }
-        });
+
+      const res = (await user.registerUserInfo(this.user)).data;
+      console.log("注册 res: ", res);
+      if (res.code === 200) {
+        this.$message.success("注册成功");
+        localStorage.setItem("ucount", this.user.ucount);
+        localStorage.setItem("password", this.user.password);
+        localStorage.setItem("username", this.user.username);
+        this.hanldeRegisterClick();
+      } else {
+        this.$message.error(res.msg);
+      }
+
+      // this.$http
+      //   .post("/user/register/", {
+      //     ucount: this.user.ucount,
+      //     password: this.user.password,
+      //     // role: this.user.role,
+      //     username: this.user.username,
+      //   })
+      //   .then(({ data }) => {
+      //     console.log("register data:", data);
+      //     if (data.code === 200) {
+      //       this.$message.success("注册成功");
+      //       localStorage.setItem("ucount", this.user.ucount);
+      //       localStorage.setItem("password", this.user.password);
+      //       localStorage.setItem("username", this.user.username);
+      //       console.log(localStorage);
+      //       this.hanldeRegisterClick();
+      //       console.log("ddd");
+      //     }
+      //   });
     },
   },
 });

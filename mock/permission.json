@@ -217,9 +217,12 @@
           "uploader": "admin",
           "uploaderId": 1,
           "status": 0,
-          "labeledCount": 0,
-          "totalCount": 400,
-          "unlabeledCount": 200
+          "labeledTaskCount": 0,
+          "totalTaskCount": 400,
+          "unlabeledTaskCount": 200,
+          "templateId": 1,
+          "templateName": "心脏病模板",
+          "textCount": 300
         },
         {
           "id": 2,
@@ -229,9 +232,12 @@
           "uploader": "james",
           "uploaderId": 2,
           "status": 1,
-          "labeledCount": 100,
-          "totalCount": 200,
-          "unlabeledCount": 100
+          "labeledTaskCount": 100,
+          "totalTaskCount": 200,
+          "unlabeledTaskCount": 100,
+          "templateId": 1,
+          "templateName": "心脏病模板",
+          "textCount": 300
         },
         {
           "id": 3,
@@ -241,9 +247,12 @@
           "uploader": "durant",
           "uploaderId": 3,
           "status": 2,
-          "labeledCount": 300,
-          "totalCount": 300,
-          "unlabeledCount": 0
+          "labeledTaskCount": 300,
+          "totalTaskCount": 300,
+          "unlabeledTaskCount": 0,
+          "templateId": 1,
+          "templateName": "心脏病模板",
+          "textCount": 300
         }
       ]
     }

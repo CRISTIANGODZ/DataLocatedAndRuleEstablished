@@ -10,9 +10,14 @@ export interface Dataset {
   uploader: string;
   uploaderId: number;
   status: number;
-  labeledCount: number;
-  unlabeledCount: number;
-  totalCount: number;
+  labeledTaskCount: number;
+  unlabeledTaskCount: number;
+  totalTaskCount: number;
+  textCount: number;
+  templateId: number,
+  templateName: string,
+  filePath: string,
+  fileName: string,
 }
 export enum DatasetOperation {
   CHECK = 0,
@@ -51,3 +56,5 @@ export enum DatasetStatusZH {
   TRAINING = "训练中",
   TRAINED = "已训练",
 }
+
+
