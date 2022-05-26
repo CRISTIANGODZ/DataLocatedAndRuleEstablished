@@ -6,13 +6,44 @@
         <el-input
           v-model="filterData.userName"
           placeholder="请输入人员名称"
+          @change="onFilterDataChange"
         ></el-input>
       </el-col>
-      <el-col>
+      <!-- <el-col>
         <el-input
           v-model="filterData.userRole"
           placeholder="请输入人员角色"
         ></el-input>
+      </el-col> -->
+
+      <el-col>
+        <el-select
+          v-model="filterData.userRole"
+          filterable
+          reserve-keyword
+          clearable
+          placeholder="选择用户角色"
+          @change="onFilterDataChange"
+        >
+          <el-option
+            v-for="item in roles"
+            :key="item.id"
+            :label="item.title"
+            :value="item.id"
+          >
+          </el-option>
+          <el-pagination
+            background
+            @size-change="handleRoleSizeChange"
+            @current-change="handleRoleCurrentChange"
+            :current-page="roleFilterData.currentIndex"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="roleFilterData.pageSize"
+            layout="prev, pager, next"
+            :total="roleFilterData.total"
+          >
+          </el-pagination>
+        </el-select>
       </el-col>
 
       <el-col>
@@ -23,7 +54,7 @@
     </el-row>
     <el-row>
       <el-table
-        :data="jsonData.data.users"
+        :data="jsonData.data.userList"
         border
         highlight-current-row
         style="width: 100%"
@@ -126,7 +157,12 @@
 <script lang="ts">
 import Vue from "vue";
 import PersonProfileModalVue from "./PersonProfileModal.vue";
-import { PersonJsonDataType, PersonOperation, PersonType } from "./PersonType";
+import {
+  PersonJsonDataType,
+  PersonOperation,
+  PersonType,
+  UserInfoJsonDataType,
+} from "./PersonType";
 import { getPersonList, getUserInfoCondition } from "./PersonApi";
 import { getRoleList } from "../PermissionManagement/PermissionApi";
 import { RoleInfo } from "../PermissionManagement/PermissionTypes";
@@ -137,16 +173,33 @@ export default Vue.extend({
   },
   data() {
     return {
+      roleSelectLoading: false,
       filterData: {
         userName: "",
-        userRole: 0,
+        userRole: null,
         pagination: {
           currentIndex: 1,
           pageSize: 10,
           total: 3,
         },
       },
-      jsonData: null as PersonJsonDataType,
+      roleFilterData: {
+        roleName: null,
+        currentIndex: 1,
+        pageSize: 5,
+        total: 3,
+      },
+      jsonData: {
+        code: "",
+        message: "",
+        ok: false,
+        data: {
+          userList: [] as RoleInfo[],
+          current: 1,
+          size: 10,
+          total: 3,
+        },
+      } as unknown as UserInfoJsonDataType,
       operation: {
         modalVisible: false,
         operationState: PersonOperation.CHECK,
@@ -165,6 +218,16 @@ export default Vue.extend({
       console.log(`当前页: ${val}`);
       this.filterData.pagination.currentIndex = val;
       this.onFilterDataChange();
+    },
+    handleRoleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.roleFilterData.pageSize = val;
+      this.onRoleFilterDataChange();
+    },
+    handleRoleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.roleFilterData.currentIndex = val;
+      this.onRoleFilterDataChange();
     },
     handleModalOperationVisible() {
       this.operation.modalVisible = true;
@@ -201,10 +264,18 @@ export default Vue.extend({
         this.getData();
       }
     },
+    onFilterDataChange() {
+      this.getData();
+    },
+    onRoleFilterDataChange() {
+      this.getRemoteRoles();
+    },
     async getData() {
       const user_data = (await getUserInfoCondition(this.filterData)).data;
       if (user_data.code === 200) {
-        this.jsonData = user_data.data;
+        this.jsonData = user_data;
+        this.filterData.pagination.total = user_data.data.total;
+        this.filterData.pagination.currentIndex = user_data.data.current;
       }
       console.log("user_data:", user_data);
 
@@ -218,10 +289,14 @@ export default Vue.extend({
       //   console.log("this.jsonData.users:", this.jsonData);
       //   this.selectPerson = data.data.users[0];
       // }
-      const role_data = (await getRoleList()).data;
+    },
+    async getRemoteRoles() {
+      const role_data = (await getRoleList(this.roleFilterData)).data;
       if (role_data.code === 200) {
         this.roles = role_data.data.roles;
         console.log("this.roles:", this.roles);
+        this.roleFilterData.total = role_data.data.total;
+        this.roleFilterData.currentIndex = role_data.data.currentPage;
       }
     },
   },
@@ -230,6 +305,7 @@ export default Vue.extend({
     // const data = getPersonList(this.filterData);
     // console.log(data);
     this.getData();
+    this.getRemoteRoles();
   },
 });
 </script>

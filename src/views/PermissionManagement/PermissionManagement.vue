@@ -71,6 +71,7 @@
       :allPermissions="jsonData.permissions"
       :closeModal="handleCloseModalOperation"
       :handleOperation="handleOperation"
+      :updateUserInfo="updateUserInfo"
       :visible="operation.modalVisible"
       :roleInfo="selectRole"
       :confirmDelete="handleConfirmDelete"
@@ -232,6 +233,9 @@ export default Vue.extend({
     async getData() {
       this.getRoles();
       this.getPermisions();
+    },
+    updateUserInfo() {
+      this.getData();
     },
   },
   mounted() {

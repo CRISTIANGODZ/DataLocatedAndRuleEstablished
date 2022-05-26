@@ -30,14 +30,14 @@
         <!-- <el-button type="primary" @click="onLogin" style="min-width: 150px"
           >忘记密码</el-button
         > -->
-        <el-button type="primary" @click="onLogin" style="min-width: 150px"
+        <!-- <el-button type="primary" @click="onLogin" style="min-width: 150px"
           >登录</el-button
-        >
+        > -->
         <el-button
           type="primary"
           @click="vlogin(userData.ucount, userData.password)"
           style="min-width: 150px"
-          >Vuex登录</el-button
+          >登录</el-button
         >
       </el-form>
     </el-row>
@@ -135,10 +135,18 @@ export default Vue.extend({
   updated() {
     console.log("updated");
   },
-  computed: mapState({
-    main_url: (state) =>
-      state.user.userInfo.loginRoleVo.permissions[0]["fpath"],
-  }),
+  // computed: {
+  //   main_url(): {return this.$store.user.userInfo.loginRoleVo.permissions[0]["fpath"]},
+  // //   ...mapState({
+  // //   main_url: (state) =>
+  // //     state.user.userInfo.loginRoleVo.permissions[0]["fpath"] || "/",
+  // // })
+  // },
+  computed: {
+    main_url() {
+      return this.$store.state.user.userInfo.loginRoleVo.permissions[0]["fpath"]||'/main';
+    },
+  },
 });
 </script>
 >

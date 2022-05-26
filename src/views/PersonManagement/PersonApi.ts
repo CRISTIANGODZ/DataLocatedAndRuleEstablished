@@ -27,7 +27,7 @@ export function getUserInfoCondition(
       "/",
     {
       roleId: filterData.userRole,
-      roleName: filterData.userName,
+      username: filterData.userName,
     }
   );
 }

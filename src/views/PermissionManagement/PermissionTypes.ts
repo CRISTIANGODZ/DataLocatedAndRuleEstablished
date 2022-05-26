@@ -29,7 +29,9 @@ export interface Pagination {
 export interface RoleListJsonData {
   code: number;
   data: {
-    pagination: Pagination;
+    currentPage: number,
+    total: number,
+    pageSize: number,
     roles: RoleInfo[];
   };
 }

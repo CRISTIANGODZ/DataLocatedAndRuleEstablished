@@ -19,6 +19,7 @@ function login(
 export default {
   login,
   updateUserInfo,
+  registerUserInfo,
 };
 
 function updateUserInfo(
@@ -27,6 +28,14 @@ function updateUserInfo(
   console.log("updateUserInfo:", updateUserInfo);
   return request.post("/user/updateUserInfo/", {
     ...updateUserInfo,
-    roleId: updateUserInfo.userRoleId,
+  });
+}
+
+function registerUserInfo(
+  registerUserInfo: PersonType
+): Promise<AxiosResponse<any>> {
+  console.log("updateUserInfo:", registerUserInfo);
+  return request.post("/user/register/", {
+    ...registerUserInfo,
   });
 }

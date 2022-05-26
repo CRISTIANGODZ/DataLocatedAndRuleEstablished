@@ -48,32 +48,40 @@
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
+
         <el-form-item label="用户角色">
-          <!-- <el-input
-            v-model="userData.userRole"
-            :disabled="true"
-            placeholder="请输入角色"
-          ></el-input> -->
           <el-select
-            v-model="userData.userRoleId"
-            clearable
+            v-model="userData.roleId"
+            filterable
+            reserve-keyword
             :disabled="!isCheckOrDelete"
-            placeholder="请选择"
+            placeholder="选择用户角色"
           >
             <el-option
-              v-for="role in allRoles"
+              v-for="role in roles"
               :key="role.id"
               :label="role.title"
               :value="role.id"
             >
             </el-option>
-          </el-select>
+            <el-pagination
+              background
+              @size-change="handleRoleSizeChange"
+              @current-change="handleRoleCurrentChange"
+              :current-page="roleFilterData.currentIndex"
+              :page-sizes="[5, 10, 15, 20]"
+              :page-size="roleFilterData.pageSize"
+              layout="prev, pager, next"
+              :total="roleFilterData.total"
+            >
+            </el-pagination
+          ></el-select>
         </el-form-item>
         <el-form-item label="邮箱">
           <el-input
             v-model="userData.email"
             type="email"
-            placeholder="请输入用户名"
+            placeholder="请输入邮箱"
             :disabled="!isCheckOrDelete"
           ></el-input>
         </el-form-item>
@@ -113,7 +121,7 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeModal">取 消</el-button>
-      <el-button v-if="isCheckOrDelete" type="primary" @click="closeModal"
+      <el-button v-if="isCheckOrDelete" type="primary" @click="handleSaveAction"
         >保 存</el-button
       >
       <el-button v-else-if="isDelete" type="danger" @click="confirmDelete"
@@ -127,6 +135,8 @@
 import { PropType } from "vue";
 import { PersonType, PersonOperation } from "./PersonType";
 import { RoleInfo } from "../PermissionManagement/PermissionTypes";
+import { getRoleList } from "../PermissionManagement/PermissionApi";
+import user from "@/api/user/user";
 
 export default {
   props: {
@@ -151,6 +161,10 @@ export default {
       type: Function,
       default: () => {},
     },
+    updateUserInfo: {
+      type: Function,
+      default: () => {},
+    },
     confirmDelete: {
       type: Function,
       default: () => {},
@@ -158,6 +172,12 @@ export default {
   },
   data() {
     return {
+      roleFilterData: {
+        roleName: 0,
+        currentIndex: 1,
+        pageSize: 100,
+        total: 3,
+      },
       centerDialogVisible: this.visible,
       formLabelAlign: {
         name: "",
@@ -165,6 +185,7 @@ export default {
         type: "",
       },
       labelPosition: "left",
+      roles: [] as Array<RoleInfo>,
     };
   },
   updated() {},
@@ -192,8 +213,60 @@ export default {
         return this.state === PersonOperation.EDIT;
       },
     },
+  },
+  methods: {
+    handleRoleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.roleFilterData.pageSize = val;
+      this.onRoleFilterDataChange();
+    },
+    handleRoleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.roleFilterData.currentIndex = val;
+      this.onRoleFilterDataChange();
+    },
     handleAvatarSuccess() {},
     beforeAvatarUpload() {},
+    onRoleFilterDataChange() {
+      this.getRemoteRoles();
+    },
+    async getRemoteRoles() {
+      const role_data = (await getRoleList(this.roleFilterData)).data;
+      if (role_data.code === 200) {
+        this.roles = role_data.data.roles;
+        console.log("this.roles:", this.roles);
+        this.roleFilterData.total = role_data.data.total;
+        this.roleFilterData.currentIndex = role_data.data.currentPage;
+      }
+    },
+    onUpdateUserInfo() {
+      user.updateUserInfo(this.userData).then((res) => {
+        if (res.data.code === 200) {
+          this.$success("修改用户信息成功");
+          this.closeModal();
+          this.updateUserInfo();
+        }
+      });
+    },
+    onAddUserInfo() {
+      user.registerUserInfo(this.userData).then((res) => {
+        if (res.data.code === 200) {
+          this.$success("添加用户成功");
+          this.closeModal();
+          this.updateUserInfo();
+        }
+      });
+    },
+    handleSaveAction() {
+      if (this.isEdit) {
+        this.onUpdateUserInfo();
+      } else if (this.isAdd) {
+        this.onAddUserInfo();
+      }
+    },
+  },
+  mounted() {
+    this.getRemoteRoles();
   },
 };
 </script>
