@@ -59,7 +59,7 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeModal">取 消</el-button>
-      <el-button type="primary" @click="closeModal">确 定</el-button>
+      <el-button type="primary" @click="onSavaDataset">确 定</el-button>
     </span>
   </el-dialog>
 </template>
@@ -67,6 +67,7 @@
 <script lang="ts">
 import { Dataset } from "./DatasetTypes";
 import template from "@/api/template";
+import { addDataset } from "@/api/dataset";
 
 export default {
   data() {
@@ -115,6 +116,15 @@ export default {
       console.log("fileList: ", fileList);
       this.uploadDatasetData.filePath = response.data.filePath;
       this.uploadDatasetData.fileName = file.name;
+    },
+    async onSavaDataset() {
+      const res = (await addDataset(this.uploadDatasetData)).data;
+      console.log("response: ", res);
+      if (res.code === 200) {
+        this.$message.success("上传成功");
+        this.closeModal();
+        this.uploadDatasetData = {} as Dataset;
+      }
     },
   },
   mounted() {
