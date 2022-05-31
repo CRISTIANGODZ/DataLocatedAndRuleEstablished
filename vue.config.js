@@ -17,9 +17,9 @@ module.exports = {
       "/": {
         //这里的/api表示的意思是以/api开头的才生效 ->刷下面的重点
         // target: "http://10.16.109.50:8081",
-        // target: "http://10.16.22.0:8081",
+        target: "http://10.16.22.0:8081",
         // target: "http://localhost:8081",
-        target: "http://10.16.79.168:8081",
+        // target: "http://10.16.79.168:8081",
         // target: "http://10.16.107.2:18081",
         changOrigin: true, //如果接口跨域这里就要这个参数配置
         pathRewrite: {

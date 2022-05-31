@@ -5,9 +5,9 @@ import router from "./router";
 var DEBUG = true;
 var LOCAL_URL = "http://10.16.79.168:3004";
 // var BASEURL = "http://10.16.109.50:8081";
-// var BASEURL = "http://10.16.22.0:8081";
+var BASEURL = "http://10.16.22.0:8081";
 // var BASEURL = "http://localhost:8081";
-var BASEURL = "http://10.16.79.168:8081";
+// var BASEURL = "http://10.16.79.168:8081";
 // var BASEURL = "http://10.16.107.2:18081";
 
 var http = axios.create({

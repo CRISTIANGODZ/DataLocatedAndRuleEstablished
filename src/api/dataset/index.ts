@@ -14,7 +14,12 @@ export function getDatasetList(
   });
 }
 
-export function addDataset(data: Dataset): Promise<AxiosResponse<any>> {
+export function addDataset(data: any): Promise<AxiosResponse<any>> {
   console.log("dataset:", data);
-  return request.post("/datasets", data);
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  };
+  return request.post("/data/upload/", data, config);
 }

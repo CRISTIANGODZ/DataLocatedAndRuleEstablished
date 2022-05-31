@@ -17,9 +17,13 @@
         <el-form-item label="上传文件">
           <el-upload
             class="upload-demo"
+            accept=".json"
             drag
-            :on-success="handleUploadSuccess"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            ref="upload"
+            :auto-upload="false"
+            :limit="1"
+            action="#"
+            :http-request="uploadFile"
           >
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">
@@ -89,7 +93,20 @@ export default {
       //   templateName: "",
       // },
       uploadDatasetData: {} as Dataset,
+      // uploadDatasetData: {
+      //   title: "",
+      //   templateId: 0,
+      //   description: "",
+      //   userId: 2,
+      // },
       templates: [],
+      uploading: false,
+      processPercent: 5,
+      processStatus: "success",
+      processVisible: false,
+      tipVisible: false,
+      tipTitle: "",
+      timer: null,
     };
   },
   props: {
@@ -117,18 +134,49 @@ export default {
       this.uploadDatasetData.filePath = response.data.filePath;
       this.uploadDatasetData.fileName = file.name;
     },
-    async onSavaDataset() {
-      const res = (await addDataset(this.uploadDatasetData)).data;
+    onSavaDataset() {
+      this.$refs.upload.submit();
+      // const res = (await addDataset(this.uploadDatasetData)).data;
+      // console.log("response: ", res);
+      // if (res.code === 200) {
+      //   this.$message.success("上传成功");
+      //   this.closeModal();
+      //   this.uploadDatasetData = {} as Dataset;
+      // }
+    },
+    async uploadFile(param) {
+      let dataset = {
+        title: this.uploadDatasetData.name,
+        description: this.uploadDatasetData.description,
+        templateId: this.uploadDatasetData.templateId,
+        userId: this.userId,
+      };
+      console.log("dataset: ", dataset);
+      const formData = new FormData();
+      formData.set("uploadFile", param.file);
+      formData.set("dataSet", JSON.stringify(dataset));
+
+      console.log("formData: ", formData);
+      const res = (await addDataset(formData)).data;
       console.log("response: ", res);
       if (res.code === 200) {
-        this.$message.success("上传成功");
-        this.closeModal();
         this.uploadDatasetData = {} as Dataset;
+        this.processPercent = 100;
+        this.closeModal();
+        this.$refs.upload.clearFiles();
+        this.$success("上传成功");
+      } else {
+        this.$error(res.msg);
       }
     },
   },
   mounted() {
     this.getTemplateList();
+  },
+  computed: {
+    userId: function () {
+      return this.$store.state.user.userInfo.userVo.id;
+    },
   },
 };
 </script>
