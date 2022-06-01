@@ -134,8 +134,8 @@ import {
   DatasetStatusZH,
 } from "./DatasetTypes";
 import { getDatasetList } from "@/api/dataset";
-import AddDatasetModalVue from "./AddDatasetModal.vue";
 import { updateDataset } from "@/api/dataset";
+import AddDatasetModalVue from "./AddDatasetModal.vue";
 export default Vue.extend({
   data() {
     return {

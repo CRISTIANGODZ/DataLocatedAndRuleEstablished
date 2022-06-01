@@ -4,22 +4,14 @@
     <!-- <el-header></el-header> -->
     <el-row el-row type="flex" justify="between" :gutter="20">
       <el-col>
-        <el-input v-model="filterData.roleName" placeholder="请输入数据集名称"></el-input>
-      </el-col>
-
-      <el-col>
-        <el-button type="primary" @click="showAddDatasetModal">添加数据集</el-button>
+        <el-input v-model="filterData.keyWord" placeholder="请输入数据集名称" @input="onFilterDataChange" />
       </el-col>
     </el-row>
     <el-row>
       <el-table :data="jsonData.datasets" border highlight-current-row style="width: 100%" @row-click="handleRowClick">
-        <el-table-column prop="id" label="编号" width="180"> </el-table-column>
-        <el-table-column prop="name" label="数据集名称" width="180"></el-table-column>
-        <el-table-column prop="templateName" label="模板名称" width="180">
-        </el-table-column>
-        <el-table-column prop="description" label="数据集描述" width="180">
-        </el-table-column>
-        <el-table-column prop="status" label="数据集状态" width="180">
+        <el-table-column type="index" label="编号" width="103"> </el-table-column>
+        <el-table-column prop="name" label="数据集名称" width="260"></el-table-column>
+        <el-table-column prop="status" label="数据集状态" width="140">
           <template slot-scope="scope">
             <el-tag :type="
               scope.row.status === datasetStatus.UNTRAIN
@@ -27,31 +19,32 @@
                 : scope.row.status === datasetStatus.TRAINING
                   ? 'info'
                   : 'success'
-            ">{{
-    scope.row.status === datasetStatus.UNTRAIN
-      ? datasetStatusZH.UNTRAIN
-      : scope.row.status === datasetStatus.TRAINING
-        ? datasetStatusZH.TRAINING
-        : datasetStatusZH.TRAINED
-}}</el-tag>
+            ">
+              {{
+                  scope.row.status === datasetStatus.UNTRAIN
+                    ? datasetStatusZH.UNTRAIN
+                    : scope.row.status === datasetStatus.TRAINING
+                      ? datasetStatusZH.TRAINING
+                      : datasetStatusZH.TRAINED
+              }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="uploader" label="上传者" width="180">
+        <el-table-column prop="lastTrainTime" label="上次训练时间" width="140">
         </el-table-column>
-        <el-table-column prop="uploadTime" label="上传时间" width="180">
+        <el-table-column prop="trainedTimes" label="总训练次数" width="140">
         </el-table-column>
-        <el-table-column prop="labeledTaskCount" label="已标注任务数量" width="180">
+        <el-table-column prop="templateName" label="模板" width="140">
         </el-table-column>
-        <el-table-column prop="totalTaskCount" label="总任务数量" width="180">
+        <el-table-column prop="labeledTaskCount" label="已标注数量" width="140">
         </el-table-column>
-        <el-table-column prop="textCount" label="总病例数量" width="180">
+        <el-table-column prop="totalTaskCount" label="总任务数量" width="140">
         </el-table-column>
-
-        <el-table-column label="操作" width="250">
+        <el-table-column label="操作" width="140">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleCheckModalOperationVisible">查看</el-button>
-            <el-button size="mini" @click="handleEditModalOperationVisible" type="primary">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDeleteModalOperationVisible">删除</el-button>
+            <el-button type="primary" disabled v-if="scope.row.status">训 练
+            </el-button>
+            <el-button @click="handleTrainModalOperationVisible" type="primary" v-else>训 练
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -71,9 +64,21 @@
       :confirmDelete=handleConfirmDelete
       :state="operation.operationState"
     ></role-permission-modal-vue> -->
+    <el-dialog title="训练" :visible.sync="trainDatasetModalVisible">
+      <el-form :model="trainSet">
+        <el-form-item label="最小置信度" :label-width="formLabelWidth">
+          <el-input v-model="trainSet.minConfidence"></el-input>
+        </el-form-item>
+        <el-form-item label="训练条数">
+          <el-input v-model="trainSet.trainBars"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="hideTrainModalOperationVisible">取 消</el-button>
+        <el-button type="primary" @click="onSaveTrainModalOperationVisible">确 定</el-button>
+      </div>
+    </el-dialog>
     <dataset-modal></dataset-modal>
-    <add-dataset-modal-vue :dialogVisible="addDatasetModalVisible" :closeModal="hideAddDatasetModal">
-    </add-dataset-modal-vue>
   </el-container>
 </template>
 
@@ -88,32 +93,57 @@ import {
   DatasetStatusZH,
 } from "./DatasetTypes";
 import { getDatasetList } from "@/api/dataset";
-import AddDatasetModalVue from "./AddDatasetModal.vue";
 export default Vue.extend({
   data() {
     return {
       filterData: {
         roleName: "",
+        keyWord: "",
         pagination: {
           currentIndex: 1,
           pageSize: 10,
-          total: 3,
+          total: 2,
         },
       },
       jsonData: {
-        datasets: [] as Dataset[],
+        // datasets: [] as Dataset[],
+        datasets: [
+          {
+            id: 111,
+            name: "2月前患者无明显诱因开始出现",
+            status: DatasetStatus.UNTRAIN,
+            lastTrainTime: "2022-05-02",
+            trainedTimes: 3,
+            templateName: "影像检查",
+            labeledTaskCount: 1000,
+            totalTaskCount: 2000,
+          },
+          {
+            id: 222,
+            name: "2月前患者无明显诱因开始出现",
+            status: DatasetStatus.TRAINING,
+            lastTrainTime: "2022-05-02",
+            trainedTimes: 2,
+            templateName: "影像检查",
+            labeledTaskCount: 1000,
+            totalTaskCount: 2000,
+          },
+        ]
       },
       operation: {
         modalVisible: false,
         operationState: DatasetOperation.CHECK,
       },
       selectRole: {} as Dataset,
-      addDatasetModalVisible: false,
+      trainDatasetModalVisible: false,
+      trainSet: {
+        minConfidence: 0.7,
+        trainBars: 100,
+      },
     };
   },
   components: {
     DatasetModal,
-    AddDatasetModalVue,
   },
   methods: {
     handleSizeChange(val) {
@@ -125,6 +155,33 @@ export default Vue.extend({
       console.log(`当前页: ${val}`);
       this.filterData.pagination.currentIndex = val;
       this.onFilterDataChange();
+    },
+    onFilterDataChange() {
+      console.log("filterData: ", this.filterData);
+      this.getDataSets();
+    },
+    getDataSets() {
+      this.$http
+        .post(
+          "/datasets/pageText/" +
+          this.filterData.pagination.currentIndex +
+          "/" +
+          this.filterData.pagination.pageSize,
+          {
+            textTitle: this.filterData.keyWord,
+          }
+        )
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.jsonData.datasets = response.data.data;
+            this.filterData.pagination.total = response.data.data.total;
+            this.filterData.pagination.currentIndex =
+              response.data.data.current;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
     handleLabelStateClick(row) {
       console.log("handleLabelStateClick");
@@ -139,65 +196,82 @@ export default Vue.extend({
         return "#67c23a";
       }
     },
-    handleEdit(index, row) {
-      console.log(index, row);
-    },
-    handleDelete(index, row) {
-      console.log(index, row);
-    },
-    handleLabelStateMouseover(row) {
-      console.log("handleLabelStateMouseover");
-      console.log(row);
-    },
-    handleModalOperationVisible() {
-      console.log("dddd");
-      this.operation.modalVisible = true;
-    },
+    // handleEdit(index, row) {
+    //   console.log(index, row);
+    // },
+    // handleDelete(index, row) {
+    //   console.log(index, row);
+    // },
+    // handleLabelStateMouseover(row) {
+    //   console.log("handleLabelStateMouseover");
+    //   console.log(row);
+    // },
+    // handleModalOperationVisible() {
+    //   console.log("dddd");
+    //   this.operation.modalVisible = true;
+    // },
     handleRowClick(row, column, event) {
       this.selectRole = row;
       console.log(row);
       console.log(column);
     },
-    handleEditModalOperationVisible() {
-      this.handleModalOperationVisible();
-      this.operation.operationState = DatasetOperation.EDIT;
+    handleTrainModalOperationVisible() {
+      this.trainDatasetModalVisible = true;
     },
-    handleCheckModalOperationVisible() {
-      this.handleModalOperationVisible();
-      this.operation.operationState = DatasetOperation.CHECK;
+    hideTrainModalOperationVisible() {
+      this.trainDatasetModalVisible = false;
     },
-    handleAddModalOperationVisible() {
-      this.operation.operationState = DatasetOperation.ADD;
-      this.handleModalOperationVisible();
-      this.selectRole = {
-        id: 0,
-        name: "",
-        description: "",
-        permissions: [],
-      };
+    async onSaveTrainModalOperationVisible() {
+      this.$http
+        .post(
+          "/datasets/train/",
+          {
+            minConfidence: this.trainSet.minConfidence,
+            trainBars: this.trainSet.trainBars,
+          }
+        )
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.getData();
+            this.hideTrainModalOperationVisible();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
-    handleDeleteModalOperationVisible() {
-      this.handleModalOperationVisible();
-      this.operation.operationState = DatasetOperation.DELETE;
-    },
-
-    showAddDatasetModal() {
-      this.addDatasetModalVisible = true;
-    },
-    hideAddDatasetModal() {
-      console.log('ccccccccccccccccccccc');
-      this.addDatasetModalVisible = false;
-    },
-    handleConfirmDelete() {
-      this.$success("删除成功");
-      this.handleCloseModalOperation();
-    },
-    handleCloseModalOperation() {
-      this.operation.modalVisible = false;
-      if (this.operation.operationState !== DatasetOperation.EDIT) {
-        this.getRoles();
-      }
-    },
+    // handleEditModalOperationVisible() {
+    //   this.handleModalOperationVisible();
+    //   this.operation.operationState = DatasetOperation.EDIT;
+    // },
+    // handleCheckModalOperationVisible() {
+    //   this.handleModalOperationVisible();
+    //   this.operation.operationState = DatasetOperation.CHECK;
+    // },
+    // handleAddModalOperationVisible() {
+    //   this.operation.operationState = DatasetOperation.ADD;
+    //   this.handleModalOperationVisible();
+    //   this.selectRole = {
+    //     id: 0,
+    //     name: "",
+    //     description: "",
+    //     permissions: [],
+    //   };
+    // },
+    // handleDeleteModalOperationVisible() {
+    //   this.handleModalOperationVisible();
+    //   this.operation.operationState = DatasetOperation.DELETE;
+    // },
+    // handleConfirmDelete() {
+    //   this.$success("删除成功");
+    //   this.handleCloseModalOperation();
+    // },
+    // handleCloseModalOperation() {
+    //   this.operation.modalVisible = false;
+    //   if (this.operation.operationState !== DatasetOperation.EDIT) {
+    //     this.getRoles();
+    //   }
+    // },
     async getData() {
       const dataset_data = (await getDatasetList(this.filterData)).data;
       console.log("dataset_data: ", dataset_data);
