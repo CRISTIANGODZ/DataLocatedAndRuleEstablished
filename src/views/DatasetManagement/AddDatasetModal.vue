@@ -1,30 +1,13 @@
 <template>
-  <el-dialog
-    title="上传数据集"
-    :visible.sync="dialogVisible"
-    width="40%"
-    :before-close="closeModal"
-  >
+  <el-dialog title="上传数据集" :visible.sync="dialogVisible" width="40%" :before-close="closeModal">
     <el-row>
-      <el-form
-        :label-position="labelPosition"
-        label-width="100px"
-        :model="formLabelAlign"
-      >
+      <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
         <el-form-item label="数据集名称">
           <el-input v-model="uploadDatasetData.name"></el-input>
         </el-form-item>
         <el-form-item label="上传文件">
-          <el-upload
-            class="upload-demo"
-            accept=".json"
-            drag
-            ref="upload"
-            :auto-upload="false"
-            :limit="1"
-            action="#"
-            :http-request="uploadFile"
-          >
+          <el-upload class="upload-demo" accept=".json" drag ref="upload" :auto-upload="false" :limit="1" action="#"
+            :http-request="uploadFile">
             <i class="el-icon-upload"></i>
             <div class="el-upload__text">
               将文件拖到此处，或<em>点击上传</em>
@@ -35,29 +18,13 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="模板">
-          <el-select
-            v-model="uploadDatasetData.templateId"
-            filterable
-            clearable
-            reserve-keyword
-            placeholder="选择模板"
-          >
-            <el-option
-              v-for="template in templates"
-              :key="template.id"
-              :label="template.title"
-              :value="template.id"
-            >
+          <el-select v-model="uploadDatasetData.templateId" filterable clearable reserve-keyword placeholder="选择模板">
+            <el-option v-for="template in templates" :key="template.id" :label="template.title" :value="template.id">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="详情">
-          <el-input
-            v-model="uploadDatasetData.description"
-            type="textarea"
-            rows="5"
-            placeholder="请输入数据集详情"
-          ></el-input>
+          <el-input v-model="uploadDatasetData.description" type="textarea" rows="5" placeholder="请输入数据集详情"></el-input>
         </el-form-item>
       </el-form>
     </el-row>
@@ -116,7 +83,7 @@ export default {
     },
     closeModal: {
       type: Function,
-      default: () => {},
+      default: () => { },
     },
   },
   methods: {
@@ -181,4 +148,5 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

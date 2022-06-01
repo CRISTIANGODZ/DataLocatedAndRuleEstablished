@@ -7,22 +7,25 @@
         <el-button type="primary" @click="showAddDatasetModal">添加数据集</el-button>
       </el-col>
     </el-row>
-
     <el-row el-row type="flex" justify="between" :gutter="20">
-      <el-col>
-        <el-input v-model="filterData.keyWord" placeholder="请输入数据集名称" @input="onFilterDataChange" />
-        <!-- <el-input v-model="filterData.roleName" placeholder="请输入数据集名称" style="width: 500px">
-          <template #append>
-            <el-button icon="el-icon-search" style="width: 70px;font-size: 20px;" @click="searchDatasetModalByName" />
-          </template>
-        </el-input> -->
+      <el-col :span="10">
+        <el-input v-model="filterData.keyWord" placeholder="输入数据集名称搜索" @input="onFilterDataChange" />
       </el-col>
+      <el-col :span="6">
+        <el-input v-model="filterData.modelName" placeholder="输入模型名称搜索" @input="onFilterDataChange" />
+      </el-col>
+      <el-col :span="6">
+        <el-select v-model="filterData.personName" placeholder="请选择上传者" @input="onFilterDataChange">
+          <el-option v-for="item in options" :key="item.id" :label="item.username" :value="item.username">
+          </el-option>
+        </el-select>
+      </el-col>
+      <el-button type="primary" @click="clearFilterData">清空所有搜索项</el-button>
     </el-row>
-
     <el-row>
       <el-table :data="jsonData.datasets" border highlight-current-row style="width: 100%" @row-click="handleRowClick">
         <el-table-column type="index" width="83" label="编号"> </el-table-column>
-        <el-table-column prop="name" label="数据集名称" width="200"></el-table-column>
+        <el-table-column prop="title" label="数据集名称" width="200"></el-table-column>
         <!-- <el-table-column prop="templateName" label="模板名称" width="180">
         </el-table-column> -->
         <el-table-column prop="description" label="数据集描述" width="210">
@@ -37,15 +40,14 @@
               点击查看更多内容</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="uploader" label="上传者" width="180">
+        <el-table-column prop="username" label="上传者" width="180">
         </el-table-column>
         <el-table-column prop="uploadTime" label="上传时间" width="180">
         </el-table-column>
-        <el-table-column prop="template" label="模板" width="120">
+        <el-table-column prop="templateTitle" label="模板" width="120">
         </el-table-column>
-        <el-table-column prop="totalTextCount" label="文本数量" width="120">
+        <el-table-column prop="total" label="文本数量" width="120">
         </el-table-column>
-
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleCheckModalOperationVisible(scope.row)">查看</el-button>
@@ -74,7 +76,7 @@
     <el-dialog title="编辑数据集" :visible.sync="editDatasetModalVisible">
       <el-form :model="editDataSet">
         <el-form-item label="名称" :label-width="formLabelWidth">
-          <el-input v-model="editDataSet.name"></el-input>
+          <el-input v-model="editDataSet.title"></el-input>
         </el-form-item>
         <el-form-item label="描述">
           <el-input v-model="editDataSet.description"></el-input>
@@ -86,11 +88,11 @@
       </div>
     </el-dialog>
     <el-dialog title="数据集详情" :visible.sync="checkDatasetModalVisible">
-      <el-row el-row type="flex" justify="between" :gutter="20">
+      <!-- <el-row el-row type="flex" justify="between" :gutter="20">
         <el-col>
           <el-input v-model="filterText.keyWord" placeholder="请输入文本名称" @input="onFilterTextChange" />
         </el-col>
-      </el-row>
+      </el-row> -->
       <el-row>
         <el-table :data="jsonData.textlist" border highlight-current-row style="width: 100%">
           <el-table-column prop="id" width="100" label="编号"> </el-table-column>
@@ -133,7 +135,6 @@ import {
   DatasetStatus,
   DatasetStatusZH,
 } from "./DatasetTypes";
-import { getDatasetList } from "@/api/dataset";
 import { updateDataset } from "@/api/dataset";
 import AddDatasetModalVue from "./AddDatasetModal.vue";
 export default Vue.extend({
@@ -141,73 +142,31 @@ export default Vue.extend({
     return {
       filterData: {
         keyWord: "",
+        modelName: "",
+        personName: "",
         pagination: {
           currentIndex: 1,
           pageSize: 10,
-          total: 3,
+          total: "",
         },
+      },
+      filterDataVo: {
+        title: "",
+        username: "",
+        templateTitle: "",
       },
       filterText: {
-        keyWord: "",
-        datasetId: 1,
+        datasetId: "",
         pagination: {
           currentIndex: 1,
           pageSize: 10,
-          total: 4,
+          total: "",
         },
       },
+      options: [],
       jsonData: {
-        //datasets: [] as Dataset[],
-        datasets: [
-          {
-            id: 1,
-            name: "2月前患者无明显诱因开始出现",
-            description: "描述描述描述描述描述描述描述描述描述描述",
-            uploader: "admin",
-            uploadTime: "2022-05-02",
-            template: "影像检查",
-            totalTextCount: "5000",
-            templateValue: "",
-          },
-          {
-            id: 2,
-            name: "2月前患者无明显诱因开始出现",
-            description: "很长的一段描述很长的一段描述很长的一段描述很长的一段描述很长的一段描述很长的一段描述",
-            uploader: "jty",
-            uploadTime: "2022-06-02",
-            template: "影像检查",
-            totalTextCount: "100",
-            templateValue: "",
-          },
-          {
-            id: 3,
-            name: "2月前患者无明显诱因开始出现",
-            description: "描述描述描述描述描述描述描述描述描述描述",
-            uploader: "admin",
-            uploadTime: "2022-05-02",
-            title: "精神病标注",
-            template: "影像检查",
-            totalTextCount: "5000",
-            templateValue: "",
-          },
-        ],
-        textlist: [
-          {
-            id: 11,
-            title: "文本1",
-            content: "内容内容内容内容内容内容",
-          },
-          {
-            id: 22,
-            title: "文本2",
-            content: "很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容很长的一段内容",
-          },
-          {
-            id: 33,
-            title: "文本3",
-            content: "内容内容内容内容内容内容",
-          }
-        ]
+        datasets: [] as Dataset[],
+        textlist: [],
       },
       operation: {
         modalVisible: false,
@@ -225,6 +184,14 @@ export default Vue.extend({
     AddDatasetModalVue,
   },
   methods: {
+    getLabelPersons() {
+      this.$http.get("/taskDistribution/userList").then((response) => {
+        if (response.data.code === 200) {
+          this.options = response.data.data;
+          console.log("标注人:", this.options);
+        }
+      });
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
       this.filterData.pagination.pageSize = val;
@@ -239,21 +206,32 @@ export default Vue.extend({
       console.log("filterData: ", this.filterData);
       this.getDataSets();
     },
+    clearFilterData() {
+      this.filterData.keyWord = "";
+      this.filterData.modelName = "";
+      this.filterData.personName = "";
+      this.filterDataVo.title = "";
+      this.filterDataVo.username = "";
+      this.filterDataVo.templateTitle = "";
+      this.getDataSets();
+    },
     getDataSets() {
+      this.filterDataVo.title = this.filterData.keyWord;
+      this.filterDataVo.username = this.filterData.personName;
+      this.filterDataVo.templateTitle = this.filterData.modelName;
       this.$http
         .post(
-          "/datasets/pageText/" +
+          "/data/pageData/" +
           this.filterData.pagination.currentIndex +
           "/" +
           this.filterData.pagination.pageSize,
-          {
-            textTitle: this.filterData.keyWord,
-          }
+          this.filterDataVo
         )
         .then((response) => {
           if (response.data.code === 200) {
-            this.jsonData.datasets = response.data.data;
-            this.filterData.pagination.total = response.data.data.total;
+            console.log(response.data);
+            this.jsonData.datasets = response.data.data.dataVoList;
+            this.filterData.pagination.total = response.data.data.dataTotal;
             this.filterData.pagination.currentIndex =
               response.data.data.current;
           }
@@ -278,22 +256,18 @@ export default Vue.extend({
     },
     getTexts() {
       this.$http
-        .post(
-          "/datasets/text/pageText/" +
+        .get(
+          "/data/viewDetail/" +
+          this.filterText.datasetId +
+          "/" +
           this.filterText.pagination.currentIndex +
           "/" +
           this.filterText.pagination.pageSize,
-          {
-            textTitle: this.filterData.keyWord,
-            datasetId: this.filterText.datasetId,
-          }
         )
         .then((response) => {
           if (response.data.code === 200) {
             this.jsonData.textlist = response.data.data;
-            this.filterText.pagination.total = response.data.data.total;
-            this.filterText.pagination.currentIndex =
-              response.data.data.current;
+            this.filterText.pagination.total = response.data.data.length;
           }
         })
         .catch((error) => {
@@ -350,7 +324,7 @@ export default Vue.extend({
       this.operation.operationState = DatasetOperation.EDIT;
       this.editDataSet = {
         id: row.id,
-        name: row.name,
+        title: row.title,
         description: row.description,
       };
       this.editDatasetModalVisible = true;
@@ -364,6 +338,7 @@ export default Vue.extend({
         this.editDataSet = {} as Dataset;
         this.$success("修改成功");
         this.editDatasetModalVisible = false;
+        this.getDataSets();
       } else {
         this.$error(res.msg);
       }
@@ -389,13 +364,14 @@ export default Vue.extend({
           //点击删除
           this.handleModalOperationVisible();
           this.operation.operationState = DatasetOperation.DELETE;
-          this.$http.delete("/datasets/delete/" + row.id).then((res) => {
+          this.$http.delete("/data/deleteDataSet/" + row.id).then((res) => {
             console.log("res: ", res);
             this.$message({
               type: "success",
               message: "删除成功",
             });
-            this.getTasks();
+            this.getData();
+            // this.getTasks();
           });
         })
         .catch(() => {
@@ -421,17 +397,19 @@ export default Vue.extend({
         this.getRoles();
       }
     },
-    async getData() {
-      const dataset_data = (await getDatasetList(this.filterData)).data;
-      console.log("dataset_data: ", dataset_data);
-      if (dataset_data.code === 200) {
-        this.jsonData.datasets = dataset_data.data.datasets;
-        this.filterData.pagination.total = dataset_data.data.pagination.total;
-      }
-    },
+    // async getData() {
+    //   const dataset_data = (await getDatasetList(this.filterData)).data;
+    //   console.log("dataset_data: ", dataset_data);
+    //   if (dataset_data.code === 200) {
+    //     this.jsonData.datasets = dataset_data.data.datasets;
+    //     this.filterData.pagination.total = dataset_data.data.pagination.total;
+    //   }
+    // },
   },
   mounted() {
-    this.getData();
+    this.getDataSets();
+    this.getLabelPersons();
+    // this.getData();
   },
   computed: {
     datasetStatus() {
