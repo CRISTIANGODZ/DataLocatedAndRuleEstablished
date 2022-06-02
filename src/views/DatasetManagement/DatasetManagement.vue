@@ -8,19 +8,26 @@
       </el-col>
     </el-row>
     <el-row el-row type="flex" justify="between" :gutter="20">
-      <el-col :span="10">
+      <el-col :span="4">
         <el-input v-model="filterData.keyWord" placeholder="输入数据集名称搜索" @input="onFilterDataChange" />
       </el-col>
-      <el-col :span="6">
-        <el-input v-model="filterData.modelName" placeholder="输入模型名称搜索" @input="onFilterDataChange" />
+      <el-col :span="4">
+        <el-select v-model="filterData.templateTitle" placeholder="请选择模板" @input="onFilterDataChange">
+          <el-option v-for="template in jsonData.templateList" :key="template.id" :label="template.title"
+            :value="template.title"></el-option>
+        </el-select>
       </el-col>
-      <el-col :span="6">
+      <el-col :span="4">
         <el-select v-model="filterData.personName" placeholder="请选择上传者" @input="onFilterDataChange">
           <el-option v-for="item in options" :key="item.id" :label="item.username" :value="item.username">
           </el-option>
         </el-select>
       </el-col>
-      <el-button type="primary" @click="clearFilterData">清空所有搜索项</el-button>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-button type="primary" @click="clearFilterData">清空所有搜索项</el-button>
+        </div>
+      </el-col>
     </el-row>
     <el-row>
       <el-table :data="jsonData.datasets" border highlight-current-row style="width: 100%" @row-click="handleRowClick">
@@ -142,7 +149,7 @@ export default Vue.extend({
     return {
       filterData: {
         keyWord: "",
-        modelName: "",
+        templateTitle: "",
         personName: "",
         pagination: {
           currentIndex: 1,
@@ -167,6 +174,7 @@ export default Vue.extend({
       jsonData: {
         datasets: [] as Dataset[],
         textlist: [],
+        templateList: [],
       },
       operation: {
         modalVisible: false,
@@ -184,6 +192,14 @@ export default Vue.extend({
     AddDatasetModalVue,
   },
   methods: {
+    getTemplateList() {
+      this.$http.get("/template/get/").then((response) => {
+        if (response.data.code === 200) {
+          this.jsonData.templateList = response.data.data;
+          console.log("模板:", this.jsonData.templateList);
+        }
+      });
+    },
     getLabelPersons() {
       this.$http.get("/taskDistribution/userList").then((response) => {
         if (response.data.code === 200) {
@@ -208,7 +224,7 @@ export default Vue.extend({
     },
     clearFilterData() {
       this.filterData.keyWord = "";
-      this.filterData.modelName = "";
+      this.filterData.templateTitle = "";
       this.filterData.personName = "";
       this.filterDataVo.title = "";
       this.filterDataVo.username = "";
@@ -218,7 +234,7 @@ export default Vue.extend({
     getDataSets() {
       this.filterDataVo.title = this.filterData.keyWord;
       this.filterDataVo.username = this.filterData.personName;
-      this.filterDataVo.templateTitle = this.filterData.modelName;
+      this.filterDataVo.templateTitle = this.filterData.templateTitle;
       this.$http
         .post(
           "/data/pageData/" +
@@ -409,6 +425,7 @@ export default Vue.extend({
   mounted() {
     this.getDataSets();
     this.getLabelPersons();
+    this.getTemplateList();
     // this.getData();
   },
   computed: {

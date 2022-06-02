@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 
-export interface DatasetType {}
+export interface DatasetType { }
 
 export interface Dataset {
   id: number;
@@ -33,9 +33,9 @@ export interface Pagination {
 }
 
 export enum DatasetStatus {
-  UNTRAIN = 0,
-  TRAINING = 1,
-  TRAINED = 2,
+  UNTRAIN = "0",
+  TRAINING = "1",
+  TRAINED = "2",
 }
 
 export interface DatasetJSONData extends AxiosRequestConfig {
