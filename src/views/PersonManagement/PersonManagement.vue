@@ -90,7 +90,9 @@
             disabled
             type="password"
           ></el-input> -->
-            <el-tag>{{ scope.row.password.replace(/[\s\S]/g, "*") }}</el-tag>
+            <el-tag>{{
+              scope.row.password.replace(/[\s\S]/g, "*").substring(0, 6)
+            }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column
@@ -256,7 +258,7 @@ export default Vue.extend({
       this.operation.operationState = PersonOperation.DELETE;
     },
     handleConfirmDelete() {
-      this.onDeleteUserInfo()
+      this.onDeleteUserInfo();
       this.handleCloseModalOperation();
     },
     handleCloseModalOperation() {
@@ -302,7 +304,8 @@ export default Vue.extend({
     },
 
     async onDeleteUserInfo() {
-      const delete_data = (await user.deleteUserInfo(this.selectPerson.id)).data;
+      const delete_data = (await user.deleteUserInfo(this.selectPerson.id))
+        .data;
       if (delete_data.code === 200) {
         this.$success("删除成功");
         this.getData();
