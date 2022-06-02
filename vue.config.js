@@ -19,8 +19,9 @@ module.exports = {
         // target: "http://10.16.109.50:8081",
         // target: "http://10.16.22.0:8081",
         // target: "http://localhost:8081",
-        target: "http://10.16.79.168:8081",
+        // target: "http://10.16.79.168:8081",
         // target: "http://10.16.107.2:18081",
+        target: "10.16.22.0:8081",
         changOrigin: true, //如果接口跨域这里就要这个参数配置
         pathRewrite: {
           //'^/api': '/api'  //实际请求地址是http://baidu.com/api/news/list
@@ -29,7 +30,8 @@ module.exports = {
         },
       },
       "/permit": {
-        target: "http://10.16.79.168:3004",
+        // target: "http://10.16.79.168:3004",
+        target: "10.16.22.0:3004",
         changOrigin: true, //如果接口跨域这里就要这个参数配置
         pathRewrite: {
           "^/permit": "/permit",
