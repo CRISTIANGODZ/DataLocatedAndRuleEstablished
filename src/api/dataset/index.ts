@@ -23,3 +23,8 @@ export function addDataset(data: any): Promise<AxiosResponse<any>> {
   };
   return request.post("/data/upload/", data, config);
 }
+
+export function updateDataset(data: Dataset): Promise<AxiosResponse<any>> {
+  console.log("dataset:", data);
+  return request.post("/data/update", data);
+}
