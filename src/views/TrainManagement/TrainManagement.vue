@@ -331,9 +331,9 @@ export default Vue.extend({
       if (this.trainSet.weight === "") {
         this.trainSet.weight = 0;
       }
-      var code = this.postTrainSet();
       this.hideTrainModalOperationVisible();
-      if (code = 200) {
+      var code = this.postTrainSet();
+      if (code == 200) {
         this.$message({
           message: '模型训练成功！',
           type: 'success'
