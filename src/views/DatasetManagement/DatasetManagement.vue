@@ -12,13 +12,13 @@
         <el-input v-model="filterData.keyWord" placeholder="输入数据集名称搜索" @input="onFilterDataChange" />
       </el-col>
       <el-col :span="4">
-        <el-select v-model="filterData.templateTitle" placeholder="请选择模板" @input="onFilterDataChange">
+        <el-select v-model="filterData.templateTitle" clearable placeholder="请选择模板" @input="onFilterDataChange">
           <el-option v-for="template in jsonData.templateList" :key="template.id" :label="template.title"
             :value="template.title"></el-option>
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-select v-model="filterData.personName" placeholder="请选择上传者" @input="onFilterDataChange">
+        <el-select v-model="filterData.personName" clearable placeholder="请选择上传者" @input="onFilterDataChange">
           <el-option v-for="item in options" :key="item.id" :label="item.username" :value="item.username">
           </el-option>
         </el-select>
@@ -82,7 +82,7 @@
     ></role-permission-modal-vue> -->
     <el-dialog title="编辑数据集" :visible.sync="editDatasetModalVisible">
       <el-form :model="editDataSet">
-        <el-form-item label="名称" :label-width="formLabelWidth">
+        <el-form-item label="名称">
           <el-input v-model="editDataSet.title"></el-input>
         </el-form-item>
         <el-form-item label="描述">
@@ -179,6 +179,11 @@ export default Vue.extend({
       operation: {
         modalVisible: false,
         operationState: DatasetOperation.CHECK,
+      },
+      formLabelAlign: {
+        name: "",
+        region: "",
+        type: "",
       },
       selectRole: {} as Dataset,
       editDataSet: {} as Dataset,

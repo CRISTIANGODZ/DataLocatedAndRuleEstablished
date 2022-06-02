@@ -7,20 +7,20 @@
         <el-input v-model="filterData.keyWord" placeholder="输入模型名称搜索" @input="onFilterDataChange" />
       </el-col>
       <el-col :span="4">
-        <el-select v-model="filterData.templateTitle" placeholder="请选择模板" @input="onFilterDataChange">
+        <el-select v-model="filterData.templateTitle" clearable placeholder="请选择模板" @input="onFilterDataChange">
           <el-option v-for="template in jsonData.templateList" :key="template.id" :label="template.title"
             :value="template.title"></el-option>
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-select v-model="filterData.state" placeholder="请选择训练状态" @input="onFilterDataChange">
+        <el-select v-model="filterData.state" clearable placeholder="请选择训练状态" @input="onFilterDataChange">
           <el-option v-for="state in stateList" :key="state.id" :label="state.title" :value="state.id">
           </el-option>
         </el-select>
       </el-col>
       <el-col :span="4">
         <div class="grid-content bg-purple">
-          <el-date-picker v-model="filterData.updateTime" align="right" type="date" placeholder="选择训练时间"
+          <el-date-picker v-model="filterData.updateTime" align="right" clearable type="date" placeholder="选择训练时间"
             format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="onFilterDataChange">
           </el-date-picker>
         </div>
@@ -162,6 +162,11 @@ export default Vue.extend({
         modalVisible: false,
         operationState: DatasetOperation.CHECK,
       },
+      formLabelAlign: {
+        name: "",
+        region: "",
+        type: "",
+      },
       selectRole: {} as Dataset,
       trainDatasetModalVisible: false,
       trainSet: {
@@ -294,17 +299,7 @@ export default Vue.extend({
           console.log(error);
         });
     },
-    async onSaveTrainModalOperationVisible() {
-      if (this.trainSet.param > this.trainSet.totalUsefulParams) {
-        this.$message({
-          message: '训练数量应小于总任务数量',
-          type: 'warning'
-        });
-        return;
-      }
-      if (this.trainSet.weight === "") {
-        this.trainSet.weight = 0;
-      }
+    postTrainSet() {
       this.$http
         .post(
           "/model/train/",
@@ -317,17 +312,47 @@ export default Vue.extend({
         )
         .then((response) => {
           if (response.data.code === 200) {
-            this.$message({
-              message: '模型训练成功！',
-              type: 'success'
-            });
-            this.getDataSets();
-            this.hideTrainModalOperationVisible();
+            return 200;
           }
         })
         .catch((error) => {
           console.log(error);
         });
+      return 500;
+    },
+    async onSaveTrainModalOperationVisible() {
+      if (this.trainSet.param > this.trainSet.totalUsefulParams) {
+        this.$message({
+          message: '训练数量应小于总任务数量',
+          type: 'warning'
+        });
+        return;
+      }
+      if (this.trainSet.weight === "") {
+        this.trainSet.weight = 0;
+      }
+      var code = this.postTrainSet();
+      this.hideTrainModalOperationVisible();
+      if (code = 200) {
+        this.$message({
+          message: '模型训练成功！',
+          type: 'success'
+        });
+        this.getDataSets();
+        location.reload();
+      } else {
+        code = this.postTrainSet();
+        if (code == 200) {
+          this.$message({
+            message: '模型训练成功！',
+            type: 'success'
+          });
+          this.getDataSets();
+          location.reload();
+        } else {
+          this.$message.error('模型训练失败！');
+        }
+      }
     },
     // async getData() {
     //   const dataset_data = (await getDatasetList(this.filterData)).data;
