@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <el-container direction="vertical">
     <h2 style="margin-bottom: 10px">任务大厅</h2>
     <el-row>
       <el-col :span="2">
         <v-chip label> 任务状态: </v-chip>
+        <!-- <el-tag>任务状态:</el-tag> -->
       </el-col>
-      <el-col>
+      <el-col :span="24">
         <el-tabs v-model="filterData.doneState" @tab-click="onFilterDataChange">
           <el-tab-pane label="全部" name="-1" />
           <el-tab-pane label="未完成" name="0" />
@@ -37,6 +38,7 @@
             v-model="filterData.labelPerson"
             filterable
             placeholder="请选择标注人"
+            clearable
             @input="onFilterDataChange"
           >
             <el-option
@@ -62,6 +64,7 @@
             v-model="filterData.templateCategory"
             filterable
             placeholder="请选择模板"
+            clearable
             @change="onFilterDataChange"
           >
             <el-option
@@ -207,7 +210,7 @@
       </el-pagination>
     </el-row>
     <!-- <MissionAnnotate :dialogVisible="missionAnnotateVisiable" /> -->
-  </div>
+  </el-container>
 </template>
 
 <script lang="ts">
