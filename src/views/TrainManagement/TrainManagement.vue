@@ -58,9 +58,8 @@
         </el-table-column>
         <el-table-column label="操作" width="140">
           <template slot-scope="scope">
-            <el-button type="primary" disabled v-if="scope.row.state === datasetStatus.TRAINING">训 练
-            </el-button>
-            <el-button @click="handleTrainModalOperationVisible(scope.row)" type="primary" v-else>训 练
+            <el-button type="primary" :disabled="scope.row.state == '1'"
+              @click="handleTrainModalOperationVisible(scope.row)">训练
             </el-button>
           </template>
         </el-table-column>
@@ -155,7 +154,7 @@ export default Vue.extend({
         }
       ],
       jsonData: {
-        datasets: [] as Dataset[],
+        datasets: [],
         templateList: [],
       },
       operation: {
@@ -312,15 +311,19 @@ export default Vue.extend({
         )
         .then((response) => {
           if (response.data.code === 200) {
-            return 200;
+            this.$message({
+              message: '训练已完成！',
+              type: 'success'
+            });
+            this.getDataSets();
           }
         })
         .catch((error) => {
           console.log(error);
+          this.postTrainSet();
         });
-      return 500;
     },
-    async onSaveTrainModalOperationVisible() {
+    onSaveTrainModalOperationVisible() {
       if (this.trainSet.param > this.trainSet.totalUsefulParams) {
         this.$message({
           message: '训练数量应小于总任务数量',
@@ -331,28 +334,30 @@ export default Vue.extend({
       if (this.trainSet.weight === "") {
         this.trainSet.weight = 0;
       }
+      this.postTrainSet();
       this.hideTrainModalOperationVisible();
-      var code = this.postTrainSet();
-      if (code == 200) {
-        this.$message({
-          message: '模型训练成功！',
-          type: 'success'
-        });
-        this.getDataSets();
-        location.reload();
-      } else {
-        code = this.postTrainSet();
-        if (code == 200) {
-          this.$message({
-            message: '模型训练成功！',
-            type: 'success'
-          });
-          this.getDataSets();
-          location.reload();
-        } else {
-          this.$message.error('模型训练失败！');
-        }
-      }
+      var delayInMilliseconds = 1000; //等待1秒
+      setTimeout(this.getDataSets, delayInMilliseconds);
+      // if (code == 200) {
+      //   this.$message({
+      //     message: '模型训练成功！',
+      //     type: 'success'
+      //   });
+      //   this.getDataSets();
+      //   location.reload();
+      // } else {
+      //   code = this.postTrainSet();
+      //   if (code == 200) {
+      //     this.$message({
+      //       message: '模型训练成功！',
+      //       type: 'success'
+      //     });
+      //     this.getDataSets();
+      //     location.reload();
+      //   } else {
+      //     this.$message.error('模型训练失败！');
+      //   }
+      // }
     },
     // async getData() {
     //   const dataset_data = (await getDatasetList(this.filterData)).data;
