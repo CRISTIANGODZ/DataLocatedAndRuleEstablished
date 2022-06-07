@@ -18,6 +18,7 @@
         :label-position="labelPosition"
         label-width="100px"
         :model="formLabelAlign"
+        :rules="rules"
       >
         <el-form-item label="用户 ucount" v-if="!isAdd">
           <el-input disabled v-model="userData.ucount"></el-input>
@@ -94,12 +95,13 @@
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
-        <el-form-item label="手机号码" v-if="!isEdit">
+        <el-form-item label="手机号码" v-if="!isEdit" prop="phone">
           <el-input
             v-model="userData.phone"
             :disabled="!isCheckOrDelete"
             type="tel"
             placeholder="请输入手机号码"
+
           ></el-input>
         </el-form-item>
         <el-form-item label="地址" v-if="!isEdit">
@@ -187,6 +189,16 @@ export default {
       },
       labelPosition: "left",
       roles: [] as Array<RoleInfo>,
+      rules: {
+        phone: [
+          {
+            required: true,
+            pattern: /^1[34578]\d{9}$/, //可以写正则表达式呦呦呦
+            message: "目前只支持中国大陆的手机号码",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   updated() {},
