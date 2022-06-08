@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 style="margin-bottom: 20px">标签管理</h2>
+    <h2 style="margin-bottom: 20px">模板管理</h2>
     <v-row>
       <v-btn color="primary ma-1" @click="add_new_info"> 新增模版 </v-btn>
     </v-row>

@@ -18,6 +18,7 @@
         :label-position="labelPosition"
         label-width="100px"
         :model="formLabelAlign"
+        :rules="rules"
       >
         <el-form-item label="用户 ucount" v-if="!isAdd">
           <el-input disabled v-model="userData.ucount"></el-input>
@@ -25,11 +26,11 @@
         <el-form-item label="用户昵称">
           <el-input
             v-model="userData.username"
-            :disabled="!isCheckOrDelete"
+            :disabled="!isCheckOrDelete || isEdit"
             placeholder="请输入用户名"
           ></el-input>
         </el-form-item>
-        <el-form-item label="头像">
+        <el-form-item label="头像" v-if="!isEdit">
           <el-upload
             class="avatar-uploader"
             :disabled="!isCheckOrDelete"
@@ -51,7 +52,7 @@
 
         <el-form-item label="用户角色">
           <el-select
-            v-model="userData.roleId"
+            v-model="userData.userRoleId"
             filterable
             reserve-keyword
             :disabled="!isCheckOrDelete"
@@ -77,7 +78,8 @@
             </el-pagination
           ></el-select>
         </el-form-item>
-        <el-form-item label="邮箱">
+
+        <el-form-item label="邮箱" v-if="!isEdit">
           <el-input
             v-model="userData.email"
             type="email"
@@ -85,7 +87,7 @@
             :disabled="!isCheckOrDelete"
           ></el-input>
         </el-form-item>
-        <el-form-item label="密码">
+        <el-form-item label="密码" v-if="!isEdit">
           <el-input
             v-model="userData.password"
             :disabled="!isCheckOrDelete"
@@ -93,15 +95,16 @@
             placeholder="请输入密码"
           ></el-input>
         </el-form-item>
-        <el-form-item label="手机号码">
+        <el-form-item label="手机号码" v-if="!isEdit" prop="phone">
           <el-input
             v-model="userData.phone"
             :disabled="!isCheckOrDelete"
             type="tel"
             placeholder="请输入手机号码"
+
           ></el-input>
         </el-form-item>
-        <el-form-item label="地址">
+        <el-form-item label="地址" v-if="!isEdit">
           <el-input
             v-model="userData.address"
             :disabled="!isCheckOrDelete"
@@ -109,7 +112,7 @@
             placeholder="请输入地址"
           ></el-input>
         </el-form-item>
-        <el-form-item label="个人简介">
+        <el-form-item label="个人简介" v-if="!isEdit">
           <el-input
             v-model="userData.description"
             :disabled="!isCheckOrDelete"
@@ -186,6 +189,16 @@ export default {
       },
       labelPosition: "left",
       roles: [] as Array<RoleInfo>,
+      rules: {
+        phone: [
+          {
+            required: true,
+            pattern: /^1[34578]\d{9}$/, //可以写正则表达式呦呦呦
+            message: "目前只支持中国大陆的手机号码",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   updated() {},

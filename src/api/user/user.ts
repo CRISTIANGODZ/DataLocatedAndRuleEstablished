@@ -29,6 +29,7 @@ function updateUserInfo(
   console.log("updateUserInfo:", updateUserInfo);
   return request.post("/user/updateUserInfo/", {
     ...updateUserInfo,
+    roleId: updateUserInfo.userRoleId,
   });
 }
 

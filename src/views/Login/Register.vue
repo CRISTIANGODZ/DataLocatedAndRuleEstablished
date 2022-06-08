@@ -67,6 +67,8 @@ export default Vue.extend({
           {
             required: true,
             message: "密码至少八个字符，至少一个字母和一个数字和一个特殊字符",
+            pattern:
+              /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/,
             trigger: "blur",
           },
         ],

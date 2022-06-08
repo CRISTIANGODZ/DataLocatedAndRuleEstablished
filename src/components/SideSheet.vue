@@ -44,7 +44,7 @@
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title>退出登陆</v-list-item-title>
+          <v-list-item-title>退出登录</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>

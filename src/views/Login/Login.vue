@@ -70,8 +70,15 @@ export default Vue.extend({
     vlogin(ucount: string, password: string) {
       this.$store
         .dispatch("user/login", { ucount, password } as PersonType)
-        .then(() => {
-          this.$router.push(this.main_url);
+        .then((code) => {
+          if (code === 200) {
+            this.$router.push(this.main_url);
+          } else {
+            this.$message({
+              message: "登录失败，密码错误或账号不存在 !!!",
+              type: "warning",
+            });
+          }
         });
       console.log("this.$store.state.user", this.$store.state.user);
     },
@@ -144,7 +151,10 @@ export default Vue.extend({
   // },
   computed: {
     main_url() {
-      return this.$store.state.user.userInfo.loginRoleVo.permissions[0]["fpath"]||'/main';
+      return (
+        this.$store.state.user.userInfo.loginRoleVo.permissions[0]["fpath"] ||
+        "/main"
+      );
     },
   },
 });
