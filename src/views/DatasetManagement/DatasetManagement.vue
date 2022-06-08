@@ -391,7 +391,7 @@ export default Vue.extend({
               type: "success",
               message: "删除成功",
             });
-            this.getData();
+            this.getDataSets();
             // this.getTasks();
           });
         })

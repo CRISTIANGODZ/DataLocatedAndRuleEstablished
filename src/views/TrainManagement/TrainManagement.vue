@@ -59,7 +59,7 @@
         <el-table-column label="操作" width="140">
           <template slot-scope="scope">
             <el-button type="primary" :disabled="scope.row.state == '1'"
-              @click="handleTrainModalOperationVisible(scope.row)">训练
+              @click="handleHistoricVersionOperationVisible(scope.row)">详情
             </el-button>
           </template>
         </el-table-column>
@@ -80,6 +80,39 @@
       :confirmDelete=handleConfirmDelete
       :state="operation.operationState"
     ></role-permission-modal-vue> -->
+    <el-dialog title="历史版本" :visible.sync="historicVersionVisible">
+      <el-row>
+        <el-table :data="jsonData.historicList" border highlight-current-row style="width: 100%"
+          @row-click="handleRowClick">
+          <el-table-column prop="id" label="编号" width="103"> </el-table-column>
+          <el-table-column prop="updateTime" label="上次训练时间" width="180">
+          </el-table-column>
+          <el-table-column prop="state" label="模型状态" width="140">
+            <template slot-scope="scope">
+              <el-tag :type="scope.row.state === datasetStatus.UNTRAIN ? 'success' : 'info'">
+                {{
+                    scope.row.state === datasetStatus.UNTRAIN
+                      ? datasetStatusZH.UNTRAIN
+                      : datasetStatusZH.TRAINING
+                }}</el-tag>
+            </template>
+          </el-table-column>
+          <el-table-column prop="lastWeight" label="上次训练最小置信度" width="140">
+          </el-table-column>
+          <el-table-column prop="lastNumber" label="上次训练任务数量" width="140">
+          </el-table-column>
+          <el-table-column prop="score" label="模型分数" width="140">
+          </el-table-column>
+          <el-table-column label="操作" width="140">
+            <template slot-scope="scope">
+              <el-button type="primary" :disabled="trainSet.state == '1'"
+                @click="handleTrainModalOperationVisible(scope.row)">训练
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-row>
+    </el-dialog>
     <el-dialog title="训练" :visible.sync="trainDatasetModalVisible">
       <el-row el-row type="flex" justify="between" :gutter="20">
         <el-col :span="4">
@@ -156,6 +189,7 @@ export default Vue.extend({
       jsonData: {
         datasets: [],
         templateList: [],
+        historicList: [],
       },
       operation: {
         modalVisible: false,
@@ -168,9 +202,12 @@ export default Vue.extend({
       },
       selectRole: {} as Dataset,
       trainDatasetModalVisible: false,
+      historicVersionVisible: false,
       trainSet: {
+        state: "",
         templateId: "",
         modelId: "",
+        versionId: "",
         weight: 0.0,
         totalUsefulParams: "",
         param: "",
@@ -265,13 +302,37 @@ export default Vue.extend({
       console.log(row);
       console.log(column);
     },
-    handleTrainModalOperationVisible(row) {
+    handleHistoricVersionOperationVisible(row) {
       this.trainSet.modelId = row.id;
+      this.trainSet.state = row.state;
       for (var i = 0; i < this.jsonData.templateList.length; i++) {
         if (this.jsonData.templateList[i].title === row.templateTitle) {
           this.trainSet.templateId = this.jsonData.templateList[i].id;
         }
       }
+      this.$http
+        .get(
+          "/model/modelHistory/" +
+          this.trainSet.modelId
+        )
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.jsonData.historicList = response.data.data;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.historicVersionVisible = true;
+    },
+    hidehistoricVersionOperationVisible() {
+      this.historicVersionVisible = false;
+    },
+    handleTrainModalOperationVisible(row) {
+      this.trainSet.weight = 0.0;
+      this.trainSet.totalUsefulParams = 0;
+      this.trainSet.param = 0;
+      this.trainSet.versionId = row.id;
       this.getTrainParam();
       this.trainDatasetModalVisible = true;
     },
@@ -336,37 +397,10 @@ export default Vue.extend({
       }
       this.postTrainSet();
       this.hideTrainModalOperationVisible();
+      this.hidehistoricVersionOperationVisible();
       var delayInMilliseconds = 1000; //等待1秒
       setTimeout(this.getDataSets, delayInMilliseconds);
-      // if (code == 200) {
-      //   this.$message({
-      //     message: '模型训练成功！',
-      //     type: 'success'
-      //   });
-      //   this.getDataSets();
-      //   location.reload();
-      // } else {
-      //   code = this.postTrainSet();
-      //   if (code == 200) {
-      //     this.$message({
-      //       message: '模型训练成功！',
-      //       type: 'success'
-      //     });
-      //     this.getDataSets();
-      //     location.reload();
-      //   } else {
-      //     this.$message.error('模型训练失败！');
-      //   }
-      // }
     },
-    // async getData() {
-    //   const dataset_data = (await getDatasetList(this.filterData)).data;
-    //   console.log("dataset_data: ", dataset_data);
-    //   if (dataset_data.code === 200) {
-    //     this.jsonData.datasets = dataset_data.data.datasets;
-    //     this.filterData.pagination.total = dataset_data.data.pagination.total;
-    //   }
-    // },
   },
   mounted() {
     this.getDataSets();
