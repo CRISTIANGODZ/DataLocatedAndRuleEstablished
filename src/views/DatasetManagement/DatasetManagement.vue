@@ -102,7 +102,7 @@
       </el-row> -->
       <el-row>
         <el-table :data="jsonData.textlist" border highlight-current-row style="width: 100%">
-          <el-table-column prop="id" width="100" label="编号"> </el-table-column>
+          <el-table-column type="index" width="100" label="编号"> </el-table-column>
           <el-table-column prop="title" label="文本名称" width="300"></el-table-column>
           <el-table-column prop="content" label="文本内容">
             <template slot-scope="scope">
