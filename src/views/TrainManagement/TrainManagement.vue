@@ -1,16 +1,16 @@
 <template>
   <el-container direction="vertical">
-    <h2>训练管理</h2>
+    <h2>模型管理</h2>
     <!-- <el-header></el-header> -->
     <div v-if="showDetails">
       <el-row>
         <el-button type="primary" icon="el-icon-arrow-left" @click="returnList">返回</el-button>
       </el-row>
       <el-row>
-        <el-table :data="jsonData.historicList" border highlight-current-row style="width: 100%" empty-text="暂无数据"
-          @row-click="handleRowClick">
-          <el-table-column type="index" width="50"></el-table-column>
-          <el-table-column prop="updateTime" label="上次训练时间" width="180">
+        <el-table :data="jsonData.historicList" border highlight-current-row :style="tableWidth(65.01)"
+          empty-text="暂无数据" @row-click="handleRowClick">
+          <el-table-column type="index" :width="remSize(7)"></el-table-column>
+          <el-table-column prop="updateTime" label="上次训练时间" :width="remSize(10)">
             <template slot-scope="scope">
               <p>
                 {{
@@ -20,7 +20,7 @@
                 }}</p>
             </template>
           </el-table-column>
-          <el-table-column prop="state" label="模型状态" width="140">
+          <el-table-column prop="state" label="模型状态" :width="remSize(8)">
             <template slot-scope="scope">
               <el-tag :type="scope.row.state === datasetStatus.UNTRAIN ? 'success' : 'info'">
                 {{
@@ -30,16 +30,24 @@
                 }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="useWeight" label="上次训练最小置信度" width="180">
+          <el-table-column prop="useWeight" label="上次训练最小置信度" :width="remSize(8)">
           </el-table-column>
-          <el-table-column prop="useBatch" label="上次训练任务数量" width="180">
+          <el-table-column prop="useBatch" label="上次训练任务数量" :width="remSize(8)">
           </el-table-column>
-          <el-table-column label="模型分数" width="140">
+          <el-table-column label="模型分数" :width="remSize(8)">
             <template slot-scope="scope">
               <p v-text="percentage(scope.row)"></p>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="200">
+          <el-table-column prop="preModel" label="选用模型" :width="remSize(8)">
+            <template slot-scope="scope">
+              <el-button :type="scope.row.preModel === 2 ? 'success' : scope.row.preModel === 1 ? 'info' : ''"
+                style="width:120px" :disabled="scope.row.state == '1'" @click="setPredictiveModel(scope.row)"
+                v-text="scope.row.preModel === 0 ? '设为预测模型' : scope.row.preModel === 2 ? '正在运行' : '正在加载模型'">
+              </el-button>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" :width="remSize(8)">
             <template slot-scope="scope">
               <el-button type="primary" :disabled="scope.row.state == '1'"
                 @click="handleTrainModalOperationVisible(scope.row)">训练
@@ -91,7 +99,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-table :data="jsonData.datasets" border highlight-current-row empty-text="暂无" :style="tableWidth(72)"
+        <el-table :data="jsonData.datasets" border highlight-current-row empty-text="暂无" :style="tableWidth(72.1)"
           @row-click="handleRowClick">
           <el-table-column type="index" label="编号" :width="remSize(7)"> </el-table-column>
           <el-table-column prop="title" label="模型名称" :width="remSize(10)"></el-table-column>
@@ -241,6 +249,7 @@ export default Vue.extend({
         templateId: "",
         modelId: "",
         modelHistoryId: "",
+        preModelId: "",
         weight: 0.0,
         totalUsefulParams: "",
         param: "",
@@ -410,7 +419,21 @@ export default Vue.extend({
         )
         .then((response) => {
           if (response.data.code === 200) {
-            this.jsonData.historicList = response.data.data.modelHistoryList;
+            var index = -1;
+            let list = response.data.data.modelHistoryList
+            for (var i in list) {
+              if (list[i].state === 1) {
+                index = i;
+              }
+              if (list[i].preModel !== 0) {
+                this.trainSet.preModelId = list[i].id;
+              }
+            }
+            for (; index > 0; index--) {
+              [list[index], list[index - 1]] = [list[index - 1], list[index]];
+            }
+            index = -1;
+            this.jsonData.historicList = list;
             this.filterText.pagination.total = response.data.data.modelHistoryTotal;
           }
         })
@@ -453,10 +476,15 @@ export default Vue.extend({
               message: '训练已完成！',
               type: 'success'
             });
-            this.getDataSets();
-            this.getHistoricVersions();
-            return 1;
+          } else if (response.data.code === 201) {
+            this.$message({
+              message: '模型训练失败',
+              type: 'error'
+            });
           }
+          this.getDataSets();
+          this.getHistoricVersions();
+          return 1;
         })
         .catch((error) => {
           console.log(error);
@@ -497,17 +525,48 @@ export default Vue.extend({
         this.postTrainSet();
       }
       this.hideTrainModalOperationVisible();
-      var delayInMilliseconds = 800; //等待1秒
+      var delayInMilliseconds = 1; //等待700毫秒
       setTimeout(this.getHistoricVersions, delayInMilliseconds);
     },
+    setPredictiveModel(row) {
+      if (row.preModel === 1) {
+        return;
+      }
+      this.$http
+        .get(
+          "/model/setPredictModel/" +
+          this.trainSet.preModelId + "/" +
+          row.id
+        )
+        .then((response) => {
+          if (response.data.code === 200) {
+            this.$message({
+              message: '模型更改成功！',
+              type: 'success'
+            });
+          } else {
+            this.$message({
+              message: '模型更改失败！',
+              type: 'error'
+            });
+          }
+          this.getHistoricVersions();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      this.getHistoricVersions();
+      // var delayInMilliseconds = 700; //等待700毫秒
+      // setTimeout(this.getHistoricVersions, delayInMilliseconds);
+    },
     percentage(row) {
-      var i = row.score * 100;
-      return Math.round(i);
+      var i = row.score;
+      return Math.round(i * 100) / 100;
     },
     remSize(size) {
       //获取设备宽度
       var deviceWidth = document.documentElement.clientWidth || window.innerWidth;
-      return Math.round(deviceWidth * size / 100) + "px";
+      return Math.floor(deviceWidth * size / 100) + "px";
     },
     tableWidth(size) {
       var width = this.remSize(size);

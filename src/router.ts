@@ -113,20 +113,26 @@ export default new Router({
           path: "/modelManagement",
           name: "modelManagement",
           component: () =>
-            import("@/views/ModelManagement/ModelManagement.vue"),
+            import("@/views/TrainManagement/TrainManagement.vue"),
         },
+        // {
+        //   path: "/modelManagement",
+        //   name: "modelManagement",
+        //   component: () =>
+        //     import("@/views/ModelManagement/ModelManagement.vue"),
+        // },
         {
           path: "/datasetManagement",
           name: "datasetManagement",
           component: () =>
             import("@/views/DatasetManagement/DatasetManagement.vue"),
         },
-        {
-          path: "/trainManagement",
-          name: "trainManagement",
-          component: () =>
-            import("@/views/TrainManagement/TrainManagement.vue"),
-        },
+        // {
+        //   path: "/trainManagement",
+        //   name: "trainManagement",
+        //   component: () =>
+        //     import("@/views/TrainManagement/TrainManagement.vue"),
+        // },
       ],
     },
     // {
