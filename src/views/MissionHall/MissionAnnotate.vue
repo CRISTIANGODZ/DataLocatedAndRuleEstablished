@@ -4,27 +4,17 @@
       <el-page-header @back="goBack" content="NLP 标注"> </el-page-header>
     </v-row>
     <v-row v-if="!(jsonData.task.doneState === 1)" style="margin-top: 40px">
-      <v-btn
-        @click="predictLabel"
-        v-if="!!!jsonData.task.preLabel"
-        color="info ma-1"
-        id="predictLabelBtn"
-      >
+      <v-btn @click="predictLabel" v-if="!!!jsonData.task.preLabel" color="info ma-1" id="predictLabelBtn">
         预打标
       </v-btn>
       <v-btn @click="reset" color="primary ma-1"> 重置所有标注 </v-btn>
-      <v-btn
-        class="ma-1"
-        :loading="complete_loading"
-        color="success"
-        @click="set_complete"
-      >
+      <v-btn class="ma-1" :loading="complete_loading" color="success" @click="set_complete">
         标记为已完成
         <template v-slot:loader>
           <span>标记中...</span>
         </template>
-      </v-btn></v-row
-    >
+      </v-btn>
+    </v-row>
 
     <v-row no-gutters style="margin-top: 40px">
       <v-col>
@@ -39,11 +29,7 @@
           </v-card>
         </v-row>
         <v-row>
-          <div
-            class="annotator-container"
-            id="annotator-container"
-            ref="container"
-          ></div>
+          <div class="annotator-container" id="annotator-container" ref="container"></div>
         </v-row>
       </v-col>
       <v-col class="pa-2" v-if="true || annotator !== null">
@@ -58,13 +44,8 @@
         <v-card>
           <v-subheader>标签</v-subheader>
 
-          <v-chip
-            v-for="label in jsonData.annotatorData.labelCategories || []"
-            :key="'label' + label['id']"
-            class="ma-2"
-            :color="label['color']"
-            text-color="white"
-          >
+          <v-chip v-for="label in jsonData.annotatorData.labelCategories || []" :key="'label' + label['id']"
+            class="ma-2" :color="label['color']" text-color="white">
             {{ label.text }}
           </v-chip>
         </v-card>
@@ -73,11 +54,7 @@
         <v-card>
           <v-subheader>关联</v-subheader>
 
-          <v-chip
-            v-for="cc in jsonData.annotatorData.connectionCategories || []"
-            :key="'cc' + cc['id']"
-            class="ma-2"
-          >
+          <v-chip v-for="cc in jsonData.annotatorData.connectionCategories || []" :key="'cc' + cc['id']" class="ma-2">
             {{ cc.text }}
           </v-chip>
         </v-card>
@@ -89,12 +66,8 @@
           </v-card-title>
           <v-card-text>
             <v-radio-group v-model="selectedLabelCategory">
-              <v-radio
-                :key="category.id"
-                :label="category.text"
-                :value="category.id"
-                v-for="category in jsonData.annotatorData.labelCategories"
-              ></v-radio>
+              <v-radio :key="category.id" :label="category.text" :value="category.id"
+                v-for="category in jsonData.annotatorData.labelCategories"></v-radio>
             </v-radio-group>
           </v-card-text>
           <v-card-actions>
@@ -105,30 +78,19 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
-      <v-dialog
-        max-width="290"
-        persistent
-        v-model="showConnectionCategoriesDialog"
-      >
+      <v-dialog max-width="290" persistent v-model="showConnectionCategoriesDialog">
         <v-card>
           <v-card-title>
             <span class="headline">请选择分类</span>
           </v-card-title>
           <v-card-text>
             <v-radio-group v-model="selectedConnectionCategory">
-              <v-radio
-                :key="category.id"
-                :label="category.text"
-                :value="category.id"
-                v-for="category in jsonData.annotatorData.connectionCategories"
-              ></v-radio>
+              <v-radio :key="category.id" :label="category.text" :value="category.id"
+                v-for="category in jsonData.annotatorData.connectionCategories"></v-radio>
             </v-radio-group>
           </v-card-text>
           <v-card-actions>
-            <v-btn
-              @click="showConnectionCategoriesDialog = false"
-              color="primary"
-            >
+            <v-btn @click="showConnectionCategoriesDialog = false" color="primary">
               取消
             </v-btn>
             <v-btn @click="addConnection" color="primary"> 确定 </v-btn>
@@ -177,7 +139,7 @@ export default {
       connectionCategories: [],
       templateTitle: "",
       taskId: 0,
-      modeld: 0,
+      // modeld: 0,
       jsonData: {
         template: {
           id: 0,
@@ -505,7 +467,7 @@ export default {
         if (data.code === 200) {
           this.complete_loading = false;
           this.$success("保存成功");
-          this.$router.push("/").catch((_) => {});
+          this.$router.push("/").catch((_) => { });
         } else {
           this.$warning(data.msg);
           this.complete_loading = false;
@@ -533,11 +495,11 @@ export default {
       // this.done_state = this.$route.query.done_state;
       // this.doneState = this.$route.query.done_state;
     },
-    getTaskInfo() {},
-    getLabels() {},
-    getConnections() {},
-    getLabelCategories() {},
-    getConnectionCategories() {},
+    getTaskInfo() { },
+    getLabels() { },
+    getConnections() { },
+    getLabelCategories() { },
+    getConnectionCategories() { },
     getTask: function () {
       this.$http.get("/task/getTask/" + this.taskId + "/").then(({ data }) => {
         if (data.code === 200) {
@@ -578,9 +540,11 @@ export default {
         customClass: "annotate-y-loading",
         target: "#predictLabelBtn",
       });
-
       this.$http
-        .get("/model/preLabel/" + this.modeld + "/" + this.taskId)
+        .get("/model/preLabel/" +
+          // this.modeld + "/" +
+          this.taskId
+        )
         .then(({ data }) => {
           if (data.code === 200) {
             console.log("model data: ", data);
@@ -589,7 +553,9 @@ export default {
             this.annotator.remove();
             this.getTask();
           } else {
-            this.$warning(data.msg);
+            this.$warning("未选择预测模型或模型正在启动中");
+            loading.close();
+            this.annotator.remove();
           }
         });
     },
@@ -622,7 +588,7 @@ export default {
     this.getTask();
   },
 
-  mounted(): void {},
+  mounted(): void { },
 };
 </script>
 <style scoped>
@@ -633,18 +599,22 @@ export default {
   overflow: hidden;
   /* padding: 0 !important; */
 }
+
 .container-wrapper {
   border-right: solid 2px black;
 }
+
 .code-container-wrapper {
   border-left: solid 2px black;
 }
+
 .annotator-container,
 .code-container {
   padding-top: 10px;
   /* overflow: scroll; */
   /* height: calc(100vh - 64px); */
 }
+
 code {
   /* max-width: calc(45vw - 16px); */
   background: rgb(32, 32, 32) !important;
@@ -655,16 +625,19 @@ code {
 }
 </style>
 <style>
-.annotator-container > svg {
+.annotator-container>svg {
   width: 45vw;
 }
+
 .poplar-annotation-label {
   font-size: 14px;
 }
+
 .poplar-annotation-connection {
   font-family: "PingFang SC", serif;
   font-size: 12px;
 }
+
 #predictLabelBtn {
   display: flex;
   justify-items: center;
