@@ -7,7 +7,7 @@
         <el-button type="primary" @click="showAddDatasetModal">添加数据集</el-button>
       </el-col>
     </el-row>
-    <el-row el-row type="flex" justify="between" :gutter="20">
+    <el-row el-row type="flex" justify="between" :gutter="10">
       <el-col :span="4">
         <el-input v-model="filterData.keyWord" placeholder="输入数据集名称搜索" @input="onFilterDataChange" />
       </el-col>
@@ -24,9 +24,16 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <div class="grid-content bg-purple">
-          <el-button type="primary" @click="clearFilterData">清空所有搜索项</el-button>
-        </div>
+
+        <el-date-picker v-model="filterData.startDate" align="right" type="date" placeholder="选择开始日期"
+          format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="onFilterDataChange" :picker-options="pickerOptions">
+        </el-date-picker>
+
+      </el-col>
+      <el-col :span="4">
+
+        <el-button type="primary" @click="clearFilterData">清空所有搜索项</el-button>
+
       </el-col>
     </el-row>
     <el-row>
@@ -151,6 +158,7 @@ export default Vue.extend({
         keyWord: "",
         templateTitle: "",
         personName: "",
+        startDate: "",
         pagination: {
           currentIndex: 1,
           pageSize: 10,
@@ -161,6 +169,7 @@ export default Vue.extend({
         title: "",
         username: "",
         templateTitle: "",
+        uploadTime: "",
       },
       filterText: {
         datasetId: "",
@@ -169,6 +178,35 @@ export default Vue.extend({
           pageSize: 10,
           total: "",
         },
+      },
+      pickerOptions: {
+        disabledDate(time) {
+          return time.getTime() > Date.now();
+        },
+        shortcuts: [
+          {
+            text: "今天",
+            onClick(picker) {
+              picker.$emit("pick", new Date());
+            },
+          },
+          {
+            text: "昨天",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit("pick", date);
+            },
+          },
+          {
+            text: "一周前",
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", date);
+            },
+          },
+        ],
       },
       options: [],
       jsonData: {
@@ -231,6 +269,7 @@ export default Vue.extend({
       this.filterData.keyWord = "";
       this.filterData.templateTitle = "";
       this.filterData.personName = "";
+      this.filterData.startDate = "";
       this.filterDataVo.title = "";
       this.filterDataVo.username = "";
       this.filterDataVo.templateTitle = "";
@@ -240,6 +279,7 @@ export default Vue.extend({
       this.filterDataVo.title = this.filterData.keyWord;
       this.filterDataVo.username = this.filterData.personName;
       this.filterDataVo.templateTitle = this.filterData.templateTitle;
+      this.filterDataVo.uploadTime = this.filterData.startDate;
       this.$http
         .post(
           "/data/pageData/" +

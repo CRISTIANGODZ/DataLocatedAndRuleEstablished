@@ -546,10 +546,16 @@ export default Vue.extend({
         return;
       }
       this.$http
-        .get(
-          "/model/setPredictModel/" +
-          // this.trainSet.preModelId + "/" +
-          row.id
+        // .get(
+        //   "/model/setPredictModel/" +
+        //   // this.trainSet.preModelId + "/" +
+        //   row.id
+        // )
+        .post(
+          "/model/setPredictModel/",
+          {
+            id: row.id
+          }
         )
         .then((response) => {
           if (response.data.code === 200) {

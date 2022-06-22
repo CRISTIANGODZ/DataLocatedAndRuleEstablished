@@ -429,7 +429,11 @@ export default {
     },
     set_complete: function () {
       this.$http
-        .get("/task/saveTaskById/" + this.taskId + "/")
+        // .get("/task/saveTaskById/" + this.taskId + "/")
+        .post("/task/saveTaskById/",
+          {
+            id: this.taskId
+          })
         .then(({ data }) => {
           if (data.code === 200) {
             this.complete_loading = false;
@@ -541,9 +545,12 @@ export default {
         target: "#predictLabelBtn",
       });
       this.$http
-        .get("/model/preLabel/" +
-          // this.modeld + "/" +
-          this.taskId
+        // .get("/model/preLabel/" +
+        //   // this.modeld + "/" +
+        //   this.taskId
+        // )
+        .post("/model/preLabel/",
+          { id: this.taskId }
         )
         .then(({ data }) => {
           if (data.code === 200) {
