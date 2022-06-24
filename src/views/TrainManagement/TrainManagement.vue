@@ -9,8 +9,8 @@
       <el-row>
         <el-table :data="jsonData.historicList" border highlight-current-row :style="tableWidth(76.01)"
           empty-text="暂无数据" @row-click="handleRowClick">
-          <el-table-column type="index" :width="remSize(6)"></el-table-column>
-          <el-table-column prop="updateTime" label="上次训练时间" :width="remSize(8)">
+          <el-table-column type="index" :width="remSize(4)"></el-table-column>
+          <el-table-column prop="updateTime" label="上次训练时间" :width="remSize(9)">
             <template slot-scope="scope">
               <p>
                 {{
@@ -31,6 +31,9 @@
             </template>
           </el-table-column>
           <el-table-column prop="useWeight" label="上次训练最小置信度" :width="remSize(8)">
+            <template slot-scope="scope">
+              <p v-text="scope.row.useWeight * 100 + '%'"></p>
+            </template>
           </el-table-column>
           <el-table-column prop="useBatch" label="上次训练任务数量" :width="remSize(8)">
           </el-table-column>
@@ -52,7 +55,7 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="操作" :width="remSize(12)">
+          <el-table-column label="操作" :width="remSize(13)">
             <template slot-scope="scope">
               <el-button type="primary" :disabled="scope.row.state == '1'"
                 @click="handleTrainModalOperationVisible(scope.row)">训练
@@ -479,7 +482,7 @@ export default Vue.extend({
           {
             templateId: this.trainSet.templateId,
             modelId: this.trainSet.modelId,
-            weight: this.trainSet.weight,
+            weight: this.trainSet.weight / 100.0,
             batchSize: this.trainSet.param,
             modelHistoryId: this.trainSet.modelHistoryId,
           }
@@ -496,7 +499,7 @@ export default Vue.extend({
               type: 'error'
             });
           }
-          //this.getDataSets();
+          this.getDataSets();
           this.getHistoricVersions();
           return 1;
         })
