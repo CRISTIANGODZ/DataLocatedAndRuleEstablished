@@ -7,10 +7,10 @@
         <el-button type="primary" icon="el-icon-arrow-left" @click="returnList">返回</el-button>
       </el-row>
       <el-row>
-        <el-table :data="jsonData.historicList" border highlight-current-row :style="tableWidth(75.01)"
+        <el-table :data="jsonData.historicList" border highlight-current-row :style="tableWidth(76.01)"
           empty-text="暂无数据" @row-click="handleRowClick">
-          <el-table-column type="index" :width="remSize(7)"></el-table-column>
-          <el-table-column prop="updateTime" label="上次训练时间" :width="remSize(10)">
+          <el-table-column type="index" :width="remSize(6)"></el-table-column>
+          <el-table-column prop="updateTime" label="上次训练时间" :width="remSize(8)">
             <template slot-scope="scope">
               <p>
                 {{
@@ -20,7 +20,7 @@
                 }}</p>
             </template>
           </el-table-column>
-          <el-table-column prop="state" label="模型状态" :width="remSize(9)">
+          <el-table-column prop="state" label="模型状态" :width="remSize(8)">
             <template slot-scope="scope">
               <el-tag :type="scope.row.state === datasetStatus.UNTRAIN ? 'success' : 'info'">
                 {{
@@ -30,20 +30,25 @@
                 }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="useWeight" label="上次训练最小置信度" :width="remSize(9)">
+          <el-table-column prop="useWeight" label="上次训练最小置信度" :width="remSize(8)">
           </el-table-column>
-          <el-table-column prop="useBatch" label="上次训练任务数量" :width="remSize(9)">
+          <el-table-column prop="useBatch" label="上次训练任务数量" :width="remSize(8)">
           </el-table-column>
-          <el-table-column label="模型分数" :width="remSize(9)">
+          <el-table-column label="准确率" :width="remSize(8)">
             <template slot-scope="scope">
-              <p v-text="percentage(scope.row)"></p>
+              <p v-text="percentage(scope.row.acc, 10000) + '%'"></p>
+            </template>
+          </el-table-column>
+          <el-table-column label="F1-score" :width="remSize(8)">
+            <template slot-scope="scope">
+              <p v-text="percentage(scope.row.score, 100)"></p>
             </template>
           </el-table-column>
           <el-table-column prop="preModel" label="选用模型" :width="remSize(10)">
             <template slot-scope="scope">
               <el-button :type="scope.row.preModel === 2 ? 'success' : scope.row.preModel === 1 ? 'info' : ''"
                 style="width:120px" :disabled="scope.row.state == '1'" @click="setPredictiveModel(scope.row)"
-                v-text="scope.row.preModel === 0 ? '设为预测模型' : scope.row.preModel === 2 ? '正在运行' : '正在加载模型'">
+                v-text="scope.row.preModel === 0 ? '设为预测模型' : scope.row.preModel === 2 ? '预测模型' : '正在加载模型'">
               </el-button>
             </template>
           </el-table-column>
@@ -153,17 +158,21 @@
           <p>最小置信度</p>
         </el-col>
         <el-col :span="10">
-          <el-input v-model="trainSet.weight" placeholder="置信度在0到1之间,默认为0" @input="onTrainWeightChange" />
+          <el-select v-model="trainSet.weight" filterable allow-create clearable default-first-option
+            placeholder="置信度在 0 到 100 之间" style="width:250px" @change="onTrainWeightChange">
+            <el-option v-for="item in confidence" :key="item" :label="item" :value="item">
+            </el-option>
+          </el-select>
         </el-col>
       </el-row>
       <nobr>置信度大于 </nobr>
-      <nobr class="el-data">{{ trainSet.weight }}</nobr>
+      <nobr class="el-data">{{ String(trainSet.weight) == "" ? 0 : trainSet.weight }} %</nobr>
       <nobr> 的任务有 </nobr>
       <nobr class="el-data">{{ trainSet.totalUsefulParams }}</nobr>
       <nobr> 条</nobr>
       <el-row el-row type="flex" justify="between" :gutter="20">
         <el-col :span="4">
-          <p>训练条数</p>
+          <p>训练条数 (不能小于100条)</p>
         </el-col>
         <el-col :span="10">
           <el-input v-model="trainSet.param" />
@@ -227,6 +236,7 @@ export default Vue.extend({
           title: "训练中"
         }
       ],
+      confidence: [0, 20, 50, 70, 90],
       jsonData: {
         datasets: [],
         templateList: [],
@@ -371,7 +381,7 @@ export default Vue.extend({
     handleTrainModalOperationVisible(row) {
       this.trainSet.weight = 0.0;
       this.trainSet.totalUsefulParams = 0;
-      this.trainSet.param = 10;
+      this.trainSet.param = 100;
       this.trainSet.modelHistoryId = row.id;
       this.getTrainParam();
       this.trainDatasetModalVisible = true;
@@ -410,6 +420,10 @@ export default Vue.extend({
     onTrainWeightChange() {
       this.getTrainParam();
     },
+    trainSetWeightFilterChange(column) {
+      this.trainSet.weight = column;
+      this.onTrainWeightChange();
+    },
     getHistoricVersions() {
       this.$http
         .get(
@@ -445,7 +459,7 @@ export default Vue.extend({
       this.$http
         .get(
           "/model/trainParam/" +
-          this.trainSet.weight +
+          this.trainSet.weight / 100.0 +
           "/" +
           this.trainSet.templateId
         )
@@ -501,13 +515,13 @@ export default Vue.extend({
       }
       if (this.trainSet.param > this.trainSet.totalUsefulParams) {
         this.$message({
-          message: '训练样本数量应小于总任务数量',
+          message: '没有这么多数据！训练数量应小于总任务数量',
           type: 'warning'
         });
         return;
-      } else if (this.trainSet.param < 10) {
+      } else if (this.trainSet.param < 100) {
         this.$message({
-          message: '训练样本数量不能小于10',
+          message: '训练样本数量不能小于100',
           type: 'warning'
         });
         return;
@@ -579,9 +593,8 @@ export default Vue.extend({
       var delayInMilliseconds = 700; //等待700毫秒
       setTimeout(this.getHistoricVersions, delayInMilliseconds);
     },
-    percentage(row) {
-      var i = row.score;
-      return Math.round(i * 100) / 100;
+    percentage(num, multiple) {
+      return Math.round(num * multiple) / 100;
     },
     remSize(size) {
       //获取设备宽度

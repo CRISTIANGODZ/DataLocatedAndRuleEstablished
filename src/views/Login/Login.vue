@@ -1,31 +1,17 @@
 <template>
   <div class="login_container">
     <el-row type="flex" justify="center">
-      <el-form
-        :label-position="labelPosition"
-        label-width="80px"
-        :model="formLabelAlign"
-      >
+      <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
         <el-form-item label="用户名称">
-          <el-input
-            v-model="userData.ucount"
-            placeholder="请输入用户名"
-          ></el-input>
+          <el-input v-model="userData.ucount" placeholder="请输入用户名"></el-input>
         </el-form-item>
 
         <el-form-item label="密码">
-          <el-input
-            v-model="userData.password"
-            type="password"
-            placeholder="请输入密码"
-            v-on:keyup.enter="onLogin"
-          ></el-input>
+          <el-input v-model="userData.password" type="password" placeholder="请输入密码" v-on:keyup.enter="onLogin">
+          </el-input>
         </el-form-item>
         <el-form-item label="记住密码">
-          <el-checkbox
-            v-model="userData.rememberPassword"
-            @change="onRememberPasswordChange"
-          ></el-checkbox>
+          <el-checkbox v-model="userData.rememberPassword" @change="onRememberPasswordChange"></el-checkbox>
         </el-form-item>
         <!-- <el-button type="primary" @click="onLogin" style="min-width: 150px"
           >忘记密码</el-button
@@ -33,12 +19,8 @@
         <!-- <el-button type="primary" @click="onLogin" style="min-width: 150px"
           >登录</el-button
         > -->
-        <el-button
-          type="primary"
-          @click="vlogin(userData.ucount, userData.password)"
-          style="min-width: 150px"
-          >登录</el-button
-        >
+        <el-button type="primary" @click="vlogin(userData.ucount, userData.password)" style="min-width: 150px">登录
+        </el-button>
       </el-form>
     </el-row>
   </div>
@@ -73,6 +55,15 @@ export default Vue.extend({
         .then((code) => {
           if (code === 200) {
             this.$router.push(this.main_url);
+            console.log("this.$store.state.user", this.$store.state.user);
+            var info = this.$store.state.user.userInfo;
+            localStorage.setItem("token", info.token);
+            localStorage.setItem("roleId", info.userVo.userRoleId);
+            localStorage.setItem("role", info.userVo.userRole);
+            localStorage.setItem("username", info.userVo.username);
+            localStorage.setItem("ucount", info.userVo.ucount);
+            localStorage.setItem("password", info.userVo.password);
+            localStorage.setItem("headIconUrl", info.userVo.avatar);
           } else {
             this.$message({
               message: "登录失败，密码错误或账号不存在 !!!",
@@ -80,7 +71,6 @@ export default Vue.extend({
             });
           }
         });
-      console.log("this.$store.state.user", this.$store.state.user);
     },
     onRememberPasswordChange() {
       // this.userData.rememberPassword = !this.userData.rememberPassword;
@@ -97,8 +87,10 @@ export default Vue.extend({
             console.log("login data:", data);
             var token = data.data.token;
             // localStorage.setItem("token", this.username + "_" + token);
+            localStorage.clear();
             localStorage.setItem("token", token);
-            localStorage.setItem("role", data.data.userVo.userRoleId);
+            localStorage.setItem("roleId", data.data.userVo.userRoleId);
+            localStorage.setItem("role", data.data.userVo.userRole);
             localStorage.setItem("username", data.data.userVo.username);
             localStorage.setItem("ucount", data.data.userVo.ucount);
             localStorage.setItem("password", this.userData.password);
@@ -141,6 +133,7 @@ export default Vue.extend({
   },
   updated() {
     console.log("updated");
+    localStorage.clear();
   },
   // computed: {
   //   main_url(): {return this.$store.user.userInfo.loginRoleVo.permissions[0]["fpath"]},
@@ -168,6 +161,7 @@ export default Vue.extend({
   max-height: calc(100vh - 64px);
   overflow: hidden;
 }
+
 .login_container {
   min-width: 400px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;

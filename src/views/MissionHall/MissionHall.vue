@@ -15,111 +15,65 @@
       </el-col>
     </el-row>
     <el-row>
-      <el-col :span="2"> <v-chip label> 任务类别: </v-chip> </el-col>
+      <el-col :span="2">
+        <v-chip label> 任务类别: </v-chip>
+      </el-col>
       <el-col :span="24">
-        <el-tabs
-          v-model="filterData.taskCategoriesCurrent"
-          @tab-click="onFilterDataChange"
-        >
-          <el-tab-pane
-            v-for="taskCategory in jsonData.taskCategories"
-            :label="taskCategory.title"
-            :name="taskCategory.id + ''"
-            :key="taskCategory.title"
-          />
+        <el-tabs v-model="filterData.taskCategoriesCurrent" @tab-click="onFilterDataChange">
+          <el-tab-pane v-for="taskCategory in jsonData.taskCategories" :label="taskCategory.title"
+            :name="taskCategory.id + ''" :key="taskCategory.title" />
         </el-tabs>
       </el-col>
     </el-row>
     <el-row :gutter="20">
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">
-          <el-select
-            v-if="isAdmin"
-            v-model="filterData.labelPerson"
-            filterable
-            placeholder="请选择标注人"
-            clearable
-            @input="onFilterDataChange"
-          >
-            <el-option
-              v-for="person in jsonData.labelPersons"
-              :key="person.id"
-              :label="person.username"
-              :value="person.username"
-            >
+      <el-col :span="4" v-if="user.userRole !== '普通用户'">
+        <div class="grid-content bg-purple">
+          <el-select v-if="user.isAdmin" v-model="filterData.labelPerson" filterable placeholder="请选择标注人" clearable
+            @input="onFilterDataChange">
+            <el-option v-for="person in jsonData.labelPersons" :key="person.id" :label="person.username"
+              :value="person.username">
             </el-option>
-          </el-select></div
-      ></el-col>
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">
-          <el-input
-            v-model="filterData.title"
-            @input="onFilterDataChange"
-            placeholder="请输入标题内容"
-          ></el-input></div
-      ></el-col>
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">
-          <el-select
-            v-model="filterData.templateCategory"
-            filterable
-            placeholder="请选择模板"
-            clearable
-            @change="onFilterDataChange"
-          >
-            <el-option
-              v-for="category in jsonData.templatesCategories"
-              :key="category.id"
-              :label="category.title"
-              :value="category.title"
-            >
-            </el-option
-          ></el-select></div
-      ></el-col>
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">
-          <el-date-picker
-            v-model="filterData.startDate"
-            align="right"
-            type="date"
-            placeholder="选择开始日期"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            @change="onFilterDataChange"
-            :picker-options="pickerOptions"
-          >
-          </el-date-picker></div
-      ></el-col>
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">
-          <el-date-picker
-            v-model="filterData.endDate"
-            align="right"
-            type="date"
-            placeholder="选择最后日期"
-            @change="onFilterDataChange"
-            format="yyyy-MM-dd"
-            value-format="yyyy-MM-dd"
-            :picker-options="pickerOptions"
-          >
-          </el-date-picker></div
-      ></el-col>
-      <el-col :span="4"
-        ><div class="grid-content bg-purple">
-          <el-button type="primary" @click="clearFilterData"
-            >清空所有搜索项</el-button
-          >
-        </div></el-col
-      >
+          </el-select>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-input v-model="filterData.title" @input="onFilterDataChange" placeholder="请输入标题内容"></el-input>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-select v-model="filterData.templateCategory" filterable placeholder="请选择模板" clearable
+            @change="onFilterDataChange">
+            <el-option v-for="category in jsonData.templatesCategories" :key="category.id" :label="category.title"
+              :value="category.title">
+            </el-option>
+          </el-select>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-date-picker v-model="filterData.startDate" align="right" type="date" placeholder="选择开始日期"
+            format="yyyy-MM-dd" value-format="yyyy-MM-dd" @change="onFilterDataChange" :picker-options="pickerOptions">
+          </el-date-picker>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-date-picker v-model="filterData.endDate" align="right" type="date" placeholder="选择最后日期"
+            @change="onFilterDataChange" format="yyyy-MM-dd" value-format="yyyy-MM-dd" :picker-options="pickerOptions">
+          </el-date-picker>
+        </div>
+      </el-col>
+      <el-col :span="4">
+        <div class="grid-content bg-purple">
+          <el-button type="primary" @click="clearFilterData">清空所有搜索项</el-button>
+        </div>
+      </el-col>
     </el-row>
     <el-row>
-      <el-table
-        :data="jsonData.tasks"
-        style="width: 100%; margin-top: 20px; margin-bottom: 20px"
-        border
-        :default-sort="{ prop: 'date', order: 'descending' }"
-        @row-click="handleRowClick"
-      >
+      <el-table :data="jsonData.tasks" style="width: 100%; margin-top: 20px; margin-bottom: 20px" border
+        :default-sort="{ prop: 'date', order: 'descending' }" @row-click="handleRowClick">
         <el-table-column type="index" width="50"> </el-table-column>
         <el-table-column prop="title" label="标题" sortable width="180">
         </el-table-column>
@@ -133,23 +87,23 @@
         <el-table-column prop="preLabel" label="是否预打标">
           <template slot-scope="scope">
             <el-tag :type="scope.row.preLabel === 0 ? 'success' : 'info'">{{
-              scope.row.preLabel === 0 ? "否" : "是"
+                scope.row.preLabel === 0 ? "否" : "是"
             }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="weight" label="置信度">
           <template slot-scope="scope">
             <el-tag :type="scope.row.weight === 0 ? 'success' : 'info'">{{
-              scope.row.weight === 0
-                ? "---"
-                : Number(scope.row.weight * 100).toFixed(2) + "%"
+                scope.row.weight === 0
+                  ? "---"
+                  : Number(scope.row.weight * 100).toFixed(2) + "%"
             }}</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="status" label="完成状态">
           <template slot-scope="scope">
             <el-tag :type="scope.row.doneState === 0 ? 'success' : 'info'">{{
-              scope.row.doneState === 0 ? "未完成" : "已完成"
+                scope.row.doneState === 0 ? "未完成" : "已完成"
             }}</el-tag>
             <!-- <v-chip
               v-if="scope.row.doneState === 1"
@@ -173,40 +127,20 @@
         </el-table-column>
         <el-table-column label="操作" width="250">
           <template slot-scope="scope">
-            <el-button
-              size="mini"
-              v-if="scope.row.doneState === 1"
-              @click="handleTaskEditAction(scope.row)"
-              >查看</el-button
-            >
-            <el-button
-              size="mini"
-              v-if="scope.row.doneState === 0"
-              @click="handleTaskEditAction(scope.row)"
-              type="primary"
-              >编辑</el-button
-            >
-            <el-button
-              size="mini"
-              type="danger"
-              @click="handleDeleteTask(scope.row)"
-              >删除</el-button
-            >
+            <el-button size="mini" v-if="scope.row.doneState === 1" @click="handleTaskEditAction(scope.row)">查看
+            </el-button>
+            <el-button size="mini" v-if="scope.row.doneState === 0" @click="handleTaskEditAction(scope.row)"
+              type="primary">编辑</el-button>
+            <el-button size="mini" type="danger" @click="handleDeleteTask(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-row>
     <el-row>
-      <el-pagination
-        background
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="filterData.pagination.currentIndex"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="filterData.pagination.pageSize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="filterData.pagination.total"
-      >
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="filterData.pagination.currentIndex" :page-sizes="[5, 10, 15, 20]"
+        :page-size="filterData.pagination.pageSize" layout="total, sizes, prev, pager, next, jumper"
+        :total="filterData.pagination.total">
       </el-pagination>
     </el-row>
     <!-- <MissionAnnotate :dialogVisible="missionAnnotateVisiable" /> -->
@@ -237,7 +171,11 @@ export default {
           pageSize: 5,
         },
       },
-      isAdmin: false,
+      user: {
+        isAdmin: false,
+        userRole: "",
+        userName: "",
+      },
       defaultTaskCategories: [{ id: -1, title: "全部", name: "all" }],
       jsonData: {
         taskCategories: [
@@ -385,7 +323,7 @@ export default {
             taskId: row.id,
           },
         })
-        .catch((_) => {});
+        .catch((_) => { });
     },
     // 使用上面 handleCurrentChange 方法即可
     // handlePrevClick(val) {
@@ -416,12 +354,13 @@ export default {
     },
     // 获取后端数据
     getTasks() {
+      console.log(this.user);
       this.$http
         .post(
           "/task/pageTask/" +
-            this.filterData.pagination.currentIndex +
-            "/" +
-            this.filterData.pagination.pageSize,
+          this.filterData.pagination.currentIndex +
+          "/" +
+          this.filterData.pagination.pageSize,
           {
             doneState:
               this.filterData.doneState === "-1"
@@ -431,7 +370,7 @@ export default {
               this.filterData.taskCategoriesCurrent == "-1"
                 ? null
                 : this.filterData.taskCategoriesCurrent,
-            username: this.filterData.labelPerson,
+            username: this.user.userRole === "普通用户" ? this.user.userName : this.filterData.labelPerson,
             textTitle: this.filterData.title,
             templateTitle: this.filterData.templateCategory,
             fromTime: this.filterData.startDate,
@@ -478,12 +417,14 @@ export default {
           // this.getTasks()
         });
     },
-    getTaskCategories() {},
-    getTemplatesCategories() {},
-    getLabelPersons() {},
+    getTaskCategories() { },
+    getTemplatesCategories() { },
+    getLabelPersons() { },
   },
   mounted() {
-    this.isAdmin = localStorage.getItem("role") !== ROLES.USER;
+    this.user.isAdmin = localStorage.getItem("roleId") !== ROLES.USER;
+    this.user.userRole = localStorage.getItem("role");
+    this.user.userName = localStorage.getItem("username");
     this.getTasks();
   },
 };

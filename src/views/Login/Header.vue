@@ -1,13 +1,8 @@
 <template>
-  <el-row
-    type="flex"
-    justify="center"
-    direction="horizontal"
-    class="login_register_header"
-  >
+  <el-row type="flex" justify="center" direction="horizontal" class="login_register_header">
     <!-- <img src="../../assets/images/logo.png" alt=""> -->
     <!-- <el-image :src="url" fit="cover"></el-image> -->
-    <h1>NLP 标注平台</h1>
+    <h1>中文电子病历自动标注平台</h1>
   </el-row>
 </template>
 
