@@ -24,7 +24,7 @@
             <h4>标注人: {{ jsonData.user.username }}</h4>
             <h4>任务类型: {{ jsonData.taskCategory.title }}</h4>
             <h4>预打标: {{ jsonData.task.preLabel == 1 ? "是" : "否" }}</h4>
-            <h4>置信度: {{ taskWeight }}</h4>
+            <h4>权重: {{ taskWeight }}</h4>
             <h4>最后更新时间 {{ jsonData.task.updateTime }}</h4>
           </v-card>
         </v-row>

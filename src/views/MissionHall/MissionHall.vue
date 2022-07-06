@@ -91,7 +91,7 @@
             }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="weight" label="置信度">
+        <el-table-column prop="weight" label="权重">
           <template slot-scope="scope">
             <el-tag :type="scope.row.weight === 0 ? 'success' : 'info'">{{
                 scope.row.weight === 0

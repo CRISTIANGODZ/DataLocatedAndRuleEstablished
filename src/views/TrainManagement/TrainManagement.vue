@@ -30,7 +30,7 @@
                 }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="useWeight" label="上次训练最小置信度" :width="remSize(8)">
+          <el-table-column prop="useWeight" label="上次训练最小权重" :width="remSize(8)">
             <template slot-scope="scope">
               <p v-text="scope.row.useWeight * 100 + '%'"></p>
             </template>
@@ -158,24 +158,24 @@
     <el-dialog title="训练" :visible.sync="trainDatasetModalVisible">
       <el-row el-row type="flex" justify="between" :gutter="20">
         <el-col :span="4">
-          <p>最小置信度</p>
+          <p>最小权重</p>
         </el-col>
         <el-col :span="10">
           <el-select v-model="trainSet.weight" filterable allow-create clearable default-first-option
-            placeholder="置信度在 0 到 100 之间" style="width:250px" @change="onTrainWeightChange">
+            placeholder="权重在 0 到 100 之间" style="width:250px" @change="onTrainWeightChange">
             <el-option v-for="item in confidence" :key="item" :label="item" :value="item">
             </el-option>
           </el-select>
         </el-col>
       </el-row>
-      <nobr>置信度大于 </nobr>
+      <nobr>权重大于 </nobr>
       <nobr class="el-data">{{ String(trainSet.weight) == "" ? 0 : trainSet.weight }} %</nobr>
       <nobr> 的任务有 </nobr>
       <nobr class="el-data">{{ trainSet.totalUsefulParams }}</nobr>
       <nobr> 条</nobr>
       <el-row el-row type="flex" justify="between" :gutter="20">
         <el-col :span="4">
-          <p>训练条数 (不能小于100条)</p>
+          <p>训练条数 (不能小于10条)</p>
         </el-col>
         <el-col :span="10">
           <el-input v-model="trainSet.param" />
@@ -384,7 +384,7 @@ export default Vue.extend({
     handleTrainModalOperationVisible(row) {
       this.trainSet.weight = 0.0;
       this.trainSet.totalUsefulParams = 0;
-      this.trainSet.param = 100;
+      this.trainSet.param = 10;
       this.trainSet.modelHistoryId = row.id;
       this.getTrainParam();
       this.trainDatasetModalVisible = true;
@@ -464,7 +464,9 @@ export default Vue.extend({
           "/model/trainParam/" +
           this.trainSet.weight / 100.0 +
           "/" +
-          this.trainSet.templateId
+          this.trainSet.templateId +
+          "/" +
+          this.trainSet.modelHistoryId
         )
         .then((response) => {
           if (response.data.code === 200) {
@@ -509,9 +511,15 @@ export default Vue.extend({
         });
     },
     onSaveTrainModalOperationVisible() {
-      if (this.trainSet.param == 0) {
+      if (this.trainSet.param <= 0) {
         this.$message({
-          message: '训练样本数量不能为0！',
+          message: '请输入正整数！',
+          type: 'warning'
+        });
+        return;
+      } else if (this.trainSet.param <= 10) {
+        this.$message({
+          message: '训练条数不能小于10条！',
           type: 'warning'
         });
         return;
@@ -519,12 +527,6 @@ export default Vue.extend({
       if (this.trainSet.param > this.trainSet.totalUsefulParams) {
         this.$message({
           message: '没有这么多数据！训练数量应小于总任务数量',
-          type: 'warning'
-        });
-        return;
-      } else if (this.trainSet.param < 100) {
-        this.$message({
-          message: '训练样本数量不能小于100',
           type: 'warning'
         });
         return;
