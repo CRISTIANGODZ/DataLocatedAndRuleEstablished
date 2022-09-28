@@ -1,53 +1,53 @@
 <template>
   <el-container direction="vertical">
-    <h2>模型管理</h2>
+    <h2 v-text="title"></h2>
     <!-- <el-header></el-header> -->
     <div v-if="showDetails">
       <el-row>
         <el-button type="primary" icon="el-icon-arrow-left" @click="returnList">返回</el-button>
       </el-row>
       <el-row>
-        <el-table :data="jsonData.historicList" border highlight-current-row :style="tableWidth(76.01)"
+        <el-table :data="jsonData.historicList" border highlight-current-row :style="tableWidths.historicListTableStyle"
           empty-text="暂无数据" @row-click="handleRowClick">
-          <el-table-column type="index" :width="remSize(4)"></el-table-column>
-          <el-table-column prop="updateTime" label="上次训练时间" :width="remSize(9)">
+          <el-table-column type="index" :width="tableWidths.historicList.index"></el-table-column>
+          <el-table-column prop="updateTime" label="上次训练时间" :width="tableWidths.historicList.updateTime">
             <template slot-scope="scope">
               <p>
                 {{
-                    scope.row.updateTime == null
-                      ? "暂无"
-                      : scope.row.updateTime
+                scope.row.updateTime == null
+                ? "暂无"
+                : scope.row.updateTime
                 }}</p>
             </template>
           </el-table-column>
-          <el-table-column prop="state" label="模型状态" :width="remSize(8)">
+          <el-table-column prop="state" label="模型状态" :width="tableWidths.historicList.state">
             <template slot-scope="scope">
               <el-tag :type="scope.row.state === datasetStatus.UNTRAIN ? 'success' : 'info'">
                 {{
-                    scope.row.state === datasetStatus.UNTRAIN
-                      ? datasetStatusZH.UNTRAIN
-                      : datasetStatusZH.TRAINING
+                scope.row.state === datasetStatus.UNTRAIN
+                ? datasetStatusZH.UNTRAIN
+                : datasetStatusZH.TRAINING
                 }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="useWeight" label="上次训练最小权重" :width="remSize(8)">
+          <el-table-column prop="useWeight" label="上次训练最小权重" :width="tableWidths.historicList.useWeight">
             <template slot-scope="scope">
               <p v-text="scope.row.useWeight * 100 + '%'"></p>
             </template>
           </el-table-column>
-          <el-table-column prop="useBatch" label="上次训练任务数量" :width="remSize(8)">
+          <el-table-column prop="useBatch" label="上次训练任务数量" :width="tableWidths.historicList.useBatch">
           </el-table-column>
-          <el-table-column label="准确率" :width="remSize(8)">
+          <el-table-column label="准确率" :width="tableWidths.historicList.accuracy">
             <template slot-scope="scope">
               <p v-text="percentage(scope.row.acc, 10000) + '%'"></p>
             </template>
           </el-table-column>
-          <el-table-column label="F1-score" :width="remSize(8)">
+          <el-table-column label="F1-score" :width="tableWidths.historicList.F1_score">
             <template slot-scope="scope">
               <p v-text="percentage(scope.row.score, 100)"></p>
             </template>
           </el-table-column>
-          <el-table-column prop="preModel" label="选用模型" :width="remSize(10)">
+          <el-table-column prop="preModel" label="选用模型" :width="tableWidths.historicList.preModel">
             <template slot-scope="scope">
               <el-button :type="scope.row.preModel === 2 ? 'success' : scope.row.preModel === 1 ? 'info' : ''"
                 style="width:120px" :disabled="scope.row.state == '1'" @click="setPredictiveModel(scope.row)"
@@ -55,7 +55,7 @@
               </el-button>
             </template>
           </el-table-column>
-          <el-table-column label="操作" :width="remSize(13)">
+          <el-table-column label="操作" :width="tableWidths.historicList.operate" fixed="right">
             <template slot-scope="scope">
               <el-button type="primary" :disabled="scope.row.state == '1'"
                 @click="handleTrainModalOperationVisible(scope.row)">训练
@@ -107,31 +107,31 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-table :data="jsonData.datasets" border highlight-current-row empty-text="暂无" :style="tableWidth(75.01)"
-          @row-click="handleRowClick">
-          <el-table-column type="index" label="编号" :width="remSize(6)"> </el-table-column>
-          <el-table-column prop="title" label="模型名称" :width="remSize(10)"></el-table-column>
-          <el-table-column prop="state" label="模型状态" :width="remSize(8)">
+        <el-table :data="jsonData.datasets" border highlight-current-row empty-text="暂无"
+          :style="tableWidths.datasetsListTableStyle" @row-click="handleRowClick">
+          <el-table-column type="index" label="编号" :width="tableWidths.datasetsList.index"> </el-table-column>
+          <el-table-column prop="title" label="模型名称" :width="tableWidths.datasetsList.title"></el-table-column>
+          <el-table-column prop="state" label="模型状态" :width="tableWidths.datasetsList.state">
             <template slot-scope="scope">
               <el-tag :type="scope.row.state === datasetStatus.UNTRAIN ? 'success' : 'info'">
                 {{
-                    scope.row.state === datasetStatus.UNTRAIN
-                      ? datasetStatusZH.UNTRAIN
-                      : datasetStatusZH.TRAINING
+                scope.row.state === datasetStatus.UNTRAIN
+                ? datasetStatusZH.UNTRAIN
+                : datasetStatusZH.TRAINING
                 }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="updateTime" label="上次训练时间" :width="remSize(10)">
+          <el-table-column prop="updateTime" label="上次训练时间" :width="tableWidths.datasetsList.updateTime">
           </el-table-column>
-          <el-table-column prop="amount" label="总训练次数" :width="remSize(8)">
+          <el-table-column prop="amount" label="总训练次数" :width="tableWidths.datasetsList.amount">
           </el-table-column>
-          <el-table-column prop="templateTitle" label="模板" :width="remSize(8)">
+          <el-table-column prop="templateTitle" label="模板" :width="tableWidths.datasetsList.templateTitle">
           </el-table-column>
-          <el-table-column prop="doneTask" label="已标注数量" :width="remSize(8)">
+          <el-table-column prop="doneTask" label="已标注数量" :width="tableWidths.datasetsList.doneTask">
           </el-table-column>
-          <el-table-column prop="totalTask" label="总任务数量" :width="remSize(8)">
+          <el-table-column prop="totalTask" label="总任务数量" :width="tableWidths.datasetsList.totalTask">
           </el-table-column>
-          <el-table-column label="操作" :width="remSize(9)">
+          <el-table-column label="操作" :width="tableWidths.datasetsList.operate" fixed="right">
             <template slot-scope="scope">
               <el-button type="primary" @click="handleHistoricVersionOperationVisible(scope.row)">详情
               </el-button>
@@ -258,6 +258,7 @@ export default Vue.extend({
       showDetails: false,
       trainDatasetModalVisible: false,
       predictiveModelOperateLock: true,
+      title: "模型管理",
       trainSet: {
         state: "",
         templateId: "",
@@ -268,6 +269,35 @@ export default Vue.extend({
         totalUsefulParams: "",
         param: "",
       },
+      tableWidths: {
+        historicListTableStyle: "width:863px",
+        historicList: {
+          index: 40,
+          updateTime: 100,
+          state: 80,
+          useWeight: 80,
+          useBatch: 80,
+          accuracy: 80,
+          F1_score: 80,
+          preModel: 142,
+          operate: 180,
+        },
+        historicListTableWidthList: [4, 10, 7, 7, 7, 7, 7, 10, 14],
+
+        datasetsListTableStyle: "width:750px",
+        datasetsList: {
+          index: 40,
+          title: 100,
+          state: 90,
+          updateTime: 100,
+          amount: 80,
+          templateTitle: 80,
+          doneTask: 80,
+          totalTask: 80,
+          operate: 100,
+        },
+        datasetsListTableWidthList: [6, 10, 8, 10, 8, 8, 8, 8, 9],
+      }
     };
   },
   components: {
@@ -365,15 +395,17 @@ export default Vue.extend({
       console.log(column);
     },
     returnList() {
+      this.title = "模型管理";
       this.getDataSets();
       this.showDetails = false;
     },
     handleHistoricVersionOperationVisible(row) {
+      this.title = row.title;
       this.trainSet.modelId = row.id;
       this.trainSet.state = row.state;
       this.filterText.pagination.pageSize = 10;
       this.filterText.pagination.currentIndex = 1;
-      for (var i = 0; i < this.jsonData.templateList.length; i++) {
+      for (let i = 0; i < this.jsonData.templateList.length; i++) {
         if (this.jsonData.templateList[i].title === row.templateTitle) {
           this.trainSet.templateId = this.jsonData.templateList[i].id;
         }
@@ -437,9 +469,9 @@ export default Vue.extend({
         )
         .then((response) => {
           if (response.data.code === 200) {
-            var index = -1;
+            let index = -1;
             let list = response.data.data.modelHistoryList
-            for (var i = 0; i < list.length; i++) {
+            for (let i = 0; i < list.length; i++) {
               if (list[i].state == "1") {
                 index = i;
               }
@@ -545,12 +577,12 @@ export default Vue.extend({
       if (this.trainSet.weight === "") {
         this.trainSet.weight = 0;
       }
-      var res = this.postTrainSet();
+      let res = this.postTrainSet();
       if (res == 0) {
         this.postTrainSet();
       }
       this.hideTrainModalOperationVisible();
-      var delayInMilliseconds = 500; //等待500毫秒
+      let delayInMilliseconds = 500; //等待500毫秒
       setTimeout(this.getHistoricVersions, delayInMilliseconds);
     },
     setPredictiveModel(row) {
@@ -595,7 +627,7 @@ export default Vue.extend({
           console.log(error);
         });
       // this.getHistoricVersions();
-      var delayInMilliseconds = 700; //等待700毫秒
+      let delayInMilliseconds = 700; //等待700毫秒
       setTimeout(this.getHistoricVersions, delayInMilliseconds);
     },
     percentage(num, multiple) {
@@ -603,23 +635,39 @@ export default Vue.extend({
     },
     remSize(size) {
       //获取设备宽度
-      var deviceWidth = document.documentElement.clientWidth || window.innerWidth;
+      let deviceWidth = document.documentElement.clientWidth || window.innerWidth;
       return Math.floor(deviceWidth * size / 100) + "px";
     },
     tableWidth(size) {
-      var width = this.remSize(size);
+      let width = this.remSize(size);
       return "width:" + width;
     },
+    updateTableWidths() {
+      let index = 0;
+      let tableWidth = 1;
+      for (let i in this.tableWidths.historicList) {
+        this.tableWidths.historicList[i] = Math.max(parseInt(this.tableWidths.historicList[i]), parseInt(this.remSize(this.tableWidths.historicListTableWidthList[index])));
+        index++;
+        tableWidth += this.tableWidths.historicList[i];
+      }
+      this.tableWidths.historicListTableStyle = "width:" + tableWidth + "px";
+      index = 0;
+      tableWidth = 1;
+      for (let i in this.tableWidths.datasetsList) {
+        this.tableWidths.datasetsList[i] = Math.max(parseInt(this.tableWidths.datasetsList[i]), parseInt(this.remSize(this.tableWidths.datasetsListTableWidthList[index])));
+        index++;
+        tableWidth += this.tableWidths.datasetsList[i];
+      }
+      this.tableWidths.datasetsListTableStyle = "width:" + tableWidth + "px";
+    },
   },
+  // created() {
+  //   this.updateTableWidths();
+  // },
   mounted() {
     this.getDataSets();
     this.getTemplateList();
-    // window.onresize = function () {
-    //   var deviceWidth = document.body.clientWidth || window.innerWidth;
-    //   document.documentElement.style.fontSize = Math.round((deviceWidth / 100)) + 'px';
-    //   document.querySelector('body').style.fontSize = 0.3 + 'rem'
-    //   console.log("*************");
-    // }
+    this.updateTableWidths();
   },
   // watch: {
   //   onresize
