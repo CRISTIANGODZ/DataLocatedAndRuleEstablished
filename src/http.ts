@@ -10,7 +10,8 @@ var LOCAL_URL = "http://10.16.111.242:3004";
 // var BASEURL = "http://10.16.22.0:8081";
 // var BASEURL = "http://localhost:8081";
 // var BASEURL = "http://10.16.79.168:8081";
-var BASEURL = "http://10.16.107.2:18081";
+// var BASEURL = "http://10.16.107.2:18081";
+var BASEURL = "http://10.19.0.26:50050";
 // var BASEURL = "http://10.16.111.242:8081";
 
 
