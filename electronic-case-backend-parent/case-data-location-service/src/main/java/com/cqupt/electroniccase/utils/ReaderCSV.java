@@ -16,7 +16,7 @@ public class ReaderCSV {
         // 第一参数：读取文件的路径 第二个参数：分隔符（不懂仔细查看引用百度百科的那段话） 第三个参数：字符集
         CsvReader csvReader = null;
         try {
-            csvReader = new CsvReader(filePath, Separator, Charset.forName("UTF-8"));
+            csvReader = new CsvReader(filePath, Separator, Charset.forName(com.cqupt.electroniccase.utils.Charset.charset(filePath)));
         } catch (FileNotFoundException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
@@ -38,4 +38,5 @@ public class ReaderCSV {
         }
         return stringBuffer;
     }
+
 }
