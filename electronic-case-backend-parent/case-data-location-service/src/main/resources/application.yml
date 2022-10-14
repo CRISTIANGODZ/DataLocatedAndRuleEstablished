@@ -17,6 +17,7 @@ spring:
 #        ephemeral: false # 是否是临时实例
 
 mybatis:
+  mapper-locations: classpath:com/cqupt/electroniccase/mapper/*.xml  #sql映射文件位置
   configuration:
     map-underscore-to-camel-case: true
 
