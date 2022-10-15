@@ -1,5 +1,3 @@
-package com.cqupt.electroniccase.utils;
-
 import com.csvreader.CsvWriter;
 
 import java.io.IOException;
@@ -7,13 +5,17 @@ import java.nio.charset.Charset;
 
 /**
  * @auther DyingZhang
- * @Create 2022-10-13 下午 10:59
+ * @Create 2022-10-15 下午 5:05
  * @Discriptioon
  */
-public class WriteCSV {
-    public static void write(String file, String key, String value, char separator) throws IOException {
+public class WriteCSVTest {
+    public static void main(String[] args) throws IOException {
+        write("F:\\project-workspace\\DataLocatedAndRuleEstablished\\electronic-case-backend-parent\\case-data-location-service\\src\\test\\java\\1.csv","病种","肝病");
+    }
+
+    public static void write(String file, String key, String value) throws IOException {
         // 第一参数：新生成文件的路径 第二个参数：分隔符（不懂仔细查看引用百度百科的那段话） 第三个参数：字符集
-        CsvWriter csvWriter = new CsvWriter(file, separator, Charset.forName("GBK"));
+        CsvWriter csvWriter = new CsvWriter(file, ',', Charset.forName("GBK"));
 
         // 表头和内容
         String[] content = {key+":"+value};

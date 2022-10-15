@@ -76,7 +76,7 @@ public class ImportDataServiceImpl implements ImportDataService {
     @Override
     public void parseCSVService(String csvPath) {
         //1.读取CSV的内容进入内存
-        StringBuffer stringBuffer = ReaderCSV.printCSVFile(csvPath,' ');
+        StringBuffer stringBuffer = ReaderCSV.printCSVFile(csvPath,',');
         //1.1解析第一种类，病人信息，病种的字符串
         String firstCategoryName = stringBuffer.substring(0, stringBuffer.indexOf(";")-1);
         stringBuffer.delete(0,stringBuffer.indexOf(";")+1);
@@ -128,7 +128,6 @@ public class ImportDataServiceImpl implements ImportDataService {
             //3.3将text加到数据库中
             textsMapper.addText(texts);
         }
-
 
     }
 
