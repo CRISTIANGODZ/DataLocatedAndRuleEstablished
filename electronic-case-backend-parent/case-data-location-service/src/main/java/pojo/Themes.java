@@ -13,4 +13,7 @@ public class Themes {
     private Long themeId;
     private String themeName;
 
+    public Themes(String themeName) {
+        this.themeName = themeName;
+    }
 }

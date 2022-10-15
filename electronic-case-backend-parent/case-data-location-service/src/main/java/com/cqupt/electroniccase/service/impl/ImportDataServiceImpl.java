@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pojo.Diseases;
-import pojo.FirstCategory;
-import pojo.Patients;
-import pojo.Texts;
+import pojo.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,6 +89,8 @@ public class ImportDataServiceImpl implements ImportDataService {
         FirstCategory firstCategory = null;
         Patients patients = null;
         Diseases diseases = null;
+        Themes themes = null;
+        Texts texts = null;
         //2.1 获取第一种类的实体类对象
         if ((firstCategoryName != "") && (firstCategoryName != null)){
             firstCategory = new FirstCategory(firstCategoryName);
@@ -113,7 +112,6 @@ public class ImportDataServiceImpl implements ImportDataService {
         patients.setDiseaseIdList(diseases.getDiseaseName());
         patients.setFirstCategory(firstCategory.getFirstCategoryId());
         patientsMapper.addPatient(patients);
-        System.out.println(patients);
 
         //3.将其他字段作为一条texts数据加入数据库中
         System.out.println(stringBuffer);
@@ -123,8 +121,13 @@ public class ImportDataServiceImpl implements ImportDataService {
             String key = singleInfo.substring(0, singleInfo.indexOf(SeparatorUtil.getSeparator(singleInfo.toString())));
             String value = singleInfo.substring(singleInfo.indexOf(SeparatorUtil.getSeparator(singleInfo.toString()))+1, singleInfo.length());
             //3.1添加theme信息
+            themes = new Themes(key);
+            themesMapper.addTheme(themes);
+            //3.2封装好text信息
+            texts = new Texts(patients.getPatientId(),firstCategory.getFirstCategoryId(),diseases.getDiseaseId(),key,value,themes.getThemeId());
+            //3.3将text加到数据库中
+            textsMapper.addText(texts);
         }
-
 
 
     }

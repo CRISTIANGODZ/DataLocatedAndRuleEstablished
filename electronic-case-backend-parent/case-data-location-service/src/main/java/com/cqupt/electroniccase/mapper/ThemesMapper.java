@@ -1,6 +1,7 @@
 package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import pojo.Themes;
 
 /**
  * @auther DyingZhang
@@ -9,4 +10,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ThemesMapper {
+
+    /**
+     * 添加theme的key进入theme数据库，并且返回主键id
+     * @param themes
+     */
+    void addTheme(Themes themes);
 }

@@ -15,6 +15,12 @@
 
     <!--下面撰写sql语句-->
 
+    <!--void addTheme(Themes themes);-->
+    <insert id="addTheme" useGeneratedKeys="true" keyProperty="themeId">
+        insert into themes (theme_name)
+        values (#{themeName})
+    </insert>
+
     <!--上面撰写sql语句-->
 
 </mapper>
