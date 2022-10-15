@@ -1,6 +1,7 @@
 package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import pojo.Diseases;
 
 /**
  * @auther DyingZhang
@@ -9,4 +10,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface DiseasesMapper {
+
+    /**
+     * 添加病种信息，并返回自增主键ID
+     * @param diseases
+     */
+    void addDiseases(Diseases diseases);
 }

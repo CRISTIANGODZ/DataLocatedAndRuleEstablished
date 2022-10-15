@@ -15,6 +15,12 @@
 
     <!--下面撰写sql语句-->
 
+    <!--void addDiseases(Diseases diseases);-->
+    <insert id="addDiseases" useGeneratedKeys="true" keyProperty="diseaseId">
+        insert into diseases (disease_name)
+        values (#{diseaseName})
+    </insert>
+
     <!--上面撰写sql语句-->
 
 </mapper>

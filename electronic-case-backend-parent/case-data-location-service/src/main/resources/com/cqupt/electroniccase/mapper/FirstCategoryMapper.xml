@@ -14,6 +14,11 @@
 
 
     <!--下面撰写sql语句-->
+    <!--void addFirstCategoryMapper(FirstCategory firstCategory);-->
+    <insert id="addFirstCategoryMapper" useGeneratedKeys="true" keyProperty="firstCategoryId">
+        insert into first_category (first_category_name)
+        values (#{firstCategoryName})
+    </insert>
 
     <!--上面撰写sql语句-->
 

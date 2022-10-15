@@ -2,16 +2,18 @@ package com.cqupt.electroniccase.service.impl;
 
 import com.cqupt.electroniccase.mapper.*;
 import com.cqupt.electroniccase.service.ImportDataService;
+import com.cqupt.electroniccase.utils.SeparatorUtil;
 import com.cqupt.electroniccase.utils.ReaderCSV;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pojo.Diseases;
 import pojo.FirstCategory;
 import pojo.Patients;
+import pojo.Texts;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -21,6 +23,7 @@ import java.util.UUID;
  * @Create 2022-10-13 下午 10:20
  * @Discriptioon
  */
+@Transactional(isolation = Isolation.READ_COMMITTED)
 @Service
 public class ImportDataServiceImpl implements ImportDataService {
 
@@ -75,39 +78,55 @@ public class ImportDataServiceImpl implements ImportDataService {
      */
     @Override
     public void parseCSVService(String csvPath) {
-        //读取CSV的内容进入内存
+        //1.读取CSV的内容进入内存
         StringBuffer stringBuffer = ReaderCSV.printCSVFile(csvPath,' ');
-        System.out.println(stringBuffer);
-        //解析字符串
+        //1.1解析第一种类，病人信息，病种的字符串
         String firstCategoryName = stringBuffer.substring(0, stringBuffer.indexOf(";")-1);
         stringBuffer.delete(0,stringBuffer.indexOf(";")+1);
         String patientsContext = stringBuffer.substring(0, stringBuffer.indexOf("病种"));
         stringBuffer.delete(0,stringBuffer.indexOf("病种"));
         String diseaseName = stringBuffer.substring(stringBuffer.indexOf("病种"), stringBuffer.indexOf(";"));
         stringBuffer.delete(stringBuffer.indexOf("病种"), stringBuffer.indexOf(";")+1);
-        //1.将第一种类，病人信息，病种加入实体类对象中
+
+        //2.将第一种类，病人信息，病种加入数据库中
         FirstCategory firstCategory = null;
         Patients patients = null;
         Diseases diseases = null;
-        //获取第一种类的实体类对象
+        //2.1 获取第一种类的实体类对象
         if ((firstCategoryName != "") && (firstCategoryName != null)){
             firstCategory = new FirstCategory(firstCategoryName);
         }
-        //获取病人信息的对象
+        //2.2 获取病人信息的对象
         if ((patientsContext != "") && (patientsContext != null) && patientsContext.contains("姓名")){
             String temporaryStr = patientsContext.substring(patientsContext.indexOf("姓名"), patientsContext.length());
             String name = temporaryStr.substring(temporaryStr.indexOf("姓名")+3, temporaryStr.indexOf(";"));
             patients = new Patients(name);
         }
-        //获取病种的对象
+        //2.3 获取病种的对象
         if ((diseaseName != "") && (diseaseName != null)){
             String diseasesName = diseaseName.substring(diseaseName.indexOf("病种") + 3, diseaseName.length());
             diseases = new Diseases(diseasesName);
         }
+        //2.4 将三个对象分别加入数据库中，并处理好之间关系：patients表中要有病种名称和第一种类id
+        firstCategoryMapper.addFirstCategoryMapper(firstCategory);
+        diseasesMapper.addDiseases(diseases);
+        patients.setDiseaseIdList(diseases.getDiseaseName());
+        patients.setFirstCategory(firstCategory.getFirstCategoryId());
+        patientsMapper.addPatient(patients);
+        System.out.println(patients);
 
-
+        //3.将其他字段作为一条texts数据加入数据库中
+        System.out.println(stringBuffer);
+        while (stringBuffer.length() != 0){
+            String singleInfo = stringBuffer.substring(0, stringBuffer.indexOf(";"));
+            stringBuffer.delete(0, stringBuffer.indexOf(";") + 1);
+            String key = singleInfo.substring(0, singleInfo.indexOf(SeparatorUtil.getSeparator(singleInfo.toString())));
+            String value = singleInfo.substring(singleInfo.indexOf(SeparatorUtil.getSeparator(singleInfo.toString()))+1, singleInfo.length());
+            //3.1添加theme信息
+        }
 
 
 
     }
+
 }

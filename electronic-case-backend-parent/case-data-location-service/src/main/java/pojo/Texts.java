@@ -19,4 +19,13 @@ public class Texts {
     private String content;
     private Date updatetime;
     private Long themeId;
+
+    public Texts(Long patientId, Long firstCategoryId, Long diseaseId, String title, String content, Long themeId) {
+        this.patientId = patientId;
+        this.firstCategoryId = firstCategoryId;
+        this.diseaseId = diseaseId;
+        this.title = title;
+        this.content = content;
+        this.themeId = themeId;
+    }
 }

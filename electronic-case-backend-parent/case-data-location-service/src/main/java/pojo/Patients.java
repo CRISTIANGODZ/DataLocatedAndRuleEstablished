@@ -9,10 +9,10 @@ import lombok.Data;
  */
 @Data
 public class Patients {
-    private Long patient_id;
+    private Long patientId;
     private String name;
     private String diseaseIdList;
-    private Long firstCategoryId;
+    private Long firstCategory;
 
     public Patients(String name) {
         this.name = name;
