@@ -1,17 +1,18 @@
 package com.cqupt.electroniccase.service;
 
-import org.springframework.stereotype.Service;
+import java.io.IOException;
 
 /**
  * @auther DyingZhang
- * @Create 2022-10-15 下午 5:16
+ * @Create 2022-10-15 下午 6:38
  * @Discriptioon
  */
-@Service
 public interface ExportDataService {
 
     /**
-     * 创建获取用户CSV的服务
+     * 将数据库中数据查询，封装到CSV文件中
+     *
      */
-    void getCSVService();
+    void getCSVService() throws IOException;
+
 }

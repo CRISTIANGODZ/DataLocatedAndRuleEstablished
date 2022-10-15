@@ -1,6 +1,7 @@
 package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import pojo.Diseases;
 
 /**
@@ -16,4 +17,11 @@ public interface DiseasesMapper {
      * @param diseases
      */
     void addDiseases(Diseases diseases);
+
+    /**
+     * 通过diseaseId查询diseaseName
+     * @param diseaseId
+     * @return
+     */
+    Diseases getDisease(@Param("diseaseId") Long diseaseId);
 }

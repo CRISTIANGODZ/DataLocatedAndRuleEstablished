@@ -1,6 +1,7 @@
 package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import pojo.Patients;
 
 /**
@@ -17,4 +18,11 @@ public interface PatientsMapper {
      * @param patients
      */
     void addPatient(Patients patients);
+
+    /**
+     * 用patientId查询patient的相关信息
+     * @param patientId
+     * @return
+     */
+    Patients getPatient(@Param("patientId") Long patientId);
 }

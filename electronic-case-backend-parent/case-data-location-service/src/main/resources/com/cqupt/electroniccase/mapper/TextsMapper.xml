@@ -21,6 +21,12 @@
         values (#{patientId}, #{firstCategoryId}, #{diseaseId}, #{title}, #{content}, NOW(), #{themeId})
     </insert>
 
+    <!--List<Texts> getAllTexts();-->
+    <select id="getAllTexts" resultType="Texts">
+        select *
+        from texts
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

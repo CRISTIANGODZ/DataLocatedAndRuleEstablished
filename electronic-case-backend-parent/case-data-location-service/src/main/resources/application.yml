@@ -17,7 +17,9 @@ spring:
 #        ephemeral: false # 是否是临时实例
 
 mybatis:
-  mapper-locations: classpath:com/cqupt/electroniccase/mapper/*.xml  #sql映射文件位置
+#默认扫描的是启动类所在包路径
+  type-aliases-package: pojo
+  mapper-locations: mapper/*.xml  #sql映射文件位置
   configuration:
     map-underscore-to-camel-case: true
 

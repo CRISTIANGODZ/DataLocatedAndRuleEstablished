@@ -76,7 +76,7 @@ public class ImportDataServiceImpl implements ImportDataService {
     @Override
     public void parseCSVService(String csvPath) {
         //1.读取CSV的内容进入内存
-        StringBuffer stringBuffer = ReaderCSV.printCSVFile(csvPath,',');
+        StringBuffer stringBuffer = ReaderCSV.printCSVFile(csvPath,' ');
         //1.1解析第一种类，病人信息，病种的字符串
         String firstCategoryName = stringBuffer.substring(0, stringBuffer.indexOf(";")-1);
         stringBuffer.delete(0,stringBuffer.indexOf(";")+1);
@@ -109,12 +109,11 @@ public class ImportDataServiceImpl implements ImportDataService {
         //2.4 将三个对象分别加入数据库中，并处理好之间关系：patients表中要有病种名称和第一种类id
         firstCategoryMapper.addFirstCategoryMapper(firstCategory);
         diseasesMapper.addDiseases(diseases);
-        patients.setDiseaseIdList(diseases.getDiseaseName());
+        patients.setDiseaseIdList(diseases.getDiseaseId().toString());
         patients.setFirstCategory(firstCategory.getFirstCategoryId());
         patientsMapper.addPatient(patients);
 
         //3.将其他字段作为一条texts数据加入数据库中
-        System.out.println(stringBuffer);
         while (stringBuffer.length() != 0){
             String singleInfo = stringBuffer.substring(0, stringBuffer.indexOf(";"));
             stringBuffer.delete(0, stringBuffer.indexOf(";") + 1);
@@ -128,6 +127,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             //3.3将text加到数据库中
             textsMapper.addText(texts);
         }
+
 
     }
 

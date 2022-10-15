@@ -20,6 +20,13 @@
         values (#{firstCategoryName})
     </insert>
 
+    <!--FirstCategory getFirstCategory(@Param("firstCategoryId") Long firstCategoryId);-->
+    <select id="getFirstCategory" resultType="FirstCategory">
+        select first_category_name
+        from first_category
+        where first_category_id = #{firstCategoryId}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

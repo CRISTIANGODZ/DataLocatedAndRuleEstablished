@@ -71,7 +71,7 @@ public class Charset {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("--文件-> [" + path + "] 采用的字符集为: [" + charset + "]");
+//        System.out.println("--文件-> [" + path + "] 采用的字符集为: [" + charset + "]");
         return charset;
     }
 }

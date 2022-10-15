@@ -1,6 +1,7 @@
 package pojo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @auther DyingZhang
@@ -8,6 +9,7 @@ import lombok.Data;
  * @Discriptioon
  */
 @Data
+@NoArgsConstructor
 public class Patients {
     private Long patientId;
     private String name;

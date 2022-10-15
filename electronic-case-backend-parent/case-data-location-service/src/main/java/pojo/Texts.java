@@ -1,6 +1,7 @@
 package pojo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * @Discriptioon
  */
 @Data
+@NoArgsConstructor
 public class Texts {
     private Long textId;
     private Long patientId;

@@ -21,6 +21,13 @@
         values (#{diseaseName})
     </insert>
 
+    <!--Diseases getDisease(@Param("diseaseId") Long diseaseId);-->
+    <select id="getDisease" resultType="Diseases">
+        select disease_name
+        from diseases
+        where disease_id = #{diseaseId}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

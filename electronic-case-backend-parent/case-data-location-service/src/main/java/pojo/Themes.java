@@ -1,6 +1,7 @@
 package pojo;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,6 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @Discriptioon
  */
 @Data
+@NoArgsConstructor
 public class Themes {
     private Long themeId;
     private String themeName;

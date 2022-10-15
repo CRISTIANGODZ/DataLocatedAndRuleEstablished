@@ -1,6 +1,7 @@
 package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import pojo.FirstCategory;
 
 /**
@@ -16,4 +17,11 @@ public interface FirstCategoryMapper {
      * @param firstCategory
      */
     void addFirstCategoryMapper(FirstCategory firstCategory);
+
+    /**
+     * 根据firstCategoryId查询firstCategoryName
+     * @param firstCategoryId
+     * @return
+     */
+    FirstCategory getFirstCategory(@Param("firstCategoryId") Long firstCategoryId);
 }
