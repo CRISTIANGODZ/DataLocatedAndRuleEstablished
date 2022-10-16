@@ -1,6 +1,8 @@
 package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import pojo.Texts;
 import pojo.Themes;
 
 /**
@@ -16,4 +18,10 @@ public interface ThemesMapper {
      * @param themes
      */
     void addTheme(Themes themes);
+
+    /**
+     * 根据themeId删除相关信息
+     * @param themeId
+     */
+    void deleteThemes(@Param("themeId") Long themeId);
 }

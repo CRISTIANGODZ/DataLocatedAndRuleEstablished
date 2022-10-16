@@ -33,4 +33,12 @@ public interface TextsMapper {
      * @return
      */
     List<Texts> getPatientTexts(@Param("patientId") Long patientId);
+
+    void getThemeIdByTextId(Long textId);
+
+    /**
+     * 删除texts字段
+     * @param texts
+     */
+    void deleteText(Texts texts);
 }

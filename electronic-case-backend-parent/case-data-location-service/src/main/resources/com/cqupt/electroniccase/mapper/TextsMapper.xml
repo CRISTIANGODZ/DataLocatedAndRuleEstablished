@@ -34,6 +34,19 @@
         where patient_id = #{patientId}
     </select>
 
+    <!--void deleteText(Texts texts);-->
+    <delete id="deleteText">
+        delete from texts
+        <where>
+            <if test="textId != '' and textId != null">
+                text_id = #{textId}
+            </if>
+            <if test="patientId != '' and patientId != null">
+                and patient_id = #{patientId}
+            </if>
+        </where>
+    </delete>
+
     <!--上面撰写sql语句-->
 
 </mapper>

@@ -1,9 +1,17 @@
 package com.cqupt.electroniccase.service;
 
+import pojo.Texts;
+
 /**
  * @auther DyingZhang
  * @Create 2022-10-16 下午 12:36
  * @Discriptioon
  */
 public interface UserOperateService {
+
+    /**
+     * 删除病人某条text数据信息
+     * @param texts
+     */
+    void deleteText(Texts texts);
 }
