@@ -24,4 +24,10 @@ public interface DiseasesMapper {
      * @return
      */
     Diseases getDisease(@Param("diseaseId") Long diseaseId);
+
+    /**
+     * 判断病种是否存在
+     * @param diseaseName
+     */
+    Diseases isDiseaseExist(@Param("diseaseName") String diseaseName);
 }

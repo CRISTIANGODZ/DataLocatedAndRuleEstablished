@@ -108,7 +108,13 @@ public class ImportDataServiceImpl implements ImportDataService {
         }
         //2.4 将三个对象分别加入数据库中，并处理好之间关系：patients表中要有病种名称和第一种类id
         firstCategoryMapper.addFirstCategoryMapper(firstCategory);
-        diseasesMapper.addDiseases(diseases);
+        //查找该病种信息是否存在
+        Diseases isDiseaseExist = diseasesMapper.isDiseaseExist(diseases.getDiseaseName());
+        if (isDiseaseExist == null){
+            diseasesMapper.addDiseases(diseases);
+        } else {
+            diseases.setDiseaseId(isDiseaseExist.getDiseaseId());
+        }
         patients.setDiseaseIdList(diseases.getDiseaseId().toString());
         patients.setFirstCategory(firstCategory.getFirstCategoryId());
         patientsMapper.addPatient(patients);

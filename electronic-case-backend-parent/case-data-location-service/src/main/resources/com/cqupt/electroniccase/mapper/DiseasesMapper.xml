@@ -28,6 +28,13 @@
         where disease_id = #{diseaseId}
     </select>
 
+    <!--int isDiseaseExist(@Param("diseaseName") String diseaseName);-->
+    <select id="isDiseaseExist" resultType="Diseases">
+        select *
+        from diseases
+        where disease_name = #{diseaseName}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>
