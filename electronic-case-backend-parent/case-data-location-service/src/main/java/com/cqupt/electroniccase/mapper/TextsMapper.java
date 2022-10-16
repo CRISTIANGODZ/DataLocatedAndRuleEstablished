@@ -41,4 +41,10 @@ public interface TextsMapper {
      * @param texts
      */
     void deleteText(Texts texts);
+
+    /**
+     * 修改texts字段
+     * @param texts
+     */
+    void updateText(Texts texts);
 }

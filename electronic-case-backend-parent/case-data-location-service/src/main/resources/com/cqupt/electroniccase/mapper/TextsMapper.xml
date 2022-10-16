@@ -46,6 +46,20 @@
             </if>
         </where>
     </delete>
+    
+    <!--void updateText(Texts texts);-->
+    <update id="updateText">
+        update texts
+        set content = #{content}
+        <where>
+            <if test="textId != '' and textId != null">
+                text_id = #{textId}
+            </if>
+            <if test="patientId != '' and patientId != null">
+                and patient_id = #{patientId}
+            </if>
+        </where>
+    </update>
 
     <!--上面撰写sql语句-->
 

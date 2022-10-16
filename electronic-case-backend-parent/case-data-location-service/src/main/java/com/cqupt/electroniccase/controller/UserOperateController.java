@@ -46,7 +46,14 @@ public class UserOperateController {
         return R.ok().message("删除成功");
     }
 
-
+    /**
+     * 修改病人某条text数据信息
+     */
+    @PostMapping("/patient/text/update")
+    public R updatePatientTextByTextIdController(Texts texts){
+        userOperateService.updateText(texts);
+        return R.ok().message("修改成功");
+    }
 
 
 }

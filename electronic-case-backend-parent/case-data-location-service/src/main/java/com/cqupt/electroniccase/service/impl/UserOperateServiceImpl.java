@@ -26,7 +26,7 @@ public class UserOperateServiceImpl implements UserOperateService {
     ThemesMapper themesMapper;
 
     /**
-     *
+     * 删除病人某条text数据信息
      * @param texts
      */
     @Override
@@ -36,5 +36,14 @@ public class UserOperateServiceImpl implements UserOperateService {
         //2.删除themes相关信息
         Long themeId = texts.getThemeId();
         themesMapper.deleteThemes(themeId);
+    }
+
+    /**
+     * 修改病人某条text数据信息
+     * @param texts
+     */
+    @Override
+    public void updateText(Texts texts) {
+        textsMapper.updateText(texts);
     }
 }
