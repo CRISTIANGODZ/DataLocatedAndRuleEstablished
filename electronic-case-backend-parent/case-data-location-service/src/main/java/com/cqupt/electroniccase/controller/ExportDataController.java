@@ -35,8 +35,8 @@ public class ExportDataController {
     @Autowired
     ExportDataService exportDataService;
 
-    @GetMapping("/get/csv/{name}")
-    public ResponseEntity<byte[]> getCSVController(HttpSession session, @PathVariable("name") String name)throws IOException{
+    @GetMapping("/get/csv")
+    public ResponseEntity<byte[]> getCSVController(HttpSession session,String name)throws IOException{
         List<Texts> patientTextList = exportDataService.getPatientAllText(name);
         String fileRealPath = exportDataService.getCSVService(patientTextList);
 

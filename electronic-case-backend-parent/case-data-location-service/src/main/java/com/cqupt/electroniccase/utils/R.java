@@ -2,6 +2,7 @@ package com.cqupt.electroniccase.utils;
 
 import lombok.Data;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //统一返回结果的类
@@ -13,6 +14,8 @@ public class R {
     private Integer code;
 
     private String message;
+
+    private List patientThemeTextList;
 
     private Map<String, Object> data = new HashMap<String, Object>();
 
@@ -59,6 +62,11 @@ public class R {
 
     public R data(Map<String, Object> map){
         this.setData(map);
+        return this;
+    }
+
+    public R addList(List list){
+        this.patientThemeTextList = list;
         return this;
     }
 }
