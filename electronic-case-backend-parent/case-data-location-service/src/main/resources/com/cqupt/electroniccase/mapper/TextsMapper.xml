@@ -27,6 +27,13 @@
         from texts
     </select>
 
+    <!--List<Texts> getPatientTexts(@Param("patientId") Long patientId);-->
+    <select id="getPatientTexts" resultType="Texts">
+        select *
+        from texts
+        where patient_id = #{patientId}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

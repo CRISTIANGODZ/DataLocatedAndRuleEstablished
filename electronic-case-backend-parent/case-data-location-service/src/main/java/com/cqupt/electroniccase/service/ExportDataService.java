@@ -1,6 +1,8 @@
 package com.cqupt.electroniccase.service;
 
-import java.io.IOException;
+import pojo.Texts;
+
+import java.util.List;
 
 /**
  * @auther DyingZhang
@@ -13,6 +15,12 @@ public interface ExportDataService {
      * 将数据库中数据查询，封装到CSV文件中
      *
      */
-    void getCSVService() throws IOException;
+    void getCSVService(List<Texts> allTexts);
 
+    /**
+     * 获取用户的所有相关的text信息
+     * @param name
+     * @return
+     */
+    List<Texts> getPatientAllText(String name);
 }

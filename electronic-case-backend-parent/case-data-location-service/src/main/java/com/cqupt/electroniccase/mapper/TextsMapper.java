@@ -2,6 +2,7 @@ package com.cqupt.electroniccase.mapper;
 
 import lombok.Data;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import pojo.Texts;
 
 import java.util.List;
@@ -25,4 +26,11 @@ public interface TextsMapper {
      * @return
      */
     List<Texts> getAllTexts();
+
+    /**
+     * 根据用户id获取所有texts数据，将其封装到List<Texts>中
+     * @param patientId
+     * @return
+     */
+    List<Texts> getPatientTexts(@Param("patientId") Long patientId);
 }

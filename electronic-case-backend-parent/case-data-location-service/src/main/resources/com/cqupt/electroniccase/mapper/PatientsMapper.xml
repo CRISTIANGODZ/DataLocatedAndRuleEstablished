@@ -28,6 +28,13 @@
         where patient_id = #{patientId}
     </select>
 
+    <!--Patients getPatientIdByName(String name);-->
+    <select id="getPatientIdByName" resultType="Patients">
+        select patient_id
+        from patients
+        where `name` = #{name}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>
