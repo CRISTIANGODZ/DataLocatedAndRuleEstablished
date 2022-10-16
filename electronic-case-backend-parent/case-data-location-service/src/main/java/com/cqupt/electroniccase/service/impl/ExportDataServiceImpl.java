@@ -56,12 +56,13 @@ public class ExportDataServiceImpl implements ExportDataService {
      * 将数据库中数据查询，封装到CSV文件中
      */
     @Override
-    public void getCSVService(List<Texts> allTexts){
+    public String getCSVService(List<Texts> allTexts){
         //创建CsvWriter，初始化csv文件
         String uuid = UUID.randomUUID().toString();
         String fileName = uuid + ".csv";
         String prefix = "F:\\project-workspace\\DataLocatedAndRuleEstablished\\electronic-case-backend-parent\\case-data-location-service\\src\\main\\resources\\get-csv\\";
-        File file = new File(prefix + fileName);
+        fileName = prefix + fileName;
+        File file = new File(fileName);
         if (!file.exists()){
             try {
                 file.createNewFile();
@@ -71,7 +72,7 @@ public class ExportDataServiceImpl implements ExportDataService {
                 System.out.println("创建成功！");
             }
         }
-        CsvWriter csvWriter = new CsvWriter(prefix + fileName, ' ', Charset.forName("GBK"));
+        CsvWriter csvWriter = new CsvWriter(fileName, ' ', Charset.forName("GBK"));
 
         //2.根据一条Text信息的first_category_id,patient_id,disease_id查询前三行信息
         Texts text0 = allTexts.get(0);
@@ -105,7 +106,7 @@ public class ExportDataServiceImpl implements ExportDataService {
             //关闭csvWriter
             csvWriter.close();
         }
-
+        return fileName;
     }
 
 
