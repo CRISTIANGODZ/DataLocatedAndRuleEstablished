@@ -1,6 +1,5 @@
 package com.cqupt.electroniccase.mapper;
 
-import lombok.Data;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import pojo.Texts;
@@ -47,4 +46,10 @@ public interface TextsMapper {
      * @param texts
      */
     void updateText(Texts texts);
+
+    /**
+     * 根据病人id查找出病人所有的text,，将其封装到List<Texts>中
+     * @param patientId
+     */
+    List<Texts> getAllThemeIdByPatientId(@Param("patientId") Long patientId);
 }

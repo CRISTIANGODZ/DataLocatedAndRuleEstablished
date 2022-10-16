@@ -35,6 +35,12 @@
         where `name` = #{name}
     </select>
 
+    <!--void deletePatient(@Param("patientId") Long patientId);-->
+    <delete id="deletePatient">
+        delete from patients
+        where patient_id = #{patientId}
+    </delete>
+
     <!--上面撰写sql语句-->
 
 </mapper>

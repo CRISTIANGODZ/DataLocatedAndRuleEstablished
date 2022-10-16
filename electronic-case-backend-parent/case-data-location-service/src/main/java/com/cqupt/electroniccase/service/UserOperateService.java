@@ -20,4 +20,10 @@ public interface UserOperateService {
      * @param texts
      */
     void updateText(Texts texts);
+
+    /**
+     * 删除某个病人的所有相关信息
+     * @param texts
+     */
+    void deletePatientAllText(Texts texts);
 }

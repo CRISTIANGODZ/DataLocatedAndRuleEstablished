@@ -24,7 +24,7 @@
     <!--void deleteThemes(@Param("themeId") Long themeId);-->
     <delete id="deleteThemes">
         DELETE FROM themes
-        WHERE theme_id = 1
+        WHERE theme_id = #{themeId}
     </delete>
 
     <!--上面撰写sql语句-->

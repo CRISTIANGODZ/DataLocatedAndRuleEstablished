@@ -55,5 +55,14 @@ public class UserOperateController {
         return R.ok().message("修改成功");
     }
 
+    /**
+     * 删除某个病人的所有相关信息
+     */
+    @PostMapping("/delete/patient/all/text")
+    public R deletePatientAllTextController(Texts texts){
+        userOperateService.deletePatientAllText(texts);
+        return R.ok().message("该病人信息以全部删除");
+    }
+
 
 }

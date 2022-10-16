@@ -27,6 +27,12 @@
         where first_category_id = #{firstCategoryId}
     </select>
 
+    <!--void deleteFirstCategoryById(@Param("firstCategoryId") Long firstCategoryId);-->
+    <delete id="deleteFirstCategoryById">
+        delete from first_category
+        where first_category_id = #{firstCategoryId}
+    </delete>
+
     <!--上面撰写sql语句-->
 
 </mapper>

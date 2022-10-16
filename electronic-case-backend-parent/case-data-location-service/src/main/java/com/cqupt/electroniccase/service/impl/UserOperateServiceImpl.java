@@ -4,13 +4,18 @@ import com.cqupt.electroniccase.mapper.*;
 import com.cqupt.electroniccase.service.UserOperateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import pojo.Texts;
+
+import java.util.List;
 
 /**
  * @auther DyingZhang
  * @Create 2022-10-16 下午 12:36
  * @Discriptioon
  */
+@Transactional(isolation = Isolation.READ_COMMITTED)
 @Service
 public class UserOperateServiceImpl implements UserOperateService {
 
@@ -46,4 +51,31 @@ public class UserOperateServiceImpl implements UserOperateService {
     public void updateText(Texts texts) {
         textsMapper.updateText(texts);
     }
+
+    /**
+     * 删除某个病人的所有相关信息
+     * @param texts
+     */
+    @Override
+    public void deletePatientAllText(Texts texts) {
+        //1根据病人id查找出所有text
+        Long patientId = texts.getPatientId();
+        List<Texts> allTexts = textsMapper.getAllThemeIdByPatientId(patientId);
+        //2.删除所有text
+        for (Texts text : allTexts){
+            textsMapper.deleteText(text);
+        }
+        //3.删除所有的theme信息
+        for (Texts text : allTexts){
+            Long themeId = text.getThemeId();
+            themesMapper.deleteThemes(themeId);
+        }
+        //4.删除第一种类的信息
+        Long firstCategoryId = texts.getFirstCategoryId();
+        firstCategoryMapper.deleteFirstCategoryById(firstCategoryId);
+        //5.删除patient信息
+        patientsMapper.deletePatient(patientId);
+    }
+
+
 }

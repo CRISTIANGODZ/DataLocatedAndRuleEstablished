@@ -24,4 +24,10 @@ public interface FirstCategoryMapper {
      * @return
      */
     FirstCategory getFirstCategory(@Param("firstCategoryId") Long firstCategoryId);
+
+    /**
+     * 删除第一种类的信息
+     * @param firstCategoryId
+     */
+    void deleteFirstCategoryById(@Param("firstCategoryId") Long firstCategoryId);
 }

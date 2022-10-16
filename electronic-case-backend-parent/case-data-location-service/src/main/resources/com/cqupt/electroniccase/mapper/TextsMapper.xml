@@ -61,6 +61,13 @@
         </where>
     </update>
 
+    <!--List<Texts> getAllThemeIdByPatientId(@Param("patientId") Long patientId);-->
+    <select id="getAllThemeIdByPatientId" resultType="Texts">
+        select *
+        from texts
+        where patient_id = #{patientId};
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

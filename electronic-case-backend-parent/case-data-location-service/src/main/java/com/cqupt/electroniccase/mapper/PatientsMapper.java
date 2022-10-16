@@ -35,4 +35,10 @@ public interface PatientsMapper {
      * @return
      */
     Patients getPatientIdByName(@Param("name") String name);
+
+    /**
+     * 根据patientId删除patient信息
+     * @param patientId
+     */
+    void deletePatient(@Param("patientId") Long patientId);
 }
