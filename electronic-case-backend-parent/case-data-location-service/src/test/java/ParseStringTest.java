@@ -31,7 +31,7 @@ public class ParseStringTest {
         if ((patientsContext != "") && (patientsContext != null) && patientsContext.contains("姓名")){
             String temporaryStr = patientsContext.substring(patientsContext.indexOf("姓名"), patientsContext.length());
             String name = temporaryStr.substring(temporaryStr.indexOf("姓名")+3, temporaryStr.indexOf(";"));
-            patients = new Patients(name);
+//            patients = new Patients(name);
         }
         //获取病种的对象
         if ((diseaseName != "") && (diseaseName != null)){

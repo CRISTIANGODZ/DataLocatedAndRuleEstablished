@@ -17,8 +17,8 @@
 
     <!--void addText(Texts texts);-->
     <insert id="addText" useGeneratedKeys="true" keyProperty="textId">
-        insert into texts (patient_id, first_category_id, disease_id, title, content, updatetime, theme_id)
-        values (#{patientId}, #{firstCategoryId}, #{diseaseId}, #{title}, #{content}, NOW(), #{themeId})
+        insert into texts (patient_id, first_category_id, title, content, updatetime, theme_id)
+        values (#{patientId}, #{firstCategoryId}, #{title}, #{content}, NOW(), #{themeId})
     </insert>
 
     <!--List<Texts> getAllTexts();-->

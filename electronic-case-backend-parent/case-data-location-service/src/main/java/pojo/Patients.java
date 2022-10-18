@@ -13,10 +13,17 @@ import lombok.NoArgsConstructor;
 public class Patients {
     private Long patientId;
     private String name;
-    private String diseaseIdList;
-    private Long firstCategory;
 
-    public Patients(String name) {
+    private Long diseaseId;
+
+    private String other;
+
+    private String patient_num;
+
+
+    public Patients(String name, String other, String patient_num) {
         this.name = name;
+        this.other = other;
+        this.patient_num = patient_num;
     }
 }

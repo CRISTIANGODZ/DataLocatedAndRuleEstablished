@@ -17,8 +17,8 @@
 
     <!--void addPatient(Patients patients);-->
     <insert id="addPatient" useGeneratedKeys="true" keyProperty="patientId">
-        insert into patients (`name`, disease_id_list, first_category)
-        values (#{name}, #{diseaseIdList}, #{firstCategory})
+        insert into patients (`name`, disease_id, other, patient_num)
+        values (#{name}, #{diseaseId}, #{other}, #{patient_num})
     </insert>
 
     <!--Patients getPatient(@Param("patientId") Long patientId);-->

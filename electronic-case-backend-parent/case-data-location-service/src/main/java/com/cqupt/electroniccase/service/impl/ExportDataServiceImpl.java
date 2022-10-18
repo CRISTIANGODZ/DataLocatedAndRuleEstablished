@@ -81,7 +81,7 @@ public class ExportDataServiceImpl implements ExportDataService {
         //2.2查询patient信息
         Patients patient = patientsMapper.getPatient(text0.getPatientId());
         //2.3查询disease信息
-        Diseases disease = diseasesMapper.getDisease(text0.getDiseaseId());
+        Diseases disease = diseasesMapper.getDisease(patient.getDiseaseId());
         //2.4将第一种类，patient,disease添加到csv中
         try {
             // 添加第一种类

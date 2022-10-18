@@ -97,9 +97,11 @@ public class ImportDataServiceImpl implements ImportDataService {
         }
         //2.2 获取病人信息的对象
         if ((patientsContext != "") && (patientsContext != null) && patientsContext.contains("姓名")){
+            String patientNum = patientsContext.substring(patientsContext.indexOf("编号")+3, patientsContext.indexOf(";"));
+            String other  = patientsContext;
             String temporaryStr = patientsContext.substring(patientsContext.indexOf("姓名"), patientsContext.length());
             String name = temporaryStr.substring(temporaryStr.indexOf("姓名")+3, temporaryStr.indexOf(";"));
-            patients = new Patients(name);
+            patients = new Patients(name,other,patientNum);
         }
         //2.3 获取病种的对象
         if ((diseaseName != "") && (diseaseName != null)){
@@ -115,8 +117,7 @@ public class ImportDataServiceImpl implements ImportDataService {
         } else {
             diseases.setDiseaseId(isDiseaseExist.getDiseaseId());
         }
-        patients.setDiseaseIdList(diseases.getDiseaseId().toString());
-        patients.setFirstCategory(firstCategory.getFirstCategoryId());
+        patients.setDiseaseId(diseases.getDiseaseId());
         patientsMapper.addPatient(patients);
 
         //3.将其他字段作为一条texts数据加入数据库中
@@ -129,7 +130,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             themes = new Themes(key);
             themesMapper.addTheme(themes);
             //3.2封装好text信息
-            texts = new Texts(patients.getPatientId(),firstCategory.getFirstCategoryId(),diseases.getDiseaseId(),key,value,themes.getThemeId());
+            texts = new Texts(patients.getPatientId(),firstCategory.getFirstCategoryId(),key,value,themes.getThemeId());
             //3.3将text加到数据库中
             textsMapper.addText(texts);
         }

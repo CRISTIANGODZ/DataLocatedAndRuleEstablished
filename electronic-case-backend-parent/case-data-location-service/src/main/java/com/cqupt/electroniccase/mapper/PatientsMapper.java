@@ -16,7 +16,7 @@ import java.util.List;
 public interface PatientsMapper {
 
     /**
-     * 添加病人信息：病种名称，第一种类id，病人姓名
+     * 添加病人信息：病种id，病人姓名
      * 并返回主键id
      * @param patients
      */
