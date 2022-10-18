@@ -8,6 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <modules>
         <module>case-data-location-service</module>
+        <module>extraction-rules-build</module>
     </modules>
     <name>electronic-case-backend-parent</name>
     <description>electronic-case-backend-parent</description>

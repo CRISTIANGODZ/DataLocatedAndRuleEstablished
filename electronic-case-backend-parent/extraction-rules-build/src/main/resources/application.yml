@@ -1,0 +1,24 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: extraction-rules-build
+  datasource:
+    url: jdbc:mysql://localhost:13306/ai_ann_db?useSSL=false&serverTimezone=UTC
+    username: root
+    password: Zdy!230003#
+    driver-class-name: com.mysql.jdbc.Driver
+  cloud:
+    nacos:
+      server-addr: localhost:8848
+      discovery:
+        cluster-name: CQ
+#        namespace: 9b4036eb-bc59-471c-b3a3-a19de58aea55 #dev环境
+#        ephemeral: false # 是否是临时实例
+
+mybatis:
+  #默认扫描的是启动类所在包路径
+  type-aliases-package: pojo
+  mapper-locations: mapper/*.xml  #sql映射文件位置
+  configuration:
+    map-underscore-to-camel-case: true
