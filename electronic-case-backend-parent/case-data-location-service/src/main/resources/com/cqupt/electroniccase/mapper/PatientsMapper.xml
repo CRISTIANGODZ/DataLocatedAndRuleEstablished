@@ -23,7 +23,7 @@
 
     <!--Patients getPatient(@Param("patientId") Long patientId);-->
     <select id="getPatient" resultType="Patients">
-        select `name`
+        select `name`, disease_id
         from patients
         where patient_id = #{patientId}
     </select>
