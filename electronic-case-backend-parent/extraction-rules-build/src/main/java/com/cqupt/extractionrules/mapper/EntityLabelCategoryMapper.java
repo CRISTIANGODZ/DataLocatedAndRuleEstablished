@@ -1,5 +1,6 @@
 package com.cqupt.extractionrules.mapper;
 
+import com.cqupt.extractionrules.pojo.EntityLabelCategory;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -10,4 +11,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface EntityLabelCategoryMapper {
 
+    /**
+     * 添加一条entityLabelCategory记录
+     * @param entityLabelCategory
+     */
+    void addEntityLabelCategory(EntityLabelCategory entityLabelCategory);
 }

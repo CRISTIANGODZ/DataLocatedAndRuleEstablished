@@ -15,6 +15,12 @@
 
     <!--下面撰写sql语句-->
 
+    <!--void addTemplate(Template template);-->
+    <insert id="addTemplate" useGeneratedKeys="true" keyProperty="templateId">
+        insert into template (template_name)
+        values (#{templateName})
+    </insert>
+
     <!--上面撰写sql语句-->
 
 </mapper>

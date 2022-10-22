@@ -15,6 +15,12 @@
 
     <!--下面撰写sql语句-->
 
+    <!--void addLabelRules(LabelRules labelRules);-->
+    <insert id="addLabelRules">
+        insert into label_rules (label_category_id, label_description)
+        values (#{labelCategoryId}, #{labelDescription})
+    </insert>
+
     <!--上面撰写sql语句-->
 
 </mapper>

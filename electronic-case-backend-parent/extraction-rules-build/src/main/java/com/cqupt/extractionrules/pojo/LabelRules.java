@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class LabelRules {
     private Long labelRuleId;
 
-    private Long labelId;
+    private Long labelCategoryId;
 
     private String labelDescription;
 }

@@ -15,6 +15,12 @@
 
     <!--下面撰写sql语句-->
 
+    <!--void addEntityLabelCategory(EntityLabelCategory entityLabelCategory);-->
+    <insert id="addEntityLabelCategory" useGeneratedKeys="true" keyProperty="labelCategoryId">
+        insert into entity_label_category (template_id, title, color, border_color)
+        values (#{templateId}, #{title}, #{color}, #{borderColor})
+    </insert>
+
     <!--上面撰写sql语句-->
 
 </mapper>

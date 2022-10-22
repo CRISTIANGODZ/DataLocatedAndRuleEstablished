@@ -1,6 +1,8 @@
 package com.cqupt.extractionrules.mapper;
 
+import com.cqupt.extractionrules.pojo.TemplateRules;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @auther DyingZhang
@@ -9,4 +11,11 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TemplateRulesMapper {
+
+    /**
+     * 添加templateRules
+     * @param templateRules
+     */
+    void addTemplateRules(TemplateRules templateRules);
+
 }

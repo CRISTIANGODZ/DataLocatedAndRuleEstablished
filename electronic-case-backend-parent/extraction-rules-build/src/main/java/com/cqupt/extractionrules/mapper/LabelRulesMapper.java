@@ -1,5 +1,6 @@
 package com.cqupt.extractionrules.mapper;
 
+import com.cqupt.extractionrules.pojo.LabelRules;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -9,4 +10,10 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface LabelRulesMapper {
+
+    /**
+     * 添加一条LabelRules
+     * @param labelRules
+     */
+    void addLabelRules(LabelRules labelRules);
 }

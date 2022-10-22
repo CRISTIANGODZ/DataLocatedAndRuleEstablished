@@ -19,6 +19,8 @@ public class EntityLabelCategory {
 
     private String color;
 
-    private String border_color;
+    private String borderColor;
+
+    private LabelRules labelRules;
 
 }
