@@ -31,21 +31,29 @@ public class TemplateController {
     }
 
     /**
-     * 根据id获取模板
-     */
-    @GetMapping("/get/single/instance")
-    public R getSingleTemplateController(Long templateId){
-        Template template = templateService.getTemplateByTemplateId(templateId);
-        return R.ok().addTemplate(template).message("获取模板成功！");
-    }
-
-    /**
      * 获取所有的标签模板
      */
     @GetMapping("/get/all/templates")
     public R getAllTemplatesController(){
         List<Template> allTemplates = templateService.getAllTemplates();
-        return R.ok().addTemplateList(allTemplates).message("成功返回所有模板！");
+        if (allTemplates.size() > 0){
+            return R.ok().addTemplateList(allTemplates).message("成功返回所有模板！");
+        } else {
+            return R.ok().message("目前并无模板存在！");
+        }
+    }
+
+    /**
+     * 根据id获取模板
+     */
+    @GetMapping("/get/single/instance")
+    public R getSingleTemplateController(Long templateId){
+        Template template = templateService.getTemplateByTemplateId(templateId);
+        if (template != null){
+            return R.ok().addTemplate(template).message("获取模板成功！");
+        } else {
+            return R.error().message("没有该模板信息,获取失败！");
+        }
     }
 
     /**
@@ -53,8 +61,11 @@ public class TemplateController {
      * @return
      */
     @PutMapping("/update")
-    public R updateSingleTemplateController(){
-        return R.ok().message("修改成功！");
+    public R updateSingleTemplateController(@RequestBody Template template){
+        templateService.deleteTemplateByTemplateId(template.getTemplateId());
+        Long templateId = templateService.addTemplateService(template);
+        template = templateService.getTemplateByTemplateId(templateId);
+        return R.ok().message("修改成功！").addTemplate(template);
     }
 
     /**
@@ -62,7 +73,12 @@ public class TemplateController {
      */
     @DeleteMapping("/delete")
     public R deleteSingleTemplateController(Long templateId){
-        templateService.deleteTemplateByTemplateId(templateId);
-        return R.ok().message("删除成功！");
+        Template template = templateService.getTemplateByTemplateId(templateId);
+        if (template != null){
+            templateService.deleteTemplateByTemplateId(templateId);
+            return R.ok().message("删除成功！");
+        } else {
+            return R.error().message("没有该模板信息，删除失败！");
+        }
     }
 }

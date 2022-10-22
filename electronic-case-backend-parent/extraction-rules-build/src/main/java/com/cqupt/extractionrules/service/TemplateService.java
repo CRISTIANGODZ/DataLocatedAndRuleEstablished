@@ -14,8 +14,9 @@ public interface TemplateService {
     /**
      * 添加模板
      * @param template
+     * @return
      */
-    void addTemplateService(Template template);
+    Long addTemplateService(Template template);
 
     /**
      * 获取所有的标签模板

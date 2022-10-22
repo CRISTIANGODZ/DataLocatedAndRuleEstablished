@@ -42,7 +42,7 @@ public class TemplateServiceImpl implements TemplateService {
      * @param template
      */
     @Override
-    public void addTemplateService(Template template) {
+    public Long addTemplateService(Template template) {
         //1.添加template记录
         templateMapper.addTemplate(template);
         //2.添加templateRules记录
@@ -63,6 +63,7 @@ public class TemplateServiceImpl implements TemplateService {
                 //上面为提取labelRules对象，并注入labelId
             labelRulesMapper.addLabelRules(labelRules);
         }
+        return templateId;
     }
 
     /**
@@ -102,22 +103,27 @@ public class TemplateServiceImpl implements TemplateService {
     @Override
     public Template getTemplateByTemplateId(Long templateId) {
         Template template = templateMapper.getTemplateByTemplateId(templateId);
-        //1.根据templateId获取TemplateRules相关信息
-        TemplateRules templateRules = templateRulesMapper.getTemplateRulesByTemplateId(templateId);
-        //1.1将templateRules注入template中
-        template.setTemplateRules(templateRules);
-        //2.根据templateId获取EntityLabelCategory信息
-        List<EntityLabelCategory> entityLabelCategoryList = entityLabelCategoryMapper.getEntityLabelCategoryByTemplateId(templateId);
-        for (EntityLabelCategory entityLabelCategory : entityLabelCategoryList){
-            //3.根据labelCategoryId获取LabelRules信息
-            Long labelCategoryId = entityLabelCategory.getLabelCategoryId();
-            LabelRules labelRules = labelRulesMapper.getLabelRules(labelCategoryId);
-            //3.1将labelRules注入到entityLabelCategory中
-            entityLabelCategory.setLabelRules(labelRules);
+        if (template != null){
+
+            //1.根据templateId获取TemplateRules相关信息
+            TemplateRules templateRules = templateRulesMapper.getTemplateRulesByTemplateId(templateId);
+            //1.1将templateRules注入template中
+            template.setTemplateRules(templateRules);
+            //2.根据templateId获取EntityLabelCategory信息
+            List<EntityLabelCategory> entityLabelCategoryList = entityLabelCategoryMapper.getEntityLabelCategoryByTemplateId(templateId);
+            for (EntityLabelCategory entityLabelCategory : entityLabelCategoryList){
+                //3.根据labelCategoryId获取LabelRules信息
+                Long labelCategoryId = entityLabelCategory.getLabelCategoryId();
+                LabelRules labelRules = labelRulesMapper.getLabelRules(labelCategoryId);
+                //3.1将labelRules注入到entityLabelCategory中
+                entityLabelCategory.setLabelRules(labelRules);
+            }
+            //2.1将list<EntityLabelCategory>注入到template中
+            template.setEntityLabelCategoryList(entityLabelCategoryList);
+            return template;
+        } else {
+            return null;
         }
-        //2.1将list<EntityLabelCategory>注入到template中
-        template.setEntityLabelCategoryList(entityLabelCategoryList);
-        return template;
     }
 
     /**
