@@ -19,6 +19,8 @@ public class R {
 
     private List<Template> templateList;
 
+    private Template template;
+
     private Map<String, Object> data = new HashMap<String, Object>();
 
     //把构造方法私有
@@ -69,6 +71,11 @@ public class R {
 
     public R addTemplateList(List<Template> templateList){
         this.templateList = templateList;
+        return this;
+    }
+
+    public R addTemplate(Template template){
+        this.template = template;
         return this;
     }
 }

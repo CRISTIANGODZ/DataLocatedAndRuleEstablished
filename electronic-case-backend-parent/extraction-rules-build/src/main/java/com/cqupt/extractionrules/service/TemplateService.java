@@ -22,4 +22,10 @@ public interface TemplateService {
      */
     List<Template> getAllTemplates();
 
+    /**
+     * 根据templateId获取模板
+     * @param templateId
+     * @return
+     */
+    Template getTemplateByTemplateId(Long templateId);
 }

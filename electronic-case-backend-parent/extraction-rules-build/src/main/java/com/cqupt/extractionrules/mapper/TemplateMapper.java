@@ -2,6 +2,7 @@ package com.cqupt.extractionrules.mapper;
 
 import com.cqupt.extractionrules.pojo.Template;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -25,4 +26,10 @@ public interface TemplateMapper {
      */
     List<Template> getAllTemplates();
 
+    /**
+     * 根据templateId获取template
+     * @param templateId
+     * @return
+     */
+    Template getTemplateByTemplateId(@Param("templateId") Long templateId);
 }

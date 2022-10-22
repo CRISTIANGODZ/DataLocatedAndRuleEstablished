@@ -34,8 +34,9 @@ public class TemplateController {
      * 根据id获取模板
      */
     @GetMapping("/get/single/instance")
-    public R getSingleTemplateController(){
-        return R.ok();
+    public R getSingleTemplateController(Long templateId){
+        Template template = templateService.getTemplateByTemplateId(templateId);
+        return R.ok().addTemplate(template);
     }
 
     /**
