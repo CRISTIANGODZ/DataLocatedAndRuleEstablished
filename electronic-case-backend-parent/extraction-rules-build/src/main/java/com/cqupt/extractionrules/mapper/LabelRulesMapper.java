@@ -24,4 +24,10 @@ public interface LabelRulesMapper {
      * @return
      */
     LabelRules getLabelRules(@Param("labelCategoryId") Long labelCategoryId);
+
+    /**
+     * 根据labelCategoryId删除labelRules
+     * @param labelCategoryId
+     */
+    void deleteLabelRulesByLabelCategoryId(@Param("labelCategoryId") Long labelCategoryId);
 }

@@ -120,4 +120,26 @@ public class TemplateServiceImpl implements TemplateService {
         return template;
     }
 
+    /**
+     * 根据templateId删除模板
+     * @param templateId
+     */
+    @Override
+    public void deleteTemplateByTemplateId(Long templateId) {
+        //1.删除Template
+        templateMapper.deleteTemplateByTemplateId(templateId);
+        //2.删除TemplateRules
+        templateRulesMapper.deleteTemplateRulesByTemplateId(templateId);
+        //3.根据templateId找出对应的List<EntityLabelCategory>
+        List<EntityLabelCategory> entityLabelCategoryList = entityLabelCategoryMapper.getEntityLabelCategoryByTemplateId(templateId);
+        for (EntityLabelCategory entityLabelCategory : entityLabelCategoryList){
+            //3.1获取EntityLabelCategory的labelCategoryId
+            Long labelCategoryId = entityLabelCategory.getLabelCategoryId();
+            //3.2删除EntityLabelCategory
+            entityLabelCategoryMapper.deleteEntityLabelCategoryByTemplateId(templateId);
+            //4.根据labelCategoryId删除labelRules
+            labelRulesMapper.deleteLabelRulesByLabelCategoryId(labelCategoryId);
+        }
+    }
+
 }

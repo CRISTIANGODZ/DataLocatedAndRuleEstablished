@@ -24,4 +24,10 @@ public interface TemplateRulesMapper {
      * @return
      */
     TemplateRules getTemplateRulesByTemplateId(@Param("templateId") Long templateId);
+
+    /**
+     * 根据templateId删除TemplateRules
+     * @param templateId
+     */
+    void deleteTemplateRulesByTemplateId(@Param("templateId") Long templateId);
 }

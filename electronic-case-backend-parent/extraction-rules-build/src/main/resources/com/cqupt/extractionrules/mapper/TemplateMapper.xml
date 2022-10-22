@@ -34,6 +34,12 @@
         where template_id = #{templateId}
     </select>
 
+    <!--void deleteTemplateByTemplateId(@Param("templateId") Long templateId);-->
+    <delete id="deleteTemplateByTemplateId">
+        delete from template
+        where template_id = #{templateId}
+    </delete>
+
     <!--上面撰写sql语句-->
 
 </mapper>

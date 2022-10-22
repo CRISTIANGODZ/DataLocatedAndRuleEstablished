@@ -28,6 +28,12 @@
         where template_id = #{templateId}
     </select>
 
+    <!--void deleteTemplateRulesByTemplateId(@Param("templateId") Long templateId);-->
+    <delete id="deleteTemplateRulesByTemplateId">
+        delete from template_rules
+        where template_id = #{templateId}
+    </delete>
+
     <!--上面撰写sql语句-->
 
 </mapper>

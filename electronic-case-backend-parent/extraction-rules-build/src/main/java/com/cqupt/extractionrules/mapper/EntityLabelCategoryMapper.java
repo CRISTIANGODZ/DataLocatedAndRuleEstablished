@@ -26,4 +26,10 @@ public interface EntityLabelCategoryMapper {
      * @return
      */
     List<EntityLabelCategory> getEntityLabelCategoryByTemplateId(@Param("templateId") Long templateId);
+
+    /**
+     * 根据templateId删除EntityLabelCategory
+     * @param templateId
+     */
+    void deleteEntityLabelCategoryByTemplateId(@Param("templateId") Long templateId);
 }

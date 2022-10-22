@@ -28,6 +28,12 @@
         where template_id = #{templateId}
     </select>
 
+    <!--void deleteEntityLabelCategoryByTemplateId(@Param("templateId") Long templateId);-->
+    <delete id="deleteEntityLabelCategoryByTemplateId">
+        delete from entity_label_category
+        where template_id = #{templateId}
+    </delete>
+
     <!--上面撰写sql语句-->
 
 </mapper>

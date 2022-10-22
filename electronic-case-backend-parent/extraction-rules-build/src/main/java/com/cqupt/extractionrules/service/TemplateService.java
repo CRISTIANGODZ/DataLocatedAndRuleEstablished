@@ -28,4 +28,10 @@ public interface TemplateService {
      * @return
      */
     Template getTemplateByTemplateId(Long templateId);
+
+    /**
+     * 根据templateId删除模板
+     * @param templateId
+     */
+    void deleteTemplateByTemplateId(Long templateId);
 }

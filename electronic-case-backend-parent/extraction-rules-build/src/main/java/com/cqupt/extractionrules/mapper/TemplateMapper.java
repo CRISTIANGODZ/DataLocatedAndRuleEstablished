@@ -32,4 +32,10 @@ public interface TemplateMapper {
      * @return
      */
     Template getTemplateByTemplateId(@Param("templateId") Long templateId);
+
+    /**
+     * 根据templateId删除template
+     * @param templateId
+     */
+    void deleteTemplateByTemplateId(@Param("templateId") Long templateId);
 }

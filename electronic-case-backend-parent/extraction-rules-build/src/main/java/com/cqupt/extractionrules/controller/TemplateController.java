@@ -27,7 +27,7 @@ public class TemplateController {
     @PostMapping("/add")
     public R addTemplateController(@RequestBody Template template){
         templateService.addTemplateService(template);
-        return R.ok();
+        return R.ok().message("添加成功！");
     }
 
     /**
@@ -36,7 +36,7 @@ public class TemplateController {
     @GetMapping("/get/single/instance")
     public R getSingleTemplateController(Long templateId){
         Template template = templateService.getTemplateByTemplateId(templateId);
-        return R.ok().addTemplate(template);
+        return R.ok().addTemplate(template).message("获取模板成功！");
     }
 
     /**
@@ -45,23 +45,24 @@ public class TemplateController {
     @GetMapping("/get/all/templates")
     public R getAllTemplatesController(){
         List<Template> allTemplates = templateService.getAllTemplates();
-        return R.ok().addTemplateList(allTemplates);
+        return R.ok().addTemplateList(allTemplates).message("成功返回所有模板！");
     }
 
     /**
      * 根据id修改所有的标签模板
      * @return
      */
-    @PostMapping("/update")
+    @PutMapping("/update")
     public R updateSingleTemplateController(){
-        return R.ok();
+        return R.ok().message("修改成功！");
     }
 
     /**
      * 根据id删除标签模板
      */
-    @Delete("/delete")
-    public R deleteSingleTemplateController(){
-        return R.ok();
+    @DeleteMapping("/delete")
+    public R deleteSingleTemplateController(Long templateId){
+        templateService.deleteTemplateByTemplateId(templateId);
+        return R.ok().message("删除成功！");
     }
 }

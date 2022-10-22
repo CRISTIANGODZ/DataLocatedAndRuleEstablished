@@ -28,6 +28,12 @@
         where label_category_id = #{labelCategoryId}
     </select>
 
+    <!--void deleteLabelRulesByLabelCategoryId(@Param("labelCategoryId") Long labelCategoryId);-->
+    <delete id="deleteLabelRulesByLabelCategoryId">
+        delete from label_rules
+        where label_category_id = #{labelCategoryId}
+    </delete>
+
     <!--上面撰写sql语句-->
 
 </mapper>
