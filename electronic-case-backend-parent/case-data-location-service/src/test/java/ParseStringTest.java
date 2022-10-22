@@ -1,9 +1,6 @@
-import pojo.Diseases;
-import pojo.FirstCategory;
-import pojo.Patients;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.cqupt.electroniccase.pojo.Diseases;
+import com.cqupt.electroniccase.pojo.FirstCategory;
+import com.cqupt.electroniccase.pojo.Patients;
 
 /**
  * @auther DyingZhang

@@ -1,5 +1,6 @@
 package com.cqupt.extractionrules.utils;
 
+import com.cqupt.extractionrules.pojo.Template;
 import lombok.Data;
 
 import java.util.HashMap;
@@ -16,7 +17,7 @@ public class R {
 
     private String message;
 
-    private List patientThemeTextList;
+    private List<Template> templateList;
 
     private Map<String, Object> data = new HashMap<String, Object>();
 
@@ -66,8 +67,8 @@ public class R {
         return this;
     }
 
-    public R addList(List list){
-        this.patientThemeTextList = list;
+    public R addTemplateList(List<Template> templateList){
+        this.templateList = templateList;
         return this;
     }
 }

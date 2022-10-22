@@ -18,7 +18,7 @@ spring:
 
 mybatis:
   #默认扫描的是启动类所在包路径
-  type-aliases-package: pojo
+  type-aliases-package: com/cqupt/extractionrules/pojo
   mapper-locations: mapper/*.xml  #sql映射文件位置
   configuration:
     map-underscore-to-camel-case: true

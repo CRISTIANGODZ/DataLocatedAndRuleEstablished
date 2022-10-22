@@ -1,6 +1,6 @@
 package com.cqupt.electroniccase.service;
 
-import pojo.Texts;
+import com.cqupt.electroniccase.pojo.Texts;
 
 import java.util.List;
 

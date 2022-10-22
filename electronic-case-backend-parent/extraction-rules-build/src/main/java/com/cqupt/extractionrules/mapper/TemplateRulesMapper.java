@@ -18,4 +18,10 @@ public interface TemplateRulesMapper {
      */
     void addTemplateRules(TemplateRules templateRules);
 
+    /**
+     * 根据templateId获取TemplateRules对象
+     * @param templateId
+     * @return
+     */
+    TemplateRules getTemplateRulesByTemplateId(@Param("templateId") Long templateId);
 }

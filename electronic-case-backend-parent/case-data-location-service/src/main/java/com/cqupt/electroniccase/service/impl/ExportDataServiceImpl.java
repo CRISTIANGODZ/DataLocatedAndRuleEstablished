@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import pojo.Diseases;
-import pojo.FirstCategory;
-import pojo.Patients;
-import pojo.Texts;
+import com.cqupt.electroniccase.pojo.Diseases;
+import com.cqupt.electroniccase.pojo.FirstCategory;
+import com.cqupt.electroniccase.pojo.Patients;
+import com.cqupt.electroniccase.pojo.Texts;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,22 +1,18 @@
 package com.cqupt.electroniccase.controller;
 
-import com.cqupt.electroniccase.mapper.*;
 import com.cqupt.electroniccase.service.ExportDataService;
-import com.cqupt.electroniccase.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pojo.Texts;
+import com.cqupt.electroniccase.pojo.Texts;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;

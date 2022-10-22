@@ -21,6 +21,13 @@
         values (#{templateId}, #{title}, #{color}, #{borderColor})
     </insert>
 
+    <!--List<EntityLabelCategory> getEntityLabelCategoryByTemplateId(@Param("templateId") Long templateId);-->
+    <select id="getEntityLabelCategoryByTemplateId" resultType="EntityLabelCategory">
+        select *
+        from entity_label_category
+        where template_id = #{templateId}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

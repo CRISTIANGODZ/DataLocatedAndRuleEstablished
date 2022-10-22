@@ -64,4 +64,34 @@ public class TemplateServiceImpl implements TemplateService {
             labelRulesMapper.addLabelRules(labelRules);
         }
     }
+
+    /**
+     * 获取所有的标签模板
+     * @return
+     */
+    @Override
+    public List<Template> getAllTemplates() {
+        //1.获取所有的模板的列表
+        List<Template> templateList = templateMapper.getAllTemplates();
+        for (Template template : templateList){
+            Long templateId = template.getTemplateId();
+            //2.根据templateId获取TemplateRules相关信息
+            TemplateRules templateRules = templateRulesMapper.getTemplateRulesByTemplateId(templateId);
+            //2.1将templateRules注入template中
+            template.setTemplateRules(templateRules);
+            //3.根据templateId获取EntityLabelCategory信息
+            List<EntityLabelCategory> entityLabelCategoryList = entityLabelCategoryMapper.getEntityLabelCategoryByTemplateId(templateId);
+            for (EntityLabelCategory entityLabelCategory : entityLabelCategoryList){
+                //4.根据labelCategoryId获取LabelRules信息
+                Long labelCategoryId = entityLabelCategory.getLabelCategoryId();
+                LabelRules labelRules = labelRulesMapper.getLabelRules(labelCategoryId);
+                //4.1将labelRules注入到entityLabelCategory中
+                entityLabelCategory.setLabelRules(labelRules);
+            }
+            //3.1将list<EntityLabelCategory>注入到template中
+            template.setEntityLabelCategoryList(entityLabelCategoryList);
+        }
+        return templateList;
+    }
+
 }

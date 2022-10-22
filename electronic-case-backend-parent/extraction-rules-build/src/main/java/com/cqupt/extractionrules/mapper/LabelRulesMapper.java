@@ -2,6 +2,7 @@ package com.cqupt.extractionrules.mapper;
 
 import com.cqupt.extractionrules.pojo.LabelRules;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * @auther DyingZhang
@@ -16,4 +17,11 @@ public interface LabelRulesMapper {
      * @param labelRules
      */
     void addLabelRules(LabelRules labelRules);
+
+    /**
+     * 根据labelCategoryId获取LabelRules
+     * @param labelCategoryId
+     * @return
+     */
+    LabelRules getLabelRules(@Param("labelCategoryId") Long labelCategoryId);
 }

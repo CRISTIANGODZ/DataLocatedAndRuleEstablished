@@ -2,10 +2,7 @@ package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import pojo.Patients;
-import pojo.Texts;
-
-import java.util.List;
+import com.cqupt.electroniccase.pojo.Patients;
 
 /**
  * @auther DyingZhang

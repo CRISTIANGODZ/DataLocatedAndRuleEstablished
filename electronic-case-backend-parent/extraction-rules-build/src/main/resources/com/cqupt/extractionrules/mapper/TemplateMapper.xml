@@ -21,6 +21,12 @@
         values (#{templateName})
     </insert>
 
+    <!--List<Template> getAllTemplates();-->
+    <select id="getAllTemplates" resultType="Template">
+        select *
+        from template
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

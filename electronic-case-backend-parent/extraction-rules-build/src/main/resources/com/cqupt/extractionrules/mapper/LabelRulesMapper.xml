@@ -21,6 +21,13 @@
         values (#{labelCategoryId}, #{labelDescription})
     </insert>
 
+    <!--LabelRules getLabelRules(@Param("labelCategoryId") Long labelCategoryId);-->
+    <select id="getLabelRules" resultType="LabelRules">
+        select *
+        from label_rules
+        where label_category_id = #{labelCategoryId}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

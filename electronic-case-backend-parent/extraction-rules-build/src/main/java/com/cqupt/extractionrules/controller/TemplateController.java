@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @auther DyingZhang
  * @Create 2022-10-18 下午 9:01
@@ -39,9 +41,10 @@ public class TemplateController {
     /**
      * 获取所有的标签模板
      */
-    @GetMapping("/get/all/instance")
+    @GetMapping("/get/all/templates")
     public R getAllTemplatesController(){
-        return R.ok();
+        List<Template> allTemplates = templateService.getAllTemplates();
+        return R.ok().addTemplateList(allTemplates);
     }
 
     /**

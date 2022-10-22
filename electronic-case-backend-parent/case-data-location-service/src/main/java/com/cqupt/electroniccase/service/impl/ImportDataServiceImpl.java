@@ -1,6 +1,7 @@
 package com.cqupt.electroniccase.service.impl;
 
 import com.cqupt.electroniccase.mapper.*;
+import com.cqupt.electroniccase.pojo.*;
 import com.cqupt.electroniccase.service.ImportDataService;
 import com.cqupt.electroniccase.utils.SeparatorUtil;
 import com.cqupt.electroniccase.utils.ReaderCSV;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pojo.*;
 
 import java.io.File;
 import java.io.IOException;

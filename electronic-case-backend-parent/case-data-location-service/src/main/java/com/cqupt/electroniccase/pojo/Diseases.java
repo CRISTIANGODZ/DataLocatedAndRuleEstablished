@@ -1,4 +1,4 @@
-package pojo;
+package com.cqupt.electroniccase.pojo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

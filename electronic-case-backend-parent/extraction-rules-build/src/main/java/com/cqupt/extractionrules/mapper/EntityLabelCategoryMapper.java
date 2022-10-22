@@ -2,6 +2,9 @@ package com.cqupt.extractionrules.mapper;
 
 import com.cqupt.extractionrules.pojo.EntityLabelCategory;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @auther DyingZhang
@@ -16,4 +19,11 @@ public interface EntityLabelCategoryMapper {
      * @param entityLabelCategory
      */
     void addEntityLabelCategory(EntityLabelCategory entityLabelCategory);
+
+    /**
+     * 根据templateId获取EntityLabelCategory
+     * @param templateId
+     * @return
+     */
+    List<EntityLabelCategory> getEntityLabelCategoryByTemplateId(@Param("templateId") Long templateId);
 }

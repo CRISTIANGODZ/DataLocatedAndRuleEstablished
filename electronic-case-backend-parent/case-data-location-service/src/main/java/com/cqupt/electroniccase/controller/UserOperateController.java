@@ -5,7 +5,7 @@ import com.cqupt.electroniccase.service.UserOperateService;
 import com.cqupt.electroniccase.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pojo.Texts;
+import com.cqupt.electroniccase.pojo.Texts;
 
 import java.util.List;
 

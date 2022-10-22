@@ -21,6 +21,13 @@
         values (#{templateId},#{templateDesc})
     </insert>
 
+    <!--TemplateRules getTemplateRulesByTemplateId(@Param("templateId") Long templateId);-->
+    <select id="getTemplateRulesByTemplateId" resultType="TemplateRules">
+        select *
+        from template_rules
+        where template_id = #{templateId}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

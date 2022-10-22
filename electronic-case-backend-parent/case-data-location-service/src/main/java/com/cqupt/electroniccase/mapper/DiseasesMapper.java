@@ -2,7 +2,7 @@ package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import pojo.Diseases;
+import com.cqupt.electroniccase.pojo.Diseases;
 
 /**
  * @auther DyingZhang
