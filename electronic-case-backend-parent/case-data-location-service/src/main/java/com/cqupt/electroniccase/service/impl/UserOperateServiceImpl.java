@@ -30,6 +30,7 @@ public class UserOperateServiceImpl implements UserOperateService {
     @Autowired
     ThemesMapper themesMapper;
 
+
     /**
      * 删除病人某条text数据信息
      * @param texts
@@ -77,5 +78,30 @@ public class UserOperateServiceImpl implements UserOperateService {
         patientsMapper.deletePatient(patientId);
     }
 
+    /**
+     * 判断数据是否存在
+     * @param texts
+     * @return
+     */
+    @Override
+    public boolean isTextExists(Texts texts) {
+        Texts text = textsMapper.getTextByTextId(texts);
+        if (text != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 根据templateId获取text
+     * @param texts
+     * @return
+     */
+    @Override
+    public Texts getSingleText(Texts texts) {
+        Texts text = textsMapper.getTextByTextId(texts);
+        return text;
+    }
 
 }

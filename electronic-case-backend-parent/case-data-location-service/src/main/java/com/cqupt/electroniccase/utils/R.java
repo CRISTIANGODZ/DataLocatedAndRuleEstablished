@@ -1,5 +1,6 @@
 package com.cqupt.electroniccase.utils;
 
+import com.cqupt.electroniccase.pojo.Texts;
 import lombok.Data;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,8 @@ public class R {
     private Integer code;
 
     private String message;
+
+    private Texts texts;
 
     private List patientThemeTextList;
 
@@ -67,6 +70,11 @@ public class R {
 
     public R addList(List list){
         this.patientThemeTextList = list;
+        return this;
+    }
+
+    public R addTexts(Texts texts){
+        this.texts = texts;
         return this;
     }
 }

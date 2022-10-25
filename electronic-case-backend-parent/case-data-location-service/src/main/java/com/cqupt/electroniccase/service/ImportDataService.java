@@ -21,6 +21,7 @@ public interface ImportDataService {
      * 解析CSV数据
      * @param csvPath
      */
-    void parseCSVService(String csvPath);
+    boolean parseCSVService(String csvPath);
+
 
 }

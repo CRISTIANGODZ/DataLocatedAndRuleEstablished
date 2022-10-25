@@ -42,7 +42,7 @@ public class ImportDataServiceImpl implements ImportDataService {
      * @param csvData
      */
     @Override
-    public String  submitCSVService(MultipartFile csvData) {
+    public String submitCSVService(MultipartFile csvData) {
         //获取上传的文件的文件名
         String filename = csvData.getOriginalFilename();
         //获取上传的文件的后缀名
@@ -53,7 +53,7 @@ public class ImportDataServiceImpl implements ImportDataService {
         //获取当前工程的真实路径
 
 //需手动设置!!!
-        String csvDataPath = "F:\\project-workspace\\DataLocatedAndRuleEstablished\\electronic-case-backend-parent\\case-data-location-service\\src\\main\\resources\\submit-csv";
+        String csvDataPath = "F:\\project-workspace\\electronic-case-backend-parent\\case-data-location-service\\src\\main\\resources\\submit-csv";
         //创建photoPath所对应的File对象
         File file = new File(csvDataPath);
         if (!file.exists()){
@@ -74,7 +74,7 @@ public class ImportDataServiceImpl implements ImportDataService {
      * @param csvPath
      */
     @Override
-    public void parseCSVService(String csvPath) {
+    public boolean parseCSVService(String csvPath) {
         //1.读取CSV的内容进入内存
         StringBuffer stringBuffer = ReaderCSV.printCSVFile(csvPath,' ');
         //1.1解析第一种类，病人信息，病种的字符串
@@ -135,7 +135,7 @@ public class ImportDataServiceImpl implements ImportDataService {
             textsMapper.addText(texts);
         }
 
-
+        return true;
     }
 
 }

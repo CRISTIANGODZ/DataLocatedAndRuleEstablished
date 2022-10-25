@@ -31,8 +31,12 @@ public class ImportDataController {
     @PostMapping("/submit/csv")
     public R submitCSVController(MultipartFile csvData, HttpSession session) throws IOException {
         String csvPath = importDataService.submitCSVService(csvData);
-        importDataService.parseCSVService(csvPath);
-        return R.ok();
+        boolean isSuccessful = importDataService.parseCSVService(csvPath);
+        if (isSuccessful) {
+            return R.ok().message("上传成功！");
+        } else {
+            return R.error().message("上传失败！");
+        }
     }
 
 }

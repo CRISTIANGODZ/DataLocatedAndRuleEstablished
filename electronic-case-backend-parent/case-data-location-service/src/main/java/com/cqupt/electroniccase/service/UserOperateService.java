@@ -26,4 +26,18 @@ public interface UserOperateService {
      * @param texts
      */
     void deletePatientAllText(Texts texts);
+
+    /**
+     * 判断数据是否存在
+     * @param texts
+     * @return
+     */
+    boolean isTextExists(Texts texts);
+
+    /**
+     * 根据templateId获取text
+     * @param texts
+     * @return
+     */
+    Texts getSingleText(Texts texts);
 }

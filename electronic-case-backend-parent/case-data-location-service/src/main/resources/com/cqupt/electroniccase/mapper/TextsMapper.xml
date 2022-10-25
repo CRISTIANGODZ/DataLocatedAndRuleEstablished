@@ -68,6 +68,13 @@
         where patient_id = #{patientId};
     </select>
 
+    <!--Texts getTextByTextId();-->
+    <select id="getTextByTextId" resultType="Texts">
+        select *
+        from texts
+        where text_id = #{textId}
+    </select>
+
     <!--上面撰写sql语句-->
 
 </mapper>

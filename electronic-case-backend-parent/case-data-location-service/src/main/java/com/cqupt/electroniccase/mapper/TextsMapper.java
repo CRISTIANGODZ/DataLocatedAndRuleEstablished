@@ -52,4 +52,10 @@ public interface TextsMapper {
      * @param patientId
      */
     List<Texts> getAllThemeIdByPatientId(@Param("patientId") Long patientId);
+
+    /**
+     * 根据templateId删除
+     * @return
+     */
+    Texts getTextByTextId(Texts texts);
 }

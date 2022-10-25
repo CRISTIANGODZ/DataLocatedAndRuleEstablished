@@ -32,7 +32,11 @@ public class UserOperateController {
     @GetMapping("/patient/text/get")
     public R getPatientTextByNameController(String name){
         List<Texts> patientAllText = exportDataService.getPatientAllText(name);
-        return R.ok().addList(patientAllText);
+        if (patientAllText != null){
+            return R.ok().addList(patientAllText).message("返回成功！");
+        } else {
+            return R.error().message("返回失败！");
+        }
     }
 
     /**
@@ -42,8 +46,13 @@ public class UserOperateController {
      */
     @PostMapping("/patient/text/delete")
     public R deletePatientTextByTextIdController(Texts texts){
-        userOperateService.deleteText(texts);
-        return R.ok().message("删除成功");
+        boolean isTextExists = userOperateService.isTextExists(texts);
+        if (isTextExists) {
+            userOperateService.deleteText(texts);
+            return R.ok().message("删除成功！");
+        } else {
+            return R.error().message("该信息不存在，删除失败！");
+        }
     }
 
     /**
@@ -51,8 +60,12 @@ public class UserOperateController {
      */
     @PostMapping("/patient/text/update")
     public R updatePatientTextByTextIdController(Texts texts){
-        userOperateService.updateText(texts);
-        return R.ok().message("修改成功");
+        if (userOperateService.isTextExists(texts)) {
+            userOperateService.updateText(texts);
+            return R.ok().message("修改成功");
+        } else {
+            return R.error().message("未查询到该条信息，修改失败！");
+        }
     }
 
     /**
@@ -62,6 +75,19 @@ public class UserOperateController {
     public R deletePatientAllTextController(Texts texts){
         userOperateService.deletePatientAllText(texts);
         return R.ok().message("该病人信息以全部删除");
+    }
+
+    /**
+     * 根据textId查询text记录
+     */
+    @GetMapping("/patient/get/single/text")
+    public R getSingleText(Texts texts){
+        Texts text = userOperateService.getSingleText(texts);
+        if (text != null){
+            return R.ok().addTexts(text).message("返回成功！");
+        } else {
+            return R.error().message("数据不存在，返回失败！");
+        }
     }
 
 
