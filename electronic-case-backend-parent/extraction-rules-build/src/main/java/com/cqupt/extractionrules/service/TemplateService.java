@@ -35,4 +35,11 @@ public interface TemplateService {
      * @param templateId
      */
     void deleteTemplateByTemplateId(Long templateId);
+
+    /**
+     * 根据templateId判断template是否存在
+     * @param templateId
+     * @return
+     */
+    boolean isTemplateExists(Long templateId);
 }

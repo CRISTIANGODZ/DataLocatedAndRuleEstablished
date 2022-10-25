@@ -148,4 +148,14 @@ public class TemplateServiceImpl implements TemplateService {
         }
     }
 
+    @Override
+    public boolean isTemplateExists(Long templateId) {
+        Template template = templateMapper.getTemplateByTemplateId(templateId);
+        if (template != null){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

@@ -62,10 +62,15 @@ public class TemplateController {
      */
     @PutMapping("/update")
     public R updateSingleTemplateController(@RequestBody Template template){
-        templateService.deleteTemplateByTemplateId(template.getTemplateId());
-        Long templateId = templateService.addTemplateService(template);
-        template = templateService.getTemplateByTemplateId(templateId);
-        return R.ok().message("修改成功！").addTemplate(template);
+        Long templateId = template.getTemplateId();
+        boolean isTemplateExists = templateService.isTemplateExists(templateId);
+        if (isTemplateExists){
+            templateService.deleteTemplateByTemplateId(templateId);
+            templateService.addTemplateService(template);
+            return R.ok().message("修改成功！");
+        } else {
+            return R.error().message("没有改模板信息，修改失败！");
+        }
     }
 
     /**
@@ -73,8 +78,8 @@ public class TemplateController {
      */
     @DeleteMapping("/delete")
     public R deleteSingleTemplateController(Long templateId){
-        Template template = templateService.getTemplateByTemplateId(templateId);
-        if (template != null){
+        boolean isTemplateExists = templateService.isTemplateExists(templateId);
+        if (isTemplateExists){
             templateService.deleteTemplateByTemplateId(templateId);
             return R.ok().message("删除成功！");
         } else {
