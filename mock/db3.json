@@ -1,0 +1,74 @@
+{
+  "login": {
+    "status": 200,
+    "msg": "success",
+    "data": {
+      "username": "admin",
+      "role": "admin"
+    }
+  },
+  "task": {
+    "update_time": "2020-02-12",
+    "connectionCategories": [
+      {
+        "id": 0,
+        "text": "修饰"
+      },
+      {
+        "id": 1,
+        "text": "限定"
+      },
+      {
+        "id": 2,
+        "text": "是...的动作"
+      }
+    ],
+    "labelCategories": [
+      {
+        "id": 0,
+        "text": "名词",
+        "color": "#eac0a2",
+        "borderColor": "#a38671"
+      },
+      {
+        "id": 1,
+        "text": "动词",
+        "color": "#619dff",
+        "borderColor": "#436db2"
+      },
+      {
+        "id": 2,
+        "text": "形容词",
+        "color": "#9d61ff",
+        "borderColor": "#6d43b2"
+      },
+      {
+        "id": 3,
+        "text": "副词",
+        "color": "#ff9d61",
+        "borderColor": "#b26d43"
+      }
+    ],
+    "labels": [
+      {
+        "id": 0,
+        "categoryId": 0,
+        "startIndex": 386,
+        "endIndex": 396
+      },
+      {
+        "id": 1,
+        "categoryId": 0,
+        "startIndex": 574,
+        "endIndex": 582
+      }
+    ],
+    "connections": [],
+    "title": "测试文件1",
+    "content": "MIT License\n\nCopyright (c) 2018 iczer\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n",
+    "done_state": true
+  },
+  "profile": {
+    "name": "typicode"
+  }
+}

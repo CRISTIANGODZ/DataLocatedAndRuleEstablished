@@ -1,0 +1,260 @@
+{
+  "permit": {
+    "roles": {
+      "code": 200,
+      "data": {
+        "total": 3,
+        "currentPage": 1,
+        "pageSize": 10,
+        "roles": [
+          {
+            "id": 1,
+            "name": "root",
+            "title": "超级管理员",
+            "description": "超级管理员",
+            "permissions": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "id": 2,
+            "name": "admin",
+            "title": "管理员",
+            "description": "管理员",
+            "permissions": [
+              1,
+              2,
+              3,
+              4
+            ]
+          },
+          {
+            "id": 3,
+            "name": "user",
+            "title": "普通用户",
+            "description": "普通用户",
+            "permissions": [
+              1,
+              4
+            ]
+          }
+        ]
+      }
+    },
+    "permissions": {
+      "code": 200,
+      "data": [
+        {
+          "id": 1,
+          "icon": "mdi-inbox-arrow-down",
+          "title": "任务大厅",
+          "path": "/main"
+        },
+        {
+          "id": 2,
+          "icon": "mdi-dresser",
+          "title": "任务分配",
+          "path": "/main"
+        },
+        {
+          "id": 3,
+          "icon": "mdi-send",
+          "title": "标签管理",
+          "path": "/labels"
+        },
+        {
+          "id": 4,
+          "icon": "mdi-camera-account",
+          "title": "个人信息",
+          "path": "/profile"
+        },
+        {
+          "id": 5,
+          "icon": "mdi-account-cog",
+          "title": "人员管理",
+          "path": "/personManagement"
+        },
+        {
+          "id": 6,
+          "icon": "mdi-shield-lock",
+          "title": "权限管理",
+          "path": "/personManagement"
+        },
+        {
+          "id": 7,
+          "icon": "mdi-database",
+          "title": "数据管理",
+          "path": "/datasetManagement"
+        },
+        {
+          "id": 8,
+          "icon": "mdi-package-variant",
+          "title": "模型管理",
+          "path": "/modelManagement"
+        }
+      ]
+    }
+  },
+  "users": {
+    "code": 200,
+    "data": {
+      "pagination": {
+        "total": 3,
+        "currentIndex": 1,
+        "pageSize": 10
+      },
+      "users": [
+        {
+          "id": 1,
+          "ucount": "admin",
+          "username": "admin",
+          "email": "fankaljead@gmail.com",
+          "password": "123456",
+          "phone": "18523771521",
+          "address": "重庆市南岸区重庆邮电大学",
+          "userRole": "超级管理员",
+          "userRoleId": 1,
+          "description": "hello world",
+          "avatar": "https://avatars.githubusercontent.com/u/30434925?s=400&u=0a2acdf9f2ea4954f44343079c9804fcd11ec933&v=4"
+        },
+        {
+          "id": 2,
+          "ucount": "james",
+          "username": "LeBron James",
+          "email": "lbj@gmail.com",
+          "password": "123456",
+          "phone": "18523771521",
+          "address": "美国加州洛杉矶",
+          "userRole": "管理员",
+          "userRoleId": 2,
+          "description": "hello world",
+          "avatar": "https://avatars.githubusercontent.com/u/30434925?s=400&u=0a2acdf9f2ea4954f44343079c9804fcd11ec933&v=4"
+        },
+        {
+          "id": 3,
+          "ucount": "king",
+          "username": "Keven Durent",
+          "email": "kd@gmail.com",
+          "password": "cqupt123?",
+          "phone": "18523771521",
+          "address": "美国牛约克",
+          "userRole": "普通用户",
+          "userRoleId": 3,
+          "description": "hello world",
+          "avatar": "https://avatars.githubusercontent.com/u/30434925?s=400&u=0a2acdf9f2ea4954f44343079c9804fcd11ec933&v=4"
+        }
+      ]
+    }
+  },
+  "roles": {
+    "code": 200,
+    "data": {
+      "total": 3,
+      "currentPage": 1,
+      "pageSize": 10,
+      "roles": [
+        {
+          "id": 1,
+          "name": "root",
+          "title": "超级管理员",
+          "description": "超级管理员",
+          "permissions": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "id": 2,
+          "name": "admin",
+          "title": "管理员",
+          "description": "管理员",
+          "permissions": [
+            1,
+            2,
+            3,
+            4
+          ]
+        },
+        {
+          "id": 3,
+          "name": "user",
+          "title": "普通用户",
+          "description": "普通用户",
+          "permissions": [
+            1,
+            4
+          ]
+        }
+      ]
+    }
+  },
+  "datasets": {
+    "code": 200,
+    "data": {
+      "pagination": {
+        "total": 3,
+        "currentIndex": 1,
+        "pageSize": 10
+      },
+      "datasets": [
+        {
+          "id": 1,
+          "name": "精神病",
+          "description": "精神病精神病精神病精神病精神病精神病",
+          "uploadTime": "2020-01-01",
+          "uploader": "admin",
+          "uploaderId": 1,
+          "status": 0,
+          "labeledTaskCount": 0,
+          "totalTaskCount": 400,
+          "unlabeledTaskCount": 200,
+          "templateId": 1,
+          "templateName": "心脏病模板",
+          "textCount": 300
+        },
+        {
+          "id": 2,
+          "name": "胃病",
+          "description": "胃病胃病胃病胃病",
+          "uploadTime": "2020-01-01",
+          "uploader": "james",
+          "uploaderId": 2,
+          "status": 1,
+          "labeledTaskCount": 100,
+          "totalTaskCount": 200,
+          "unlabeledTaskCount": 100,
+          "templateId": 1,
+          "templateName": "心脏病模板",
+          "textCount": 300
+        },
+        {
+          "id": 3,
+          "name": "心脏病",
+          "description": "心脏病心脏病心脏病心脏病",
+          "uploadTime": "2020-01-01",
+          "uploader": "durant",
+          "uploaderId": 3,
+          "status": 2,
+          "labeledTaskCount": 300,
+          "totalTaskCount": 300,
+          "unlabeledTaskCount": 0,
+          "templateId": 1,
+          "templateName": "心脏病模板",
+          "textCount": 300
+        }
+      ]
+    }
+  }
+}

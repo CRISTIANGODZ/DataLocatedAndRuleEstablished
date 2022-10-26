@@ -1,0 +1,129 @@
+<template>
+  <v-container fluid>
+    <v-row align="center">
+      <v-col class="d-flex" cols="1" sm="6">
+        <v-select
+          v-model="select"
+          :items="template_list"
+          item-text="title"
+          item-value="id"
+          label="选择模板"
+          @change="changeTemplate"
+          :readonly="!editable"
+        ></v-select>
+      </v-col>
+      <v-btn
+        color="primary"
+        depressed
+        elevation="1"
+        @click="selectTemplate"
+        :disabled="!editable && !selected"
+        >更改模板</v-btn
+      >
+    </v-row>
+  </v-container>
+</template>
+
+<script lang="ts">
+import Vue from "vue";
+
+// interface TemplateArray{
+//   [index:number]:{
+//     id : number;
+//     title : string;
+//   }
+// }
+
+export default Vue.extend({
+  data: () => ({
+    // template_list: [],
+    select: 0,
+    selected: true,
+    textId: 0,
+  }),
+  props: {
+    selectTemplateId: Number,
+    editable: Boolean,
+    template_list: Array,
+    selectTemplateInfo: Object,
+    selectTemplateIdOperation: Function,
+  },
+  methods: {
+    // get_template_list() {
+    //   this.$http.get("/getTemplateLists").then(({ data }) => {
+    //     if (data.code === 200) {
+    //       this.template_list = data.data;
+    //       console.log("template_list:", this.template_list);
+    //     } else {
+    //       alert(data.msg);
+    //     }
+    //   });
+    // },
+    selectTemplate() {
+      console.log("selectTemplateIdOperation select:", this.select);
+      console.log("this.textId:", this.textId);
+      this.selectTemplateIdOperation(this.select);
+      this.$http.get(
+        "/text/updateTemplate/" + this.textId + "/" + this.select
+      ).then(({ data }) => {
+        if (data.code === 200) {
+          this.selectTemplateIdOperation(this.select);
+          this.$success("更改模板成功");
+        } else {
+          this.$warning(data.msg);
+        }
+      });
+    },
+    initialTemplate() {
+      if (this.editable) {
+        if (this.selectTemplateId !== 0) {
+          if (this.selectTemplate) {
+            this.select = this.selectTemplate;
+          } else {
+            this.select = { title: "", id: 0 };
+          }
+          this.selected = true;
+          this.select = this.selectTemplateId;
+          this.textId = this.selectTemplateInfo.textId;
+        } else {
+          this.selected = false;
+          // this.select.id = 0;
+        }
+      }
+    },
+    changeTemplate(id) {
+      if (this.selectTemplateId === 0) {
+        this.selected = false;
+        this.select = id;
+        console.log("this.select:", this.select);
+        console.log("this.textId:", this.textId);
+      }
+      // this.selectTemplateIdOperation(this.select);
+      // this.selected = false;
+      // this.select.id = id;
+      // this.select.id = id;
+      console.log("this.select:", this.select);
+      // this.$get("/text/updateTemplate/"+id+"/"+this.selectTemplateId, {
+      //   id: this.selectTemplateId,
+      //   template_id: id,
+      // }).then(({ data }) => {
+      //   if (data.code === 200) {
+      //     this.selectTemplateIdOperation(id);
+      //     alert("更改模板成功");
+      //   } else {
+      //     alert(data.msg);
+      //   }
+      // });
+    },
+  },
+  mounted(): void {
+    // this.get_template_list();
+    this.initialTemplate();
+    console.log("this.selectTemplateId:", this.selectTemplateId);
+    console.log("this.template_list:", this.template_list);
+    console.log("this.select:", this.select);
+  },
+});
+</script>
+
+<style></style>
