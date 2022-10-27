@@ -60,7 +60,7 @@ public class ExportDataServiceImpl implements ExportDataService {
         //创建CsvWriter，初始化csv文件
         String uuid = UUID.randomUUID().toString();
         String fileName = uuid + ".csv";
-        String prefix = "F:\\project-workspace\\electronic-case-backend-parent\\case-data-location-service\\src\\main\\resources\\com\\cqupt\\electroniccase\\mapper\\get-csv";
+        String prefix = "F:\\project-workspace\\electronic-case-backend-parent\\case-data-location-service\\src\\main\\resources\\get-csv";
         fileName = prefix + fileName;
         File file = new File(fileName);
         if (!file.exists()){
