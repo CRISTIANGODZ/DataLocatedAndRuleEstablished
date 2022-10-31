@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +30,7 @@ public class ImportDataController {
      * @return
      */
     @PostMapping("/submit/csv")
-    public R submitCSVController(MultipartFile csvData, HttpSession session) throws IOException {
+    public R submitCSVController(@RequestPart("csvData") MultipartFile csvData) throws IOException {
         String csvPath = importDataService.submitCSVService(csvData);
         boolean isSuccessful = importDataService.parseCSVService(csvPath);
         if (isSuccessful) {
