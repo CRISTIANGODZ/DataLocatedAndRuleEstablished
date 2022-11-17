@@ -54,7 +54,7 @@ public class ImportDataServiceImpl implements ImportDataService {
         //获取当前工程的真实路径
 
 //需手动设置!!!
-        String csvDataPath = "F:\\project-workspace\\electronic-case-backend-parent\\case-data-location-service\\src\\main\\resources\\submit-csv";
+        String csvDataPath = "\\home\\dyingzhang\\myproject\\CaseDataStaticResources\\UserData";
         //创建photoPath所对应的File对象
         File file = new File(csvDataPath);
         if (!file.exists()){
