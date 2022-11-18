@@ -15,7 +15,7 @@ public interface ImportDataService {
      * 以CSV格式导入数据
      * @param csvData
      */
-    String  submitCSVService(MultipartFile csvData);
+    String  submitCSVService(MultipartFile csvData, HttpSession session);
 
     /**
      * 解析CSV数据

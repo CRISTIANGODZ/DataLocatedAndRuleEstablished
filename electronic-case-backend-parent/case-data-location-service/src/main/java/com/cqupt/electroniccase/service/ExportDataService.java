@@ -1,7 +1,9 @@
 package com.cqupt.electroniccase.service;
 
 import com.cqupt.electroniccase.pojo.Texts;
+import com.netflix.ribbon.proxy.annotation.Http;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -15,7 +17,7 @@ public interface ExportDataService {
      * 将数据库中数据查询，封装到CSV文件中
      *
      */
-    String getCSVService(List<Texts> allTexts);
+    String getCSVService(List<Texts> allTexts, HttpSession session);
 
     /**
      * 获取用户的所有相关的text信息

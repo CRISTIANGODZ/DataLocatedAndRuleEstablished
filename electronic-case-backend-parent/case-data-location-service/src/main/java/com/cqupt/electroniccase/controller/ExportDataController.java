@@ -34,7 +34,7 @@ public class ExportDataController {
     @GetMapping("/get/csv")
     public ResponseEntity<byte[]> getCSVController(HttpSession session,String name)throws IOException{
         List<Texts> patientTextList = exportDataService.getPatientAllText(name);
-        String fileRealPath = exportDataService.getCSVService(patientTextList);
+        String fileRealPath = exportDataService.getCSVService(patientTextList, session);
 
         //获取ServletContext对象
         ServletContext servletContext = session.getServletContext();

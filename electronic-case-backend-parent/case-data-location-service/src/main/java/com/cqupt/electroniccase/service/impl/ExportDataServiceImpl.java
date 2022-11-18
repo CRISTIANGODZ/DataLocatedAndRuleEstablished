@@ -12,6 +12,8 @@ import com.cqupt.electroniccase.pojo.FirstCategory;
 import com.cqupt.electroniccase.pojo.Patients;
 import com.cqupt.electroniccase.pojo.Texts;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -56,15 +58,19 @@ public class ExportDataServiceImpl implements ExportDataService {
      * 将数据库中数据查询，封装到CSV文件中
      */
     @Override
-    public String getCSVService(List<Texts> allTexts){
+    public String getCSVService(List<Texts> allTexts, HttpSession session){
         //创建CsvWriter，初始化csv文件
         String uuid = UUID.randomUUID().toString();
         String fileName = uuid + ".csv";
-        String prefix = "\\home\\dyingzhang\\myproject\\CaseDataStaticResources\\ReturnData";
-        fileName = prefix + fileName;
+        //获取ServletContext对象
+        ServletContext servletContext = session.getServletContext();
+        //获取服务器中文件的真实路径
+        String realPath = servletContext.getRealPath("/submit-csv");
+        fileName = realPath + fileName;
         File file = new File(fileName);
         if (!file.exists()){
             try {
+                file.mkdirs();
                 file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();

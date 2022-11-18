@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
@@ -43,7 +45,7 @@ public class ImportDataServiceImpl implements ImportDataService {
      * @param csvData
      */
     @Override
-    public String submitCSVService(MultipartFile csvData) {
+    public String submitCSVService(MultipartFile csvData, HttpSession session) {
         //获取上传的文件的文件名
         String filename = csvData.getOriginalFilename();
         //获取上传的文件的后缀名
@@ -52,15 +54,14 @@ public class ImportDataServiceImpl implements ImportDataService {
         //拼接一个新的文件名
         filename = uuid + hzName;
         //获取当前工程的真实路径
-
 //需手动设置!!!
-        String csvDataPath = "\\home\\dyingzhang\\myproject\\CaseDataStaticResources\\UserData";
-        //创建photoPath所对应的File对象
-        File file = new File(csvDataPath);
-        if (!file.exists()){
-            file.mkdir();
+        ServletContext servletContext = session.getServletContext();
+        String photoPath = servletContext.getRealPath("/get-csv");
+        File file = new File(photoPath);
+        if(!file.exists()){
+            file.mkdirs();
         }
-        String finalPath = csvDataPath + File.separator + filename;
+        String finalPath = photoPath + File.separator + filename;
         //上传文件
         try {
             csvData.transferTo(new File(finalPath));
