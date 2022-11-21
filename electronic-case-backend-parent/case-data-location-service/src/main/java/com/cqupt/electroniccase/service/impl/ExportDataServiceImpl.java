@@ -2,6 +2,7 @@ package com.cqupt.electroniccase.service.impl;
 
 import com.cqupt.electroniccase.mapper.*;
 import com.cqupt.electroniccase.service.ExportDataService;
+import com.cqupt.electroniccase.utils.Logger;
 import com.csvreader.CsvWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,6 @@ import java.util.UUID;
 @Transactional(isolation = Isolation.READ_COMMITTED)
 @Service
 public class ExportDataServiceImpl implements ExportDataService {
-
     @Autowired
     FirstCategoryMapper firstCategoryMapper;
     @Autowired
@@ -40,7 +40,6 @@ public class ExportDataServiceImpl implements ExportDataService {
     @Autowired
     ThemesMapper themesMapper;
 
-
     /**
      * 获取用户相关的所有text信息
      * @param name
@@ -51,6 +50,7 @@ public class ExportDataServiceImpl implements ExportDataService {
         Patients patient = patientsMapper.getPatientIdByName(name);
         Long patientId = patient.getPatientId();
         List<Texts> list = textsMapper.getPatientTexts(patientId);
+        Logger.info("成功获取text信息");
         return list;
     }
 
@@ -70,12 +70,12 @@ public class ExportDataServiceImpl implements ExportDataService {
         File file = new File(fileName);
         if (!file.exists()){
             try {
-                file.mkdirs();
                 file.createNewFile();
             } catch (IOException e) {
+                Logger.error("初始化CSV文件失败！");
                 e.printStackTrace();
             } finally {
-                System.out.println("创建成功！");
+                Logger.info("初始化CSV文件成功！");
             }
         }
         CsvWriter csvWriter = new CsvWriter(fileName, ' ', Charset.forName("GBK"));
@@ -107,10 +107,12 @@ public class ExportDataServiceImpl implements ExportDataService {
                 csvWriter.writeRecord(theme);
             }
         } catch (IOException e) {
+            Logger.error("封装数据异常！");
             throw new RuntimeException(e);
         } finally {
             //关闭csvWriter
             csvWriter.close();
+            Logger.info("封装数据成功！");
         }
         return fileName;
     }

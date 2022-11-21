@@ -3,6 +3,7 @@ package com.cqupt.electroniccase.service.impl;
 import com.cqupt.electroniccase.mapper.*;
 import com.cqupt.electroniccase.pojo.*;
 import com.cqupt.electroniccase.service.ImportDataService;
+import com.cqupt.electroniccase.utils.Logger;
 import com.cqupt.electroniccase.utils.SeparatorUtil;
 import com.cqupt.electroniccase.utils.ReaderCSV;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,6 @@ public class ImportDataServiceImpl implements ImportDataService {
     ThemesMapper themesMapper;
 
 
-
     /**
      * 以CSV格式导入数据
      * @param csvData
@@ -66,7 +66,10 @@ public class ImportDataServiceImpl implements ImportDataService {
         try {
             csvData.transferTo(new File(finalPath));
         } catch (IOException e) {
+            Logger.error("上传文件失败！");
             throw new RuntimeException(e);
+        } finally {
+            Logger.info("成功接收文件！");
         }
         return finalPath;
     }
@@ -77,67 +80,74 @@ public class ImportDataServiceImpl implements ImportDataService {
      */
     @Override
     public boolean parseCSVService(String csvPath) {
-        //1.读取CSV的内容进入内存
-        StringBuffer stringBuffer = ReaderCSV.printCSVFile(csvPath,' ');
-        //1.1解析第一种类，病人信息，病种的字符串
-        String firstCategoryName = stringBuffer.substring(0, stringBuffer.indexOf(";")-1);
-        stringBuffer.delete(0,stringBuffer.indexOf(";")+1);
-        String patientsContext = stringBuffer.substring(0, stringBuffer.indexOf("病种"));
-        stringBuffer.delete(0,stringBuffer.indexOf("病种"));
-        String diseaseName = stringBuffer.substring(stringBuffer.indexOf("病种"), stringBuffer.indexOf(";"));
-        stringBuffer.delete(stringBuffer.indexOf("病种"), stringBuffer.indexOf(";")+1);
+        Logger.info("开始解析CSV文件");
+        try {
+            //1.读取CSV的内容进入内存
+            StringBuffer stringBuffer = ReaderCSV.printCSVFile(csvPath,' ');
+            //1.1解析第一种类，病人信息，病种的字符串
+            String firstCategoryName = stringBuffer.substring(0, stringBuffer.indexOf(";")-1);
+            stringBuffer.delete(0,stringBuffer.indexOf(";")+1);
+            String patientsContext = stringBuffer.substring(0, stringBuffer.indexOf("病种"));
+            stringBuffer.delete(0,stringBuffer.indexOf("病种"));
+            String diseaseName = stringBuffer.substring(stringBuffer.indexOf("病种"), stringBuffer.indexOf(";"));
+            stringBuffer.delete(stringBuffer.indexOf("病种"), stringBuffer.indexOf(";")+1);
 
-        //2.将第一种类，病人信息，病种加入数据库中
-        FirstCategory firstCategory = null;
-        Patients patients = null;
-        Diseases diseases = null;
-        Themes themes = null;
-        Texts texts = null;
-        //2.1 获取第一种类的实体类对象
-        if ((firstCategoryName != "") && (firstCategoryName != null)){
-            firstCategory = new FirstCategory(firstCategoryName);
-        }
-        //2.2 获取病人信息的对象
-        if ((patientsContext != "") && (patientsContext != null) && patientsContext.contains("姓名")){
-            String patientNum = patientsContext.substring(patientsContext.indexOf("编号")+3, patientsContext.indexOf(";"));
-            String other  = patientsContext;
-            String temporaryStr = patientsContext.substring(patientsContext.indexOf("姓名"), patientsContext.length());
-            String name = temporaryStr.substring(temporaryStr.indexOf("姓名")+3, temporaryStr.indexOf(";"));
-            patients = new Patients(name,other,patientNum);
-        }
-        //2.3 获取病种的对象
-        if ((diseaseName != "") && (diseaseName != null)){
-            String diseasesName = diseaseName.substring(diseaseName.indexOf("病种") + 3, diseaseName.length());
-            diseases = new Diseases(diseasesName);
-        }
-        //2.4 将三个对象分别加入数据库中，并处理好之间关系：patients表中要有病种名称和第一种类id
-        firstCategoryMapper.addFirstCategoryMapper(firstCategory);
-        //查找该病种信息是否存在
-        Diseases isDiseaseExist = diseasesMapper.isDiseaseExist(diseases.getDiseaseName());
-        if (isDiseaseExist == null){
-            diseasesMapper.addDiseases(diseases);
-        } else {
-            diseases.setDiseaseId(isDiseaseExist.getDiseaseId());
-        }
-        patients.setDiseaseId(diseases.getDiseaseId());
-        patientsMapper.addPatient(patients);
+            //2.将第一种类，病人信息，病种加入数据库中
+            FirstCategory firstCategory = null;
+            Patients patients = null;
+            Diseases diseases = null;
+            Themes themes = null;
+            Texts texts = null;
+            //2.1 获取第一种类的实体类对象
+            if ((firstCategoryName != "") && (firstCategoryName != null)){
+                firstCategory = new FirstCategory(firstCategoryName);
+            }
+            //2.2 获取病人信息的对象
+            if ((patientsContext != "") && (patientsContext != null) && patientsContext.contains("姓名")){
+                String patientNum = patientsContext.substring(patientsContext.indexOf("编号")+3, patientsContext.indexOf(";"));
+                String other  = patientsContext;
+                String temporaryStr = patientsContext.substring(patientsContext.indexOf("姓名"), patientsContext.length());
+                String name = temporaryStr.substring(temporaryStr.indexOf("姓名")+3, temporaryStr.indexOf(";"));
+                patients = new Patients(name,other,patientNum);
+            }
+            //2.3 获取病种的对象
+            if ((diseaseName != "") && (diseaseName != null)){
+                String diseasesName = diseaseName.substring(diseaseName.indexOf("病种") + 3, diseaseName.length());
+                diseases = new Diseases(diseasesName);
+            }
+            //2.4 将三个对象分别加入数据库中，并处理好之间关系：patients表中要有病种名称和第一种类id
+            firstCategoryMapper.addFirstCategoryMapper(firstCategory);
+            //查找该病种信息是否存在
+            Diseases isDiseaseExist = diseasesMapper.isDiseaseExist(diseases.getDiseaseName());
+            if (isDiseaseExist == null){
+                diseasesMapper.addDiseases(diseases);
+            } else {
+                diseases.setDiseaseId(isDiseaseExist.getDiseaseId());
+            }
+            patients.setDiseaseId(diseases.getDiseaseId());
+            patientsMapper.addPatient(patients);
 
-        //3.将其他字段作为一条texts数据加入数据库中
-        while (stringBuffer.length() != 0){
-            String singleInfo = stringBuffer.substring(0, stringBuffer.indexOf(";"));
-            stringBuffer.delete(0, stringBuffer.indexOf(";") + 1);
-            String key = singleInfo.substring(0, singleInfo.indexOf(SeparatorUtil.getSeparator(singleInfo.toString())));
-            String value = singleInfo.substring(singleInfo.indexOf(SeparatorUtil.getSeparator(singleInfo.toString()))+1, singleInfo.length());
-            //3.1添加theme信息
-            themes = new Themes(key);
-            themesMapper.addTheme(themes);
-            //3.2封装好text信息
-            texts = new Texts(patients.getPatientId(),firstCategory.getFirstCategoryId(),key,value,themes.getThemeId());
-            //3.3将text加到数据库中
-            textsMapper.addText(texts);
+            //3.将其他字段作为一条texts数据加入数据库中
+            while (stringBuffer.length() != 0){
+                String singleInfo = stringBuffer.substring(0, stringBuffer.indexOf(";"));
+                stringBuffer.delete(0, stringBuffer.indexOf(";") + 1);
+                String key = singleInfo.substring(0, singleInfo.indexOf(SeparatorUtil.getSeparator(singleInfo.toString())));
+                String value = singleInfo.substring(singleInfo.indexOf(SeparatorUtil.getSeparator(singleInfo.toString()))+1, singleInfo.length());
+                //3.1添加theme信息
+                themes = new Themes(key);
+                themesMapper.addTheme(themes);
+                //3.2封装好text信息
+                texts = new Texts(patients.getPatientId(),firstCategory.getFirstCategoryId(),key,value,themes.getThemeId());
+                //3.3将text加到数据库中
+                textsMapper.addText(texts);
+            }
+        } catch (Exception e) {
+            Logger.error("解析文件失败");
+            throw new RuntimeException(e);
+        } finally {
+            Logger.info("解析文件成功！");
+            return true;
         }
-
-        return true;
     }
 
 }

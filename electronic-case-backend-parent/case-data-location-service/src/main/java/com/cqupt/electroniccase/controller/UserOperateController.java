@@ -2,6 +2,7 @@ package com.cqupt.electroniccase.controller;
 
 import com.cqupt.electroniccase.service.ExportDataService;
 import com.cqupt.electroniccase.service.UserOperateService;
+import com.cqupt.electroniccase.utils.Logger;
 import com.cqupt.electroniccase.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,8 +32,10 @@ public class UserOperateController {
      */
     @GetMapping("/patient/text/get")
     public R getPatientTextByNameController(String name){
+        Logger.info("查询病人信息接口 ---> ");
         List<Texts> patientAllText = exportDataService.getPatientAllText(name);
         if (patientAllText != null){
+            Logger.info(" <--- 查询病人信息接口");
             return R.ok().addList(patientAllText).message("返回成功！");
         } else {
             return R.error().message("返回失败！");
@@ -46,11 +49,14 @@ public class UserOperateController {
      */
     @PostMapping("/patient/text/delete")
     public R deletePatientTextByTextIdController(Texts texts){
+        Logger.info("删除病人信息接口 --->");
         boolean isTextExists = userOperateService.isTextExists(texts);
         if (isTextExists) {
             userOperateService.deleteText(texts);
+            Logger.info(" <--- 删除病人信息接口");
             return R.ok().message("删除成功！");
         } else {
+            Logger.error(" <--- 删除病人信息失败");
             return R.error().message("该信息不存在，删除失败！");
         }
     }

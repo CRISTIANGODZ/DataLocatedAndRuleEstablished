@@ -1,6 +1,7 @@
 package com.cqupt.electroniccase.controller;
 
 import com.cqupt.electroniccase.service.ImportDataService;
+import com.cqupt.electroniccase.utils.Logger;
 import com.cqupt.electroniccase.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,11 +32,15 @@ public class ImportDataController {
      */
     @PostMapping("/submit/csv")
     public R submitCSVController(@RequestPart("csvData") MultipartFile csvData, HttpSession session) throws IOException {
+        Logger.info("上传文件接口 ---> ");
         String csvPath = importDataService.submitCSVService(csvData, session);
         boolean isSuccessful = importDataService.parseCSVService(csvPath);
         if (isSuccessful) {
+            Logger.info(" <--- 上传文件成功");
+            Logger.info("csvPath:" + csvPath);
             return R.ok().message("上传成功！");
         } else {
+            Logger.info(" <--- 上传文件失败");
             return R.error().message("上传失败！");
         }
     }
