@@ -35,7 +35,7 @@ public class UserOperateController {
         Logger.info("查询病人信息接口 ---> ");
         List<Texts> patientAllText = exportDataService.getPatientAllText(name);
         if (patientAllText != null){
-            Logger.info(" <--- 查询病人信息接口");
+            Logger.info(" <--- 查询病人信息接口\n");
             return R.ok().addList(patientAllText).message("返回成功！");
         } else {
             return R.error().message("返回失败！");
@@ -53,10 +53,10 @@ public class UserOperateController {
         boolean isTextExists = userOperateService.isTextExists(texts);
         if (isTextExists) {
             userOperateService.deleteText(texts);
-            Logger.info(" <--- 删除病人信息接口");
+            Logger.info(" <--- 删除病人信息接口\n");
             return R.ok().message("删除成功！");
         } else {
-            Logger.error(" <--- 删除病人信息失败");
+            Logger.error(" <--- 删除病人信息失败\n");
             return R.error().message("该信息不存在，删除失败！");
         }
     }
@@ -66,10 +66,15 @@ public class UserOperateController {
      */
     @PostMapping("/patient/text/update")
     public R updatePatientTextByTextIdController(Texts texts){
+        Logger.info("修改信息接口 --> ");
         if (userOperateService.isTextExists(texts)) {
             userOperateService.updateText(texts);
+            Logger.info("修改信息成功");
+            Logger.info(" <-- 修改信息接口\n");
             return R.ok().message("修改成功");
         } else {
+            Logger.error("修改信息失败!");
+            Logger.info(" <-- 修改信息接口\n");
             return R.error().message("未查询到该条信息，修改失败！");
         }
     }
@@ -79,7 +84,9 @@ public class UserOperateController {
      */
     @PostMapping("/delete/patient/all/text")
     public R deletePatientAllTextController(Texts texts){
+        Logger.info("删除信息接口 --> ");
         userOperateService.deletePatientAllText(texts);
+        Logger.info(" <-- 删除信息接口\n");
         return R.ok().message("该病人信息以全部删除");
     }
 
@@ -88,10 +95,15 @@ public class UserOperateController {
      */
     @GetMapping("/patient/get/single/text")
     public R getSingleText(Texts texts){
+        Logger.info("根据textId查询text记录接口 --> ");
         Texts text = userOperateService.getSingleText(texts);
         if (text != null){
+            Logger.info("查询成功！");
+            Logger.info(" <-- 根据textId查询text记录接口\n");
             return R.ok().addTexts(text).message("返回成功！");
         } else {
+            Logger.error("查询失败！");
+            Logger.info(" <-- 根据textId查询text记录接口\n");
             return R.error().message("数据不存在，返回失败！");
         }
     }

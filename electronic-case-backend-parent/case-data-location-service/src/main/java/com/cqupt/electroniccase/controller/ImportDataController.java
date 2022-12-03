@@ -32,16 +32,16 @@ public class ImportDataController {
      */
     @PostMapping("/submit/csv")
     public R submitCSVController(@RequestPart("csvData") MultipartFile csvData, HttpSession session) throws IOException {
-        Logger.info("上传文件接口 ---> ");
+        Logger.info("\n上传文件接口 ---> ");
         String csvPath = importDataService.submitCSVService(csvData, session);
         boolean isSuccessful = importDataService.parseCSVService(csvPath);
         if (isSuccessful) {
             Logger.info(" <--- 上传文件成功");
             Logger.info("csvPath:" + csvPath);
-            return R.ok().message("上传成功！");
+            return R.ok().message("上传成功！\n");
         } else {
             Logger.info(" <--- 上传文件失败");
-            return R.error().message("上传失败！");
+            return R.error().message("上传失败！\n");
         }
     }
 

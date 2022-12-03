@@ -2,6 +2,7 @@ package com.cqupt.extractionrules.controller;
 
 import com.cqupt.extractionrules.pojo.Template;
 import com.cqupt.extractionrules.service.TemplateService;
+import com.cqupt.extractionrules.utils.Logger;
 import com.cqupt.extractionrules.utils.R;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;

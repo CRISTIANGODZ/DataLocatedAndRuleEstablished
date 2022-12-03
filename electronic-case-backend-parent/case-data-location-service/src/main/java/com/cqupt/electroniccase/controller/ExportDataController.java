@@ -64,7 +64,7 @@ public class ExportDataController {
             Logger.error("导出文件发生IO异常！");
             throw new RuntimeException(e);
         } finally {
-            Logger.info(" <--- 导出文件接口");
+            Logger.info(" <--- 导出文件接口\n");
             return responseEntity;
         }
     }
