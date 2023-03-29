@@ -1,7 +1,6 @@
 package com.cqupt.electroniccase.service;
 
-import com.cqupt.electroniccase.pojo.Texts;
-import com.netflix.ribbon.proxy.annotation.Http;
+import com.cqupt.electroniccase.domain.entity.Texts;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.cqupt.electroniccase.service;
 
-import com.cqupt.electroniccase.pojo.Texts;
+import com.cqupt.electroniccase.domain.entity.Texts;
 
 /**
  * @auther DyingZhang

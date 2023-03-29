@@ -1,7 +1,7 @@
 package com.cqupt.electroniccase.service.impl;
 
+import com.cqupt.electroniccase.domain.entity.*;
 import com.cqupt.electroniccase.mapper.*;
-import com.cqupt.electroniccase.pojo.*;
 import com.cqupt.electroniccase.service.ImportDataService;
 import com.cqupt.electroniccase.utils.Logger;
 import com.cqupt.electroniccase.utils.SeparatorUtil;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;

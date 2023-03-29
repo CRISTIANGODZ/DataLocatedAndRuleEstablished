@@ -1,6 +1,6 @@
-import com.cqupt.electroniccase.pojo.Diseases;
-import com.cqupt.electroniccase.pojo.FirstCategory;
-import com.cqupt.electroniccase.pojo.Patients;
+import com.cqupt.electroniccase.domain.entity.Diseases;
+import com.cqupt.electroniccase.domain.entity.FirstCategory;
+import com.cqupt.electroniccase.domain.entity.Patients;
 
 /**
  * @auther DyingZhang

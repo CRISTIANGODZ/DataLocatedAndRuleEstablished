@@ -1,8 +1,7 @@
-package com.cqupt.electroniccase.pojo;
+package com.cqupt.electroniccase.domain.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * @auther DyingZhang

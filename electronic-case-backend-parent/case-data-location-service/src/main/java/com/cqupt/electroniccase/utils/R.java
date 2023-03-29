@@ -1,6 +1,6 @@
 package com.cqupt.electroniccase.utils;
 
-import com.cqupt.electroniccase.pojo.Texts;
+import com.cqupt.electroniccase.domain.entity.Texts;
 import lombok.Data;
 import java.util.HashMap;
 import java.util.List;

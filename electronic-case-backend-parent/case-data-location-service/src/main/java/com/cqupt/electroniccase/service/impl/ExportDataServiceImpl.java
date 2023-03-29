@@ -1,5 +1,7 @@
 package com.cqupt.electroniccase.service.impl;
 
+import com.cqupt.electroniccase.bean.ESUtils;
+import com.cqupt.electroniccase.bean.ESUtils;
 import com.cqupt.electroniccase.mapper.*;
 import com.cqupt.electroniccase.service.ExportDataService;
 import com.cqupt.electroniccase.utils.Logger;
@@ -8,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import com.cqupt.electroniccase.pojo.Diseases;
-import com.cqupt.electroniccase.pojo.FirstCategory;
-import com.cqupt.electroniccase.pojo.Patients;
-import com.cqupt.electroniccase.pojo.Texts;
+import com.cqupt.electroniccase.domain.entity.Diseases;
+import com.cqupt.electroniccase.domain.entity.FirstCategory;
+import com.cqupt.electroniccase.domain.entity.Patients;
+import com.cqupt.electroniccase.domain.entity.Texts;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;

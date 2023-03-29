@@ -10,7 +10,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cqupt.electroniccase.pojo.Texts;
+import com.cqupt.electroniccase.domain.entity.Texts;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;

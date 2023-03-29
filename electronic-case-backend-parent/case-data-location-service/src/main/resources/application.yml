@@ -4,13 +4,13 @@ spring:
   application:
     name: case_data_location
   datasource:
-    url: jdbc:mysql://121.4.93.222:3306/ai_ann_db?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:13306/ai_ann_db?useSSL=false&serverTimezone=UTC
     username: root
     password: Zdy!230003#
     driver-class-name: com.mysql.jdbc.Driver
   cloud:
     nacos:
-      server-addr: 121.4.93.222:8848
+      server-addr: localhost:8848
       discovery:
         cluster-name: CQ
 #        namespace: 9b4036eb-bc59-471c-b3a3-a19de58aea55 #dev环境
@@ -18,7 +18,7 @@ spring:
 
 mybatis:
 #默认扫描的是启动类所在包路径
-  type-aliases-package: com/cqupt/electroniccase/pojo
+  type-aliases-package: com/cqupt/electroniccase/domain/entity
   mapper-locations: mapper/*.xml  #sql映射文件位置
   configuration:
     map-underscore-to-camel-case: true

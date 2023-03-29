@@ -1,4 +1,4 @@
-package com.cqupt.electroniccase.pojo;
+package com.cqupt.electroniccase.domain.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

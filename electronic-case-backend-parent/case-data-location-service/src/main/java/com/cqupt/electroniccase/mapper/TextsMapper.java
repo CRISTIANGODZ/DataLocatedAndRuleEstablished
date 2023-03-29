@@ -2,7 +2,7 @@ package com.cqupt.electroniccase.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import com.cqupt.electroniccase.pojo.Texts;
+import com.cqupt.electroniccase.domain.entity.Texts;
 
 import java.util.List;
 

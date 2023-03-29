@@ -6,7 +6,7 @@ import com.cqupt.electroniccase.utils.Logger;
 import com.cqupt.electroniccase.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.cqupt.electroniccase.pojo.Texts;
+import com.cqupt.electroniccase.domain.entity.Texts;
 
 import java.util.List;
 
