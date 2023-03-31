@@ -93,7 +93,7 @@ public class ESUtils {
     }
 
     /**
-     * 插入一条文档
+     * 插入一条文档（必须是对象，不能是字符串）
      * true为插入成功
      * false为修改成功
      * @param index
@@ -107,6 +107,7 @@ public class ESUtils {
         IndexRequest indexRequest = new IndexRequest();
         indexRequest.index(index).id(id);
 
+        //封装JSON对象
         ObjectMapper objectMapper = new ObjectMapper();
         String userStr = objectMapper.writeValueAsString(t);
         indexRequest.source(userStr, XContentType.JSON);
