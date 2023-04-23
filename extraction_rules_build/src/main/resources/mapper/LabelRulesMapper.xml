@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqupt.extractionrules.mapper.LabelRulesMapper">
+    <!--
+    
+  -->
+
+
+    <!--自定义映射-->
+
+    <!--自定义映射-->
+
+
+    <!--下面撰写sql语句-->
+
+    <!--void addLabelRules(LabelRules labelRules);-->
+    <insert id="addLabelRules">
+        insert into label_rules (label_category_id, label_description)
+        values (#{labelCategoryId}, #{labelDescription})
+    </insert>
+
+    <!--LabelRules getLabelRules(@Param("labelCategoryId") Long labelCategoryId);-->
+    <select id="getLabelRules" resultType="LabelRules">
+        select *
+        from label_rules
+        where label_category_id = #{labelCategoryId}
+    </select>
+
+    <!--void deleteLabelRulesByLabelCategoryId(@Param("labelCategoryId") Long labelCategoryId);-->
+    <delete id="deleteLabelRulesByLabelCategoryId">
+        delete from label_rules
+        where label_category_id = #{labelCategoryId}
+    </delete>
+
+    <!--上面撰写sql语句-->
+
+</mapper>

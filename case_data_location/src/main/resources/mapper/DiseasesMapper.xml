@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqupt.case_data_location.mapper.DiseasesMapper">
+    <!--
+    
+  -->
+
+
+    <!--自定义映射-->
+
+    <!--自定义映射-->
+
+
+    <!--下面撰写sql语句-->
+
+    <!--void addDiseases(Diseases diseases);-->
+    <insert id="addDiseases" useGeneratedKeys="true" keyProperty="diseaseId">
+        insert into diseases (disease_name)
+        values (#{diseaseName})
+    </insert>
+
+    <!--Diseases getDisease(@Param("diseaseId") Long diseaseId);-->
+    <select id="getDisease" resultType="Diseases">
+        select disease_name
+        from diseases
+        where disease_id = #{diseaseId}
+    </select>
+
+    <!--int isDiseaseExist(@Param("diseaseName") String diseaseName);-->
+    <select id="isDiseaseExist" resultType="Diseases">
+        select *
+        from diseases
+        where disease_name = #{diseaseName}
+    </select>
+
+    <!--上面撰写sql语句-->
+
+</mapper>

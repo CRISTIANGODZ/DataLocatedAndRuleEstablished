@@ -1,0 +1,14 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: case_data_location
+  profiles:
+    active: dev
+
+mybatis:
+  #默认扫描的是启动类所在包路径
+  type-aliases-package: com/cqupt/case_data_location/pojo/entity
+  mapper-locations: classpath:mapper/*.xml  #sql映射文件位置
+  configuration:
+    map-underscore-to-camel-case: true

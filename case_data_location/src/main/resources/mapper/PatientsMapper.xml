@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqupt.case_data_location.mapper.PatientsMapper">
+    <!--
+    
+  -->
+
+
+    <!--自定义映射-->
+
+    <!--自定义映射-->
+
+
+    <!--下面撰写sql语句-->
+
+    <!--void addPatient(Patients patients);-->
+    <insert id="addPatient" useGeneratedKeys="true" keyProperty="patientId">
+        insert into patients (`name`, disease_id, other, patient_num)
+        values (#{name}, #{diseaseId}, #{other}, #{patient_num})
+    </insert>
+
+    <!--Patients getPatient(@Param("patientId") Long patientId);-->
+    <select id="getPatient" resultType="Patients">
+        select `name`, disease_id
+        from patients
+        where patient_id = #{patientId}
+    </select>
+
+    <!--Patients getPatientIdByName(String name);-->
+    <select id="getPatientIdByName" resultType="Patients">
+        select patient_id
+        from patients
+        where `name` = #{name}
+    </select>
+
+    <!--void deletePatient(@Param("patientId") Long patientId);-->
+    <delete id="deletePatient">
+        delete from patients
+        where patient_id = #{patientId}
+    </delete>
+
+    <!--上面撰写sql语句-->
+
+</mapper>

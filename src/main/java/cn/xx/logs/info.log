@@ -1,0 +1,133 @@
+2023-04-23 11:57:01 上午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:
+上传文件接口 ---> 
+2023-04-23 11:57:02 上午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功接收文件！
+2023-04-23 11:57:02 上午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:开始解析CSV文件
+2023-04-23 11:58:32 上午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.error(Logger.java:24) ]
+ERROR:解析文件失败
+2023-04-23 11:58:45 上午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:解析文件成功！
+2023-04-23 11:58:48 上午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 上传文件成功
+2023-04-23 11:58:48 上午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:csvPath:C:\Users\DyingZhang\AppData\Local\Temp\tomcat-docbase.6059000820977711057.8081\get-csv\c7b271d1-977f-4c72-bee8-5e01aae7cf40.csv
+2023-04-23 12:01:42 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:
+上传文件接口 ---> 
+2023-04-23 12:01:42 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功接收文件！
+2023-04-23 12:01:42 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:开始解析CSV文件
+2023-04-23 12:01:58 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.error(Logger.java:24) ]
+ERROR:解析文件失败
+2023-04-23 12:02:18 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 上传文件成功
+2023-04-23 12:02:18 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:csvPath:C:\Users\DyingZhang\AppData\Local\Temp\tomcat-docbase.392284371657975969.8081\get-csv\24f08db4-2b98-4382-b491-ec595cbae3a4.csv
+2023-04-23 12:02:41 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:
+上传文件接口 ---> 
+2023-04-23 12:02:42 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功接收文件！
+2023-04-23 12:02:42 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:开始解析CSV文件
+2023-04-23 12:03:03 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.error(Logger.java:24) ]
+ERROR:解析文件失败
+2023-04-23 12:03:07 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 上传文件失败
+2023-04-23 12:03:53 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:
+上传文件接口 ---> 
+2023-04-23 12:03:53 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功接收文件！
+2023-04-23 12:03:53 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:开始解析CSV文件
+2023-04-23 12:07:44 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.error(Logger.java:24) ]
+ERROR:解析文件失败
+2023-04-23 12:07:44 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 上传文件失败
+2023-04-23 12:07:58 下午 [Thread: http-nio-8081-exec-4][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:
+上传文件接口 ---> 
+2023-04-23 12:07:58 下午 [Thread: http-nio-8081-exec-4][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功接收文件！
+2023-04-23 12:07:58 下午 [Thread: http-nio-8081-exec-4][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:开始解析CSV文件
+2023-04-23 12:11:28 下午 [Thread: http-nio-8081-exec-4][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.error(Logger.java:24) ]
+ERROR:解析文件失败
+2023-04-23 12:11:28 下午 [Thread: http-nio-8081-exec-4][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 上传文件失败
+2023-04-23 12:12:46 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:
+上传文件接口 ---> 
+2023-04-23 12:12:46 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功接收文件！
+2023-04-23 12:12:46 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:开始解析CSV文件
+2023-04-23 12:12:47 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 上传文件成功
+2023-04-23 12:12:47 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:csvPath:C:\Users\DyingZhang\AppData\Local\Temp\tomcat-docbase.8671895195101195675.8081\get-csv\a4afe353-f56c-4da7-a89b-78cf5b16a6d8.csv
+2023-04-23 12:14:06 下午 [Thread: http-nio-8081-exec-5][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:查询病人信息接口 ---> 
+2023-04-23 12:14:08 下午 [Thread: http-nio-8081-exec-5][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功获取text信息
+2023-04-23 12:14:08 下午 [Thread: http-nio-8081-exec-5][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 查询病人信息接口
+
+2023-04-23 12:14:15 下午 [Thread: http-nio-8081-exec-6][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:查询病人信息接口 ---> 
+2023-04-23 12:14:15 下午 [Thread: http-nio-8081-exec-6][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功获取text信息
+2023-04-23 12:14:15 下午 [Thread: http-nio-8081-exec-6][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 查询病人信息接口
+
+2023-04-23 12:14:19 下午 [Thread: http-nio-8081-exec-7][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:查询病人信息接口 ---> 
+2023-04-23 12:14:19 下午 [Thread: http-nio-8081-exec-7][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功获取text信息
+2023-04-23 12:14:19 下午 [Thread: http-nio-8081-exec-7][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 查询病人信息接口
+
+2023-04-23 12:14:30 下午 [Thread: http-nio-8081-exec-8][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:查询病人信息接口 ---> 
+2023-04-23 12:14:30 下午 [Thread: http-nio-8081-exec-8][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功获取text信息
+2023-04-23 12:14:30 下午 [Thread: http-nio-8081-exec-8][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 查询病人信息接口
+
+2023-04-23 12:14:33 下午 [Thread: http-nio-8081-exec-9][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:查询病人信息接口 ---> 
+2023-04-23 12:14:33 下午 [Thread: http-nio-8081-exec-9][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功获取text信息
+2023-04-23 12:14:33 下午 [Thread: http-nio-8081-exec-9][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 查询病人信息接口
+
+2023-04-23 14:46:52 下午 [Thread: http-nio-8081-exec-1][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:删除信息接口 --> 
+2023-04-23 14:54:50 下午 [Thread: http-nio-8081-exec-4][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:删除信息接口 --> 
+2023-04-23 14:54:57 下午 [Thread: http-nio-8081-exec-6][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:
+上传文件接口 ---> 
+2023-04-23 14:54:57 下午 [Thread: http-nio-8081-exec-6][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功接收文件！
+2023-04-23 14:54:57 下午 [Thread: http-nio-8081-exec-6][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:开始解析CSV文件
+2023-04-23 14:54:58 下午 [Thread: http-nio-8081-exec-6][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.error(Logger.java:24) ]
+ERROR:解析文件失败
+2023-04-23 14:54:58 下午 [Thread: http-nio-8081-exec-6][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 上传文件失败
+2023-04-23 22:37:40 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:
+上传文件接口 ---> 
+2023-04-23 22:37:40 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:成功接收文件！
+2023-04-23 22:37:40 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:开始解析CSV文件
+2023-04-23 22:37:40 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO: <--- 上传文件成功
+2023-04-23 22:37:40 下午 [Thread: http-nio-8081-exec-3][ Class:CaseDataLocationLogger >> Method: com.cqupt.case_data_location.utils.Logger.info(Logger.java:16) ]
+INFO:csvPath:C:\Users\DyingZhang\AppData\Local\Temp\tomcat-docbase.5750285328896306225.8081\get-csv\f54d2df8-ed0c-4fc3-b438-06cac6705990.csv

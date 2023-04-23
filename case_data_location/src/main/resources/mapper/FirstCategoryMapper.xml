@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqupt.case_data_location.mapper.FirstCategoryMapper">
+    <!--
+    
+  -->
+
+
+    <!--自定义映射-->
+
+    <!--自定义映射-->
+
+
+    <!--下面撰写sql语句-->
+    <!--void addFirstCategoryMapper(FirstCategory firstCategory);-->
+    <insert id="addFirstCategoryMapper" useGeneratedKeys="true" keyProperty="firstCategoryId">
+        insert into first_category (first_category_name)
+        values (#{firstCategoryName})
+    </insert>
+
+    <!--FirstCategory getFirstCategory(@Param("firstCategoryId") Long firstCategoryId);-->
+    <select id="getFirstCategory" resultType="FirstCategory">
+        select first_category_name
+        from first_category
+        where first_category_id = #{firstCategoryId}
+    </select>
+
+    <!--void deleteFirstCategoryById(@Param("firstCategoryId") Long firstCategoryId);-->
+    <delete id="deleteFirstCategoryById">
+        delete from first_category
+        where first_category_id = #{firstCategoryId}
+    </delete>
+
+    <!--上面撰写sql语句-->
+
+</mapper>

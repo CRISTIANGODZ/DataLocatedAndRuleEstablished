@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqupt.extractionrules.mapper.EntityLabelCategoryMapper">
+    <!--
+    
+  -->
+
+
+    <!--自定义映射-->
+
+    <!--自定义映射-->
+
+
+    <!--下面撰写sql语句-->
+
+    <!--void addEntityLabelCategory(EntityLabelCategory entityLabelCategory);-->
+    <insert id="addEntityLabelCategory" useGeneratedKeys="true" keyProperty="labelCategoryId">
+        insert into entity_label_category (template_id, title, color, border_color)
+        values (#{templateId}, #{title}, #{color}, #{borderColor})
+    </insert>
+
+    <!--List<EntityLabelCategory> getEntityLabelCategoryByTemplateId(@Param("templateId") Long templateId);-->
+    <select id="getEntityLabelCategoryByTemplateId" resultType="EntityLabelCategory">
+        select *
+        from entity_label_category
+        where template_id = #{templateId}
+    </select>
+
+    <!--void deleteEntityLabelCategoryByTemplateId(@Param("templateId") Long templateId);-->
+    <delete id="deleteEntityLabelCategoryByTemplateId">
+        delete from entity_label_category
+        where template_id = #{templateId}
+    </delete>
+
+    <!--上面撰写sql语句-->
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqupt.extractionrules.mapper.TemplateRulesMapper">
+    <!--
+    
+  -->
+
+
+    <!--自定义映射-->
+
+    <!--自定义映射-->
+
+
+    <!--下面撰写sql语句-->
+
+    <!--void addTemplateRules(TemplateRules templateRules);-->
+    <insert id="addTemplateRules" useGeneratedKeys="true" keyProperty="templateRuleId">
+        insert into template_rules (template_id, template_desc)
+        values (#{templateId},#{templateDesc})
+    </insert>
+
+    <!--TemplateRules getTemplateRulesByTemplateId(@Param("templateId") Long templateId);-->
+    <select id="getTemplateRulesByTemplateId" resultType="TemplateRules">
+        select *
+        from template_rules
+        where template_id = #{templateId}
+    </select>
+
+    <!--void deleteTemplateRulesByTemplateId(@Param("templateId") Long templateId);-->
+    <delete id="deleteTemplateRulesByTemplateId">
+        delete from template_rules
+        where template_id = #{templateId}
+    </delete>
+
+    <!--上面撰写sql语句-->
+
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqupt.case_data_location.mapper.TextsMapper">
+    <!--
+    
+  -->
+
+
+    <!--自定义映射-->
+
+    <!--自定义映射-->
+
+
+    <!--下面撰写sql语句-->
+
+    <!--void addText(Texts texts);-->
+    <insert id="addText" useGeneratedKeys="true" keyProperty="textId">
+        insert into texts (patient_id, first_category_id, title, content, updatetime, theme_id)
+        values (#{patientId}, #{firstCategoryId}, #{title}, #{content}, NOW(), #{themeId})
+    </insert>
+
+    <!--List<Texts> getAllTexts();-->
+    <select id="getAllTexts" resultType="Texts">
+        select *
+        from texts
+    </select>
+
+    <!--List<Texts> getPatientTexts(@Param("patientId") Long patientId);-->
+    <select id="getPatientTexts" resultType="Texts">
+        select *
+        from texts
+        where patient_id = #{patientId}
+    </select>
+
+    <!--void deleteText(Texts texts);-->
+    <delete id="deleteText">
+        delete from texts
+        <where>
+            <if test="textId != '' and textId != null">
+                text_id = #{textId}
+            </if>
+            <if test="patientId != '' and patientId != null">
+                and patient_id = #{patientId}
+            </if>
+        </where>
+    </delete>
+    
+    <!--void updateText(Texts texts);-->
+    <update id="updateText">
+        update texts
+        set content = #{content}
+        <where>
+            <if test="textId != '' and textId != null">
+                text_id = #{textId}
+            </if>
+            <if test="patientId != '' and patientId != null">
+                and patient_id = #{patientId}
+            </if>
+        </where>
+    </update>
+
+    <!--List<Texts> getAllThemeIdByPatientId(@Param("patientId") Long patientId);-->
+    <select id="getAllThemeIdByPatientId" resultType="Texts">
+        select *
+        from texts
+        where patient_id = #{patientId};
+    </select>
+
+    <!--Texts getTextByTextId();-->
+    <select id="getTextByTextId" resultType="Texts">
+        select *
+        from texts
+        where text_id = #{textId}
+    </select>
+
+    <!--上面撰写sql语句-->
+
+</mapper>
