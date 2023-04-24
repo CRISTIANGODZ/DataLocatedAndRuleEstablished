@@ -37,7 +37,7 @@ public class TemplateController {
     public R getAllTemplatesController(){
         List<Template> allTemplates = templateService.getAllTemplates();
         if (allTemplates.size() > 0){
-            return R.ok().addTemplateList(allTemplates).message("成功返回所有模板！");
+            return R.ok().data("allTemplates" ,allTemplates).message("成功返回所有模板！");
         } else {
             return R.ok().message("目前并无模板存在！");
         }
@@ -50,7 +50,7 @@ public class TemplateController {
     public R getSingleTemplateController(Long templateId){
         Template template = templateService.getTemplateByTemplateId(templateId);
         if (template != null){
-            return R.ok().addTemplate(template).message("获取模板成功！");
+            return R.ok().data("template", template).message("获取模板成功！");
         } else {
             return R.error().message("没有该模板信息,获取失败！");
         }

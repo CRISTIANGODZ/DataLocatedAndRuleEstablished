@@ -2,6 +2,7 @@ package com.cqupt.case_data_location;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @auther DyingZhang
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Discriptioon
  */
 @SpringBootApplication
+@EnableSwagger2
 public class CaseDataLocation {
     public static void main(String[] args) {
         SpringApplication.run(CaseDataLocation.class, args);

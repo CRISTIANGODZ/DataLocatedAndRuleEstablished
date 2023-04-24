@@ -26,6 +26,7 @@
         <log4j.version>1.2.12</log4j.version>
         <lombok.version>1.18.10</lombok.version>
         <javacsv.version>2.0</javacsv.version>
+        <swagger2.version>2.9.2</swagger2.version>
     </properties>
 
 
@@ -97,6 +98,17 @@
                 <groupId>net.sourceforge.javacsv</groupId>
                 <artifactId>javacsv</artifactId>
                 <version>${javacsv.version}</version>
+            </dependency>
+            <!-- swagger2 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger2.version}</version>
             </dependency>
 
         </dependencies>

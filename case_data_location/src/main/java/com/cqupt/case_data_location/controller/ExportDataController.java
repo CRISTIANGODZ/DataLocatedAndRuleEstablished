@@ -3,6 +3,10 @@ package com.cqupt.case_data_location.controller;
 import com.cqupt.case_data_location.pojo.entity.Texts;
 import com.cqupt.case_data_location.service.ExportDataService;
 import com.cqupt.case_data_location.utils.Logger;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletContext;
@@ -25,6 +30,7 @@ import java.util.UUID;
  * @Create 2022-10-15 下午 6:37
  * @Discriptioon
  */
+@Api(tags = "文件导出")
 @RestController
 @RequestMapping("/electronic/case")
 public class ExportDataController {
@@ -32,8 +38,11 @@ public class ExportDataController {
     @Autowired
     ExportDataService exportDataService;
 
+    @ApiOperation(value = "导出文件接口", notes = "<font color='green'>描述：</font>用于文件的导出")
     @GetMapping("/get/csv")
-    public ResponseEntity<byte[]> getCSVController(HttpSession session,String name){
+    @ResponseBody
+    public ResponseEntity<byte[]> getCSVController(HttpSession session,
+                                                   @ApiParam(name = "name", required = true, value = "患者姓名") String name){
         Logger.info("导出文件接口 ---> ");
         ResponseEntity<byte[]> responseEntity = null;
         try {
