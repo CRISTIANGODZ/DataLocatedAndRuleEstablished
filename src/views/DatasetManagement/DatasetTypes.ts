@@ -5,7 +5,6 @@ export interface DatasetType {}
 export interface Dataset {
   id: number;
   name: string;
-  description: string;
   uploadTime: string;
   uploader: string;
   uploaderId: number;
@@ -18,6 +17,14 @@ export interface Dataset {
   templateName: string,
   filePath: string,
   fileName: string,
+  textId: number,
+  patientId: number,
+  firstCategoryId: number,
+  diseasedId: number,
+  title: string,
+  content: string,
+  updatetime: number,
+  themeId: number
 }
 export enum DatasetOperation {
   CHECK = 0,

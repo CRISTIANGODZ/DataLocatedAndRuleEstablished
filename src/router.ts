@@ -127,13 +127,19 @@ export default new Router({
           component: () =>
             import("@/views/DatasetManagement/DatasetManagement.vue"),
         },
-        // {
-        //   path: "/trainManagement",
-        //   name: "trainManagement",
-        //   component: () =>
-        //     import("@/views/TrainManagement/TrainManagement.vue"),
-        // },
-      ],
+        {
+          path: "/patientManagement",
+          name: "patientManagement",
+          component: () =>
+            import("@/views/PatientManagement/PatientManagement.vue"),
+        },
+        //{
+        //  path: "/trainManagement",
+        //  name: "trainManagement",
+        //  component: () =>
+        //    import("@/views/TrainManagement/TrainManagement.vue"),
+        //},
+      ]
     },
     // {
     //   path: "/register",

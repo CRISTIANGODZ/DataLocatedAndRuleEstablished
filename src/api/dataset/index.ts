@@ -16,15 +16,39 @@ export function getDatasetList(
 
 export function addDataset(data: any): Promise<AxiosResponse<any>> {
   console.log("dataset:", data);
-  const config = {
-    headers: {
-      "Content-Type": "multipart/form-data",
+  // const config = {
+  //   headers: {
+  //     "Content-Type": "multipart/form-data",
+  //   },
+  // };
+  return request({
+    url:"http://121.4.93.222:8081/electronic/case/submit/csv",
+    method:'post',
+    headers:{
+        "Content-Type": "multipart/form-data;boundary=----WebKitFormBoundaryIsWvYgQMdGdA0emB",
     },
-  };
-  return request.post("/data/upload/", data, config);
+    data
+
+  })
+  // return request.post("http://121.4.93.222:8081/electronic/case/submit/csv",data,{
+  //   headers:{
+  //     "Content-Type": "multipart/form-data",
+  //   }
+  // });
 }
+
+
+// export function addDataset(data: any): Promise<AxiosResponse<any>> {
+//   console.log("dataset:", data);
+//   const config = {
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//     },
+//   };
+//   return request.post("/data/upload/", data, config);
+// }
 
 export function updateDataset(data: Dataset): Promise<AxiosResponse<any>> {
   console.log("dataset:", data);
-  return request.post("/data/update", data);
+  return request.post("/electronic/case/patient/text/update", data);
 }

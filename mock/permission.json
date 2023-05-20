@@ -20,7 +20,8 @@
               5,
               6,
               7,
-              8
+              8,
+              9
             ]
           },
           {
@@ -90,7 +91,7 @@
         {
           "id": 7,
           "icon": "mdi-database",
-          "title": "数据管理",
+          "title": "病历管理",
           "path": "/datasetManagement"
         },
         {
@@ -98,6 +99,12 @@
           "icon": "mdi-package-variant",
           "title": "模型管理",
           "path": "/modelManagement"
+        },
+        {
+          "id": 9,
+          "icon": "",
+          "title": "病历管理",
+          "path": "/patientManagement"
         }
       ]
     }

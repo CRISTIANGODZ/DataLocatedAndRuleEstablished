@@ -2,8 +2,7 @@
   <div>
     <v-sheet
       color="grey lighten-4"
-      class="pa-4 d-flex flex-column align-center justify-center"
-    >
+      class="pa-4 d-flex flex-column align-center justify-center">
       <!-- <v-avatar class="mb-4" color="grey darken-1" size="64"></v-avatar> -->
       <el-avatar :src="userInfo.avatar"></el-avatar>
       <div>{{ userInfo.username }}</div>
@@ -22,12 +21,10 @@
           :key="index"
           link
           color="primary"
-          @click="go_page(link)"
-        >
+          @click="go_page(link)">
           <v-list-item-icon>
             <v-icon>{{ icon }}</v-icon>
           </v-list-item-icon>
-
           <v-list-item-content>
             <v-list-item-title>{{ text }}</v-list-item-title>
           </v-list-item-content>
@@ -42,7 +39,6 @@
         <v-list-item-icon>
           <v-icon>mdi-delete</v-icon>
         </v-list-item-icon>
-
         <v-list-item-content>
           <v-list-item-title>退出登录</v-list-item-title>
         </v-list-item-content>
@@ -52,6 +48,7 @@
 </template>
 
 <script lang="ts">
+
 import Vue from "vue";
 import { mapActions, mapState } from "vuex";
 import { permission_links, permission_roles } from "../constants";
@@ -60,25 +57,26 @@ import { PermissionType, UserVo } from "@/views/Login/LoginTypes";
 
 export default Vue.extend({
   data: () => ({
-    // permission_links: [
-    //   // super_admin_links:
-    //   [
-    //     ["mdi-inbox-arrow-down", "任务大厅", "main"],
-    //     ["mdi-alert", "任务分配", "taskAssign"],
-    //     ["mdi-send", "标签管理", "labels"],
-    //     ["mdi-delete", "个人信息", "profile"],
-    //     ["mdi-alert-octagon", "权限管理", "personManagement"],
-    //   ],
-    //   // regular_admin_links:
-    //   [
-    //     ["mdi-inbox-arrow-down", "任务大厅", "main"],
-    //     ["mdi-send", "标签管理", "labels"],
-    //     ["mdi-send", "任务分配", "taskAssign"],
-    //     ["mdi-delete", "个人信息", "profile"],
-    //   ],
-    //   // regular_person_link:
-    //   [],
-    // ],
+    permission_links: [
+      //// super_admin_links:
+      //[
+      //  ["mdi-inbox-arrow-down", "任务大厅", "main"],
+      //  ["mdi-alert", "任务分配", "taskAssign"],
+      //  ["mdi-send", "标签管理", "labels"],
+      //  ["mdi-delete", "个人信息", "profile"],
+      //  ["mdi-alert-octagon", "权限管理", "personManagement"],
+      //  ["", "病历管理", "patientManagement"],
+      //],
+      //// regular_admin_links:
+      //[
+      //  ["mdi-inbox-arrow-down", "任务大厅", "main"],
+      //  ["mdi-send", "标签管理", "labels"],
+      //  ["mdi-send", "任务分配", "taskAssign"],
+      //  ["mdi-delete", "个人信息", "profile"],
+      //],
+      //// regular_person_link:
+      //[],
+    ],
     links: [],
     // permission_roles: ["超级管理员", "管理员", "普通用户"],
     role: "0",
@@ -87,7 +85,6 @@ export default Vue.extend({
     activePath: "",
     permissions: [] as PermissionType[],
     userInfo: {} as UserVo,
-
     headIconUrl:
       "https://w7.pngwing.com/pngs/306/70/png-transparent-computer-icons-management-admin-silhouette-black-and-white-neck.png",
   }),

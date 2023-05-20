@@ -10,7 +10,7 @@ module.exports = {
   },
   devServer: {
     host: "0.0.0.0", // 允许外部ip访问
-    port: 8080, // 端口
+    port: 8080, // 端口8080
     https: false, // 启用https
     proxy: "",
     proxy: {
@@ -20,8 +20,8 @@ module.exports = {
         // target: "http://10.16.22.0:8081",
         // target: "http://localhost:8081",
         // target: "http://10.16.79.168:8081",
-        target: "http://10.16.107.2:18081",
-        // target: "10.16.22.0:8081",
+        // target: "http://10.16.107.2:18081",
+        target: "10.16.22.0:8081",
         changOrigin: true, //如果接口跨域这里就要这个参数配置
         pathRewrite: {
           //'^/api': '/api'  //实际请求地址是http://baidu.com/api/news/list

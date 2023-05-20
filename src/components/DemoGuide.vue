@@ -87,15 +87,12 @@ export default Vue.extend({
   overflow: scroll;
   border-right: solid 2px black;
 }
-
 img {
   max-width: 40vw;
 }
-
 p {
   margin-top: 16px;
 }
-
 code {
   max-width: calc(45vw - 16px);
   background: rgb(32, 32, 32) !important;

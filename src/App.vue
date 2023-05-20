@@ -54,7 +54,7 @@ export default Vue.extend({
   },
 });
 </script>
->
+
 
 <style scoped>
 .login_register_container {

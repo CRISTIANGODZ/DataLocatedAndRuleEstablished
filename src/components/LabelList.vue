@@ -164,7 +164,6 @@
             </v-list-item-action>
           </v-list-item>
         </v-list>
-
         <div style="flex: 1 1 auto"></div>
       </v-card>
     </v-dialog>
@@ -410,6 +409,18 @@ export default Vue.extend({
           this.$warning(data.msg);
         }
       });
+      //我的
+      //const params = {templateId:idx}
+      //this.$http.delete("/template/delete/",params).then(({ data }) => {
+      //   if (data.code === 200) {
+      //     this.get_temp_list();
+      //     this.$success("删除成功");
+      //   } else {
+      //     this.$warning(data.msg);
+      //   }
+      // });
+
+
       // data["method"] = "del";
       // var self = this;
       // this.$http.post("/template/delete", data).then(({ data }) => {
@@ -423,10 +434,15 @@ export default Vue.extend({
       // });
     },
     edit_info(idx, id) {
+      console.log('bianibu1dasfhkash',idx, id);
+      
       this.temp_label_info = this.temp_data[idx];
       this.edit_template_id = id;
       this.dialog_edit = true;
     },
+    // edit_info(idx, id) {
+    //   
+    // },
     add_new_info() {
       this.temp_label_info = {
         labelCategories: [],
