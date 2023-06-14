@@ -37,7 +37,6 @@ public class TemplateServiceImpl implements TemplateService {
 
     @Autowired
     TemplateRulesMapper templateRulesMapper;
-
     /**
      * 添加模板
      * @param template
