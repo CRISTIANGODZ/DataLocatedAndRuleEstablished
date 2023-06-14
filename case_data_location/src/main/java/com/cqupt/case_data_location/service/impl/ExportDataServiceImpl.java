@@ -51,6 +51,7 @@ public class ExportDataServiceImpl implements ExportDataService {
      * @param name
      * @return
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public List<Texts> getPatientAllText(String name) {//不能判断重名;修改不同步
         Long patientId = -1l;
@@ -66,6 +67,7 @@ public class ExportDataServiceImpl implements ExportDataService {
     /**
      * 将数据库中数据查询，封装到CSV文件中
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public String getCSVService(List<Texts> allTexts, HttpSession session){
         //创建CsvWriter，初始化csv文件

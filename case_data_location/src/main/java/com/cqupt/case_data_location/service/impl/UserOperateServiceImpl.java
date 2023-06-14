@@ -39,6 +39,7 @@ public class UserOperateServiceImpl implements UserOperateService {
      * 删除病人某条text数据信息
      * @param texts
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public void deleteText(Texts texts) {
         //1.删除该Texts字段
@@ -52,6 +53,7 @@ public class UserOperateServiceImpl implements UserOperateService {
      * 修改病人某条text数据信息
      * @param texts
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public void updateText(Texts texts) {
         textsMapper.updateText(texts);
@@ -61,6 +63,7 @@ public class UserOperateServiceImpl implements UserOperateService {
      * 删除某个病人的所有相关信息
      * @param texts
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public void deletePatientAllText(Texts texts) {
         //1根据病人id查找出所有text
@@ -89,6 +92,7 @@ public class UserOperateServiceImpl implements UserOperateService {
      * @param texts
      * @return
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public boolean isTextExists(Texts texts) {
         Texts text = textsMapper.getTextByTextId(texts);
@@ -104,6 +108,7 @@ public class UserOperateServiceImpl implements UserOperateService {
      * @param texts
      * @return
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public Texts getSingleText(Texts texts) {
         Texts text = textsMapper.getTextByTextId(texts);

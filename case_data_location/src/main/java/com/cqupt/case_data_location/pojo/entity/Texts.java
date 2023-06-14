@@ -18,7 +18,6 @@ public class Texts {
     private Long firstCategoryId;
     private String title;
     private String content;
-
     private Date updatetime;
     private Long themeId;
 

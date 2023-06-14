@@ -26,7 +26,6 @@ import java.util.UUID;
  * @Create 2022-10-13 下午 10:20
  * @Discriptioon
  */
-@Transactional(isolation = Isolation.READ_COMMITTED)
 @Service
 public class ImportDataServiceImpl implements ImportDataService {
 
@@ -48,6 +47,7 @@ public class ImportDataServiceImpl implements ImportDataService {
      * 以CSV格式导入数据
      * @param csvData
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public String submitCSVService(MultipartFile csvData, HttpSession session) {
         //获取上传的文件的文件名
@@ -82,6 +82,7 @@ public class ImportDataServiceImpl implements ImportDataService {
      * 解析CSV中的数据，并将其存入数据库中
      * @param csvPath
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public boolean parseCSVService(String csvPath) {
         Logger.info("开始解析CSV文件");

@@ -22,7 +22,6 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/electronic/case")
 public class ImportDataController {
-
     @Autowired
     ImportDataService importDataService;
 

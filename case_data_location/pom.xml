@@ -8,6 +8,7 @@
         <artifactId>ai_ann_parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <packaging>jar</packaging>
 
     <groupId>com.dyingzhang</groupId>
     <artifactId>case_data_location</artifactId>

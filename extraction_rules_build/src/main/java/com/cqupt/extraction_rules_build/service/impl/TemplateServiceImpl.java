@@ -42,6 +42,7 @@ public class TemplateServiceImpl implements TemplateService {
      * 添加模板
      * @param template
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public Long addTemplateService(Template template) {
         //1.添加template记录
@@ -71,6 +72,7 @@ public class TemplateServiceImpl implements TemplateService {
      * 获取所有的标签模板
      * @return
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public List<Template> getAllTemplates() {
         //1.获取所有的模板的列表
@@ -101,6 +103,7 @@ public class TemplateServiceImpl implements TemplateService {
      * @param templateId
      * @return
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public Template getTemplateByTemplateId(Long templateId) {
         Template template = templateMapper.getTemplateByTemplateId(templateId);
@@ -131,6 +134,7 @@ public class TemplateServiceImpl implements TemplateService {
      * 根据templateId删除模板
      * @param templateId
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public void deleteTemplateByTemplateId(Long templateId) {
         //1.删除Template
@@ -149,6 +153,7 @@ public class TemplateServiceImpl implements TemplateService {
         }
     }
 
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public boolean isTemplateExists(Long templateId) {
         Template template = templateMapper.getTemplateByTemplateId(templateId);
