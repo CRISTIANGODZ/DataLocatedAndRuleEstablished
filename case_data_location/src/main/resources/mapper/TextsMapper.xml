@@ -27,6 +27,14 @@
         from texts
     </select>
 
+    <!--List<Texts> getPatientPage(@Param("patientId") Long patientId, @Param("offset") Integer offset, @Param("limits") Integer limits);-->
+    <select id="getPatientPage" resultType="Texts">
+        select *
+        from texts
+        where patient_id = #{patientId}
+        limit #{offset}, #{limits}
+    </select>
+
     <!--List<Texts> getPatientTexts(@Param("patientId") Long patientId);-->
     <select id="getPatientTexts" resultType="Texts">
         select *

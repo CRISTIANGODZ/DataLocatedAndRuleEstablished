@@ -2,6 +2,7 @@ package com.cqupt.case_data_location.controller;
 
 
 import com.cqupt.case_data_location.pojo.entity.Texts;
+import com.cqupt.case_data_location.pojo.query.UserQuery;
 import com.cqupt.case_data_location.service.ExportDataService;
 import com.cqupt.case_data_location.service.UserOperateService;
 import com.cqupt.case_data_location.utils.Logger;
@@ -32,15 +33,17 @@ public class UserOperateController {
 
     /**
      * 根据病人的姓名查询病人信息，的所有text信息返回给前端
-     * @param name
+     * @param userQuery
      * @return
      */
     @ApiOperation(value = "病历查询", notes = "<font color='green'>描述：</font>根据用户姓名查询病人信息", response = Texts.class)
     @GetMapping("/patient/text/get")
     @ResponseBody
-    public R getPatientTextByNameController(@ApiParam(name = "name", required = true, value = "患者名字") String name){
+    public R getPatientTextByNameController(@ApiParam(name = "userQuery", required = true, value = "病人信息") @RequestBody UserQuery userQuery){
         Logger.info("查询病人信息接口 ---> ");
-        List<Texts> patientAllText = exportDataService.getPatientAllText(name);
+
+        List<Texts> patientAllText = exportDataService.getPatientAllText(userQuery.getName(), userQuery.getOffset(), userQuery.getLimits());
+
         if (patientAllText != null){
             Logger.info(" <--- 查询病人信息接口\n");
             return R.ok().data("patientAllText", patientAllText).message("返回成功！");

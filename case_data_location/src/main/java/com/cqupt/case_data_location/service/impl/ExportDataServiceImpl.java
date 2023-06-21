@@ -47,12 +47,29 @@ public class ExportDataServiceImpl implements ExportDataService {
     ESUtils esUtils;
 
     /**
+     * 分页查询
      * 获取用户相关的所有text信息
      * @param name
      * @return
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
-    @Override
+    public List<Texts> getPatientAllText(String name, Integer offset, Integer limits) {//不能判断重名;修改不同步
+        Long patientId = -1l;
+        SearchHits hits = esUtils.getDocByMustColumn("texts", "name", name);//名称含有传入的name，也可以被搜到：可以加映射，不使分词;
+        for (SearchHit hit : hits) {
+            patientId = Long.parseLong(hit.getId());
+        }
+        List<Texts> list = textsMapper.getPatientPage(patientId, offset, limits);
+        Logger.info("成功获取text信息");
+        return list;
+    }
+
+    /**
+     * 获取用户相关的所有text信息
+     * @param name
+     * @return
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public List<Texts> getPatientAllText(String name) {//不能判断重名;修改不同步
         Long patientId = -1l;
         SearchHits hits = esUtils.getDocByMustColumn("texts", "name", name);//名称含有传入的name，也可以被搜到：可以加映射，不使分词;

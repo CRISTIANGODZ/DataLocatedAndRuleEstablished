@@ -27,6 +27,14 @@ public interface TextsMapper {
     List<Texts> getAllTexts();
 
     /**
+     * 分页查询
+     * 根据用户id获取所有texts数据，将其封装到List<Texts>中
+     * @param patientId
+     * @return
+     */
+    List<Texts> getPatientPage(@Param("patientId") Long patientId, @Param("offset") Integer offset, @Param("limits") Integer limits);
+
+    /**
      * 根据用户id获取所有texts数据，将其封装到List<Texts>中
      * @param patientId
      * @return

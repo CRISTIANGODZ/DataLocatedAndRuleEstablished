@@ -20,9 +20,18 @@ public interface ExportDataService {
     String getCSVService(List<Texts> allTexts, HttpSession session);
 
     /**
+     * 分页查询
+     * 获取用户的所有相关的text信息
+     * @param name
+     * @return
+     */
+    List<Texts> getPatientAllText(String name, Integer offset, Integer limits);
+
+    /**
      * 获取用户的所有相关的text信息
      * @param name
      * @return
      */
     List<Texts> getPatientAllText(String name);
+
 }
