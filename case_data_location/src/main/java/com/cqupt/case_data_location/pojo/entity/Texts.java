@@ -30,4 +30,8 @@ public class Texts {
     }
 
 
+    public Texts(Long textId, Long themeId) {
+        this.textId = textId;
+        this.themeId = themeId;
+    }
 }

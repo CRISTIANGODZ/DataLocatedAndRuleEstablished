@@ -1,7 +1,10 @@
 package com.cqupt.case_data_location.service;
 
 
+import com.cqupt.case_data_location.pojo.entity.Patients;
 import com.cqupt.case_data_location.pojo.entity.Texts;
+
+import java.util.List;
 
 /**
  * @auther DyingZhang
@@ -30,15 +33,28 @@ public interface UserOperateService {
 
     /**
      * 判断数据是否存在
-     * @param texts
+     * @param textId
      * @return
      */
-    boolean isTextExists(Texts texts);
+    boolean isTextExists(Long textId);
 
     /**
      * 根据templateId获取text
-     * @param texts
+     * @param textId
      * @return
      */
-    Texts getSingleText(Texts texts);
+    Texts getSingleText(Long textId);
+
+    /**
+     * 根据病人id查询病人信息
+     * @param id
+     * @return
+     */
+    List<Texts> getTextsByPatientId(Long id);
+
+    /**
+     * 返回所有的patient
+     * @return
+     */
+    List<Patients> getPatients();
 }

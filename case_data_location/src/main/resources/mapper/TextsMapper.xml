@@ -76,7 +76,7 @@
         where patient_id = #{patientId};
     </select>
 
-    <!--Texts getTextByTextId();-->
+    <!--Texts getTextByTextId(@Param("textId") Long textId);-->
     <select id="getTextByTextId" resultType="Texts">
         select *
         from texts

@@ -15,6 +15,12 @@
 
     <!--下面撰写sql语句-->
 
+    <!--List<Patients> getAllPatient();-->
+    <select id="getAllPatient" resultType="Patients">
+        select *
+        from patients
+    </select>
+
     <!--void addPatient(Patients patients);-->
     <insert id="addPatient" useGeneratedKeys="true" keyProperty="patientId">
         insert into patients (`name`, disease_id, other, patient_num)

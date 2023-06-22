@@ -1,6 +1,7 @@
 package com.cqupt.case_data_location.controller;
 
 
+import com.cqupt.case_data_location.pojo.entity.Patients;
 import com.cqupt.case_data_location.pojo.entity.Texts;
 import com.cqupt.case_data_location.pojo.query.UserQuery;
 import com.cqupt.case_data_location.service.ExportDataService;
@@ -32,6 +33,18 @@ public class UserOperateController {
     UserOperateService userOperateService;
 
     /**
+     * 根据病人id查询病人信息
+     * @param patientId
+     * @return
+     */
+    @ApiOperation(value = "病历查询", notes = "<font color='green'>描述：</font>根据用户id查询病人信息")
+    @GetMapping("/patient/get/id")
+    public R getTextsByPatientId(@ApiParam(name = "patientId", required = true) @RequestParam("patientId") Long patientId) {
+        List<Texts> textsList = userOperateService.getTextsByPatientId(patientId);
+        return textsList.size() != 0 ? R.ok().data("Texts", textsList) : R.error().message("查询失败");
+    }
+
+    /**
      * 根据病人的姓名查询病人信息，的所有text信息返回给前端
      * @param userQuery
      * @return
@@ -54,16 +67,19 @@ public class UserOperateController {
 
     /**
      * 删除病人某条text数据信息
-     * @param texts
+     * @param textId
+     * @param themeId
      * @return
      */
     @ApiOperation(value = "删除病例信息", notes = "<font color='green'>描述：</font>删除病人的某条病历信息")
     @PostMapping("/patient/text/delete")
     @ResponseBody
-    public R deletePatientTextByTextIdController(@RequestBody Texts texts){
+    public R deletePatientTextByTextIdController(@ApiParam(name = "textId", required = true) @RequestParam("textId") Long textId,
+                                                 @ApiParam(name = "themeId", required = true) @RequestParam("themeId") Long themeId){
         Logger.info("删除病人信息接口 --->");
-        boolean isTextExists = userOperateService.isTextExists(texts);
+        boolean isTextExists = userOperateService.isTextExists(textId);
         if (isTextExists) {
+            Texts texts = new Texts(textId, themeId);
             userOperateService.deleteText(texts);
             Logger.info(" <--- 删除病人信息接口\n");
             return R.ok().message("删除成功！");
@@ -81,7 +97,7 @@ public class UserOperateController {
     @ResponseBody
     public R updatePatientTextByTextIdController(@RequestBody Texts texts){
         Logger.info("修改信息接口 --> ");
-        if (userOperateService.isTextExists(texts)) {
+        if (userOperateService.isTextExists(texts.getTextId())) {
             userOperateService.updateText(texts);
             Logger.info("修改信息成功");
             Logger.info(" <-- 修改信息接口\n");
@@ -112,9 +128,9 @@ public class UserOperateController {
     @ApiOperation(value = "查询text记录", notes = "<font color='green'>描述：</font>根据id查询某条具体记录", response = Texts.class)
     @GetMapping("/patient/get/single/text")
     @ResponseBody
-    public R getSingleText(@RequestBody Texts texts){
+    public R getSingleText(@ApiParam(name = "textId", required = true) @RequestParam("textId") Long textId) {
         Logger.info("根据textId查询text记录接口 --> ");
-        Texts text = userOperateService.getSingleText(texts);
+        Texts text = userOperateService.getSingleText(textId);
         if (text != null){
             Logger.info("查询成功！");
             Logger.info(" <-- 根据textId查询text记录接口\n");
@@ -125,5 +141,19 @@ public class UserOperateController {
             return R.error().message("数据不存在，返回失败！");
         }
     }
+
+    /**
+     * 获取所有用户接口
+     * @return
+     */
+    @ApiOperation(value = "查询所有的病人", notes = "<font color='green'>描述：</font>根据所有上传的病例")
+    @GetMapping("/patient/all")
+    @ResponseBody
+    public R getPatients() {
+        List<Patients> patientsList = userOperateService.getPatients();
+        return patientsList.size() != 0 ? R.ok().data("patients", patientsList) : R.error().message("获取失败");
+    }
+
+
 
 }

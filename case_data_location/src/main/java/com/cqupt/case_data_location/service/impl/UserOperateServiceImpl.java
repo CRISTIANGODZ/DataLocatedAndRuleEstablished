@@ -2,6 +2,7 @@ package com.cqupt.case_data_location.service.impl;
 
 
 import com.cqupt.case_data_location.mapper.*;
+import com.cqupt.case_data_location.pojo.entity.Patients;
 import com.cqupt.case_data_location.pojo.entity.Texts;
 import com.cqupt.case_data_location.service.UserOperateService;
 import com.cqupt.case_data_location.utils.ESUtils;
@@ -89,13 +90,13 @@ public class UserOperateServiceImpl implements UserOperateService {
 
     /**
      * 判断数据是否存在
-     * @param texts
+     * @param textId
      * @return
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
-    public boolean isTextExists(Texts texts) {
-        Texts text = textsMapper.getTextByTextId(texts);
+    public boolean isTextExists(Long textId) {
+        Texts text = textsMapper.getTextByTextId(textId);
         if (text != null){
             return true;
         } else {
@@ -105,14 +106,35 @@ public class UserOperateServiceImpl implements UserOperateService {
 
     /**
      * 根据templateId获取text
-     * @param texts
+     * @param textId
      * @return
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
-    public Texts getSingleText(Texts texts) {
-        Texts text = textsMapper.getTextByTextId(texts);
+    public Texts getSingleText(Long textId) {
+        Texts text = textsMapper.getTextByTextId(textId);
         return text;
+    }
+
+    /**
+     * 根据id获取所有的Texts
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Texts> getTextsByPatientId(Long id) {
+        List<Texts> textsList = textsMapper.getPatientTexts(id);
+        return textsList;
+    }
+
+    /**
+     * 获取所有的Patients
+     * @return
+     */
+    @Override
+    public List<Patients> getPatients() {
+        List<Patients> patientsList = patientsMapper.getAllPatient();
+        return patientsList;
     }
 
 }

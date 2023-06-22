@@ -65,5 +65,5 @@ public interface TextsMapper {
      * 根据templateId删除
      * @return
      */
-    Texts getTextByTextId(Texts texts);
+    Texts getTextByTextId(@Param(("textId")) Long textId);
 }

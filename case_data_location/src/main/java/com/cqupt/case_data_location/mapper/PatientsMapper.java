@@ -4,6 +4,8 @@ import com.cqupt.case_data_location.pojo.entity.Patients;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 /**
  * @auther DyingZhang
  * @Create 2022-10-14 下午 8:52
@@ -38,4 +40,10 @@ public interface PatientsMapper {
      * @param patientId
      */
     void deletePatient(@Param("patientId") Long patientId);
+
+    /**
+     * 获取所有的Patients
+     * @return
+     */
+    List<Patients> getAllPatient();
 }
